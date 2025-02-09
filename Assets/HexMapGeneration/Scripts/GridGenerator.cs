@@ -11,9 +11,12 @@ public class GridGenerator : MonoBehaviour
     
     void Start(){    
         PlaceTiles(width);
+        ClearTiles();
     }
 
-    void PlaceTiles(int width){
+    public void PlaceTiles(int width){
+        ClearTiles();
+
         if(width%2==0) width++;
 
         int height = (int)(1.5f*width);
@@ -25,10 +28,23 @@ public class GridGenerator : MonoBehaviour
                 if(x%2!=0 && y==height-1) continue;
 
                 GameObject tileGameObject = Instantiate(tilePrefab, Coordinates.OffsetToWorldCoordinates(x, y, tileRadius), Quaternion.identity, transform);
-                tileGameObject.GetComponent<Tile>().cubicCoordinates = Coordinates.OffsetToCubeCoordinates(x, y);
 
-                tileGameObject.GetComponent<Renderer>().material.color=Random.ColorHSV();
+                Vector3Int cubicCoordinate = Coordinates.OffsetToCubeCoordinates(x, y);
+                Tile tileComponent = tileGameObject.GetComponent<Tile>();
+                tileComponent.cubicCoordinates = cubicCoordinate;
+                Tile.grid.Add(Coordinates.OffsetToCubeCoordinates(x, y), tileComponent);
             }
         }
     }
+
+    public void ClearTiles(){
+        foreach(Vector3Int coordinate in Tile.grid.Keys){
+            Tile tile=null;
+            Tile.grid.TryGetValue(coordinate, out tile);
+            if(tile != null) Destroy(tile.transform.gameObject);
+        }
+        Tile.grid.Clear();
+    }
+
+
 }
