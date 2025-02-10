@@ -13,6 +13,18 @@ public class TroupTest : MonoBehaviour
 
     public void addTroup()
     {
+        if (xField.text == "")
+        {
+            xField.text = "0";
+        }
+        if (yField.text == "")
+        {
+            yField.text = "0";
+        }
+        if (zField.text == "")
+        {
+            zField.text = "0";
+        }
         troup_Generator.CreateTroupe(Int32.Parse(xField.text),Int32.Parse( yField.text), 1);
     }
     

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,6 +19,18 @@ public class Tile : MonoBehaviour
 
 
     public Vector3Int cubicCoordinates;
+
+    public GameObject Troup; 
+
+    public Boolean hasTroup=false;
+
+    public void setTroup(GameObject troup)
+    {
+        Troup=troup;
+        hasTroup = true;
+    }
+
+
 
 
     public Tile GetUpNeighbor(){

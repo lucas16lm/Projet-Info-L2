@@ -6,8 +6,22 @@ public class Troup_Generator : MonoBehaviour
     
    public void CreateTroupe(int x,int y,int tileRadius)
     {
-        GameObject troup = Instantiate(TroupPrefab, Coordinates.OffsetToWorldCoordinates(x, y, tileRadius)+ new Vector3(0,0,10), Quaternion.identity, transform);
-        troup.transform.position = new Vector3(troup.transform.position.x, 1.5f, troup.transform.position.z);
+
+        Tile tile = Tile.GetTile(Coordinates.OffsetToCubeCoordinates(x, y)); 
+        if(!tile.hasTroup)
+        {
+            GameObject troup = Instantiate(TroupPrefab, Coordinates.OffsetToWorldCoordinates(x, y, tileRadius), Quaternion.identity, transform);
+            Troup_Mouvement troup_Mouvement = troup.GetComponent<Troup_Mouvement>();
+
+            troup_Mouvement.OnTile = tile;
+            troup_Mouvement.movetoOnTile();
+
+            tile.setTroup(troup);
+        }
+       
+        
+       
+       
 
     }
 }
