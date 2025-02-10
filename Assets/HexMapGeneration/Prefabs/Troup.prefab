@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4097322522795607668}
   - component: {fileID: 8586169676947728951}
   - component: {fileID: 4312916258570955861}
+  - component: {fileID: 2910053873462967192}
   m_Layer: 0
   m_Name: Troup
   m_TagString: Untagged
@@ -110,3 +111,15 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2910053873462967192
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3283104176460166506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a109ba04a3fefa499515d36a5657c44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
