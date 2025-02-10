@@ -3,8 +3,9 @@ using UnityEngine;
 public class Troup_Mouvement : MonoBehaviour
 {
     public Vector3Int cubicCoordinates;
-    public static Tile GetPos(int x, int y, int z)
+    
+    public Vector3Int getPos()
     {
-        return GetPos(new Vector3Int(x, y, z));
+        return cubicCoordinates;
     }
 }
