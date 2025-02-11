@@ -1,3 +1,5 @@
+using NUnit.Framework;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Troup_Mouvement : MonoBehaviour
@@ -27,7 +29,15 @@ public class Troup_Mouvement : MonoBehaviour
         if (ThisTile != null)
         {
             transform.position = ThisTile.transform.position+ new Vector3(0,1.5f,0);
-        }
+            List<Tile> tiles = ThisTile.GetNeighbors();
+            foreach(Tile tile in tiles)
+            {
+                if (tile != null)
+                {
+                    Debug.Log(tile);
+                }
+            }
+         }
     }
     
 
