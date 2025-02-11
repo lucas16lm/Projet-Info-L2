@@ -37,7 +37,29 @@ public class Tile : MonoBehaviour
         return new List<Tile>(grid.Values);
     }
 
+    public static int GetSize(){
+        return grid.Count;
+    }
 
+
+    #endregion
+
+    #region static methods related to tiles
+
+    public static float DistanceBetween(Tile tile1, Tile tile2){
+        return Vector3.Distance(tile1.transform.position, tile2.transform.position);
+    }
+
+    public static Tile FindNearestTile(Tile tile, List<Tile> tiles){
+        Tile nearest = tiles[0];
+        for (int i = 1; i < tiles.Count; i++)
+        {
+            if(DistanceBetween(tile, tiles[i])<DistanceBetween(tile, nearest)){
+                nearest = tiles[i];
+            }
+        }
+        return nearest;
+    }
     #endregion
 
     #region tile related attributes and methods
@@ -70,39 +92,30 @@ public class Tile : MonoBehaviour
         return GetTile(cubicCoordinates.x-1, cubicCoordinates.y, cubicCoordinates.z+1);
     }
 
-    public void SetTerrainType(TerrainType terrainType){
+    public void AssignBiome(TerrainType terrainType){
         this.terrainType=terrainType;
-        switch(terrainType){
-            case TerrainType.plain:
-                transform.GetComponent<Renderer>().material.color = Color.green;
-                break;
-            case TerrainType.forest:
-                transform.GetComponent<Renderer>().material.color = Color.yellow;
-                break;
-            case TerrainType.hill:
-                transform.GetComponent<Renderer>().material.color = Color.grey;
-                break;
-            case TerrainType.montain:
-                transform.GetComponent<Renderer>().material.color = Color.black;
-                break;
-            case TerrainType.water:
-                transform.GetComponent<Renderer>().material.color = Color.blue;
-                break;
-        }
     }
 
-    public void SetTerrainType(float height){
-        if(height<0.6f){
-            SetTerrainType(TerrainType.plain);
-        }
-        else if(height<0.8f){
-            SetTerrainType(TerrainType.forest);
-        }
-        else if(height<0.9f){
-            SetTerrainType(TerrainType.hill);
-        }
-        else{
-            SetTerrainType(TerrainType.montain);
+    public void ApplyBiome(){
+        switch(terrainType){
+            case TerrainType.plain:
+                transform.GetComponent<Renderer>().material.color = new Color(0, 1, 0);
+                break;
+            case TerrainType.forest:
+                transform.GetComponent<Renderer>().material.color = new Color(0, 0.7f, 0);
+                break;
+            case TerrainType.hill:
+                transform.GetComponent<Renderer>().material.color = new Color(0.6f, 0.15f, 0.15f);
+                transform.localScale+=0.8f*Vector3.up;
+                break;
+            case TerrainType.montain:
+                transform.GetComponent<Renderer>().material.color = new Color(0.25f, 0.25f, 0.25f);
+                transform.localScale+=1.5f*Vector3.up;
+                break;
+            case TerrainType.water:
+                transform.GetComponent<Renderer>().material.color = new Color(0, 0, 0.8f);
+                transform.localScale+=Vector3.down/2;
+                break;
         }
     }
 

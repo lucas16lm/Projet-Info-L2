@@ -47,6 +47,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cubicCoordinates: {x: 0, y: 0, z: 0}
+  terrainType: 0
+  height: 0
 --- !u!33 &5983166516719174690
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -78,7 +80,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 668bc560be54d004f850de02b36bb185, type: 2}
+  - {fileID: 2100000, guid: 1383007e823dc7246af3cb75cbd32438, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
