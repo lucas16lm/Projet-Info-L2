@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GridGenerator : MonoBehaviour
@@ -7,12 +9,8 @@ public class GridGenerator : MonoBehaviour
     public GameObject tilePrefab;
     public float tileRadius=1f;
 
+    public int seed;
 
-    
-    void Start(){    
-        PlaceTiles(width);
-        ClearTiles();
-    }
 
     public void PlaceTiles(int width){
         ClearTiles();
@@ -32,18 +30,26 @@ public class GridGenerator : MonoBehaviour
                 Vector3Int cubicCoordinate = Coordinates.OffsetToCubeCoordinates(x, y);
                 Tile tileComponent = tileGameObject.GetComponent<Tile>();
                 tileComponent.cubicCoordinates = cubicCoordinate;
-                Tile.grid.Add(Coordinates.OffsetToCubeCoordinates(x, y), tileComponent);
+                Tile.AddTile(Coordinates.OffsetToCubeCoordinates(x, y), tileComponent);
             }
         }
     }
 
+    public void CreateBiomes(){
+        System.Random prng = new System.Random(seed);
+        List<Tile> centers = new List<Tile>();
+        for (int i = 0; i < 10; i++)
+        {
+            
+        }
+    }
+
     public void ClearTiles(){
-        foreach(Vector3Int coordinate in Tile.grid.Keys){
-            Tile tile=null;
-            Tile.grid.TryGetValue(coordinate, out tile);
+        foreach(Vector3Int coordinate in Tile.GetCoordinates()){
+            Tile tile = Tile.GetTile(coordinate);
             if(tile != null) Destroy(tile.transform.gameObject);
         }
-        Tile.grid.Clear();
+        Tile.Clear();
     }
 
 

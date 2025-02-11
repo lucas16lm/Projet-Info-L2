@@ -152,6 +152,9 @@ MonoBehaviour:
   heightRatio: 1.5
   tilePrefab: {fileID: 7814397987527416864, guid: 99b09d3f1ac42bf449b632560f360521, type: 3}
   tileRadius: 1
+  scale: 10
+  seed: 0
+  roundElevation: 16
 --- !u!4 &29020918
 Transform:
   m_ObjectHideFlags: 0
