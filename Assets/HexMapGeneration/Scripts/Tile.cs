@@ -5,6 +5,27 @@ using UnityEngine;
 public class Tile : MonoBehaviour
 {
     public static Dictionary<Vector3Int,Tile> grid = new Dictionary<Vector3Int, Tile>();
+    public static Dictionary<Tile,GameObject> gridObject = new Dictionary<Tile, GameObject>();
+    
+    public static GameObject GetObject(Tile tile)
+    {
+        GameObject obj = null;
+        gridObject.TryGetValue(tile, out obj );
+        return obj;
+    }
+    public static GameObject GetObject(Vector3Int vector3Int)
+    {
+        return GetObject(GetTile(vector3Int));
+    }
+    public static GameObject GetObject(int x,int y , int z)
+    {
+        return GetObject(GetTile(x,y,z));
+    }
+
+    public static void SetObject(GameObject gameObject,Tile tile)
+    {
+        gridObject[tile]=gameObject;
+    }
 
     public static Tile GetTile(Vector3Int coordinates){
         Tile tile = null;
@@ -20,15 +41,18 @@ public class Tile : MonoBehaviour
 
     public Vector3Int cubicCoordinates;
 
-    public GameObject Troup; 
+    
 
-    public Boolean hasTroup=false;
-
-    public void setTroup(GameObject troup)
+    public Boolean hasTroup() 
     {
-        Troup=troup;
-        hasTroup = true;
+        if (gridObject[this] != null)
+        {
+            return true;
+        }
+        return false;
     }
+
+   
 
 
 
