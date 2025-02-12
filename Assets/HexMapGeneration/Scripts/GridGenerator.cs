@@ -34,6 +34,7 @@ public class GridGenerator : MonoBehaviour
                 tileComponent.cubicCoordinates = cubicCoordinate;
                 Tile.grid.Add(Coordinates.OffsetToCubeCoordinates(x, y), tileComponent);
                 Tile.gridObject.Add(tileComponent, null);
+                tileComponent.name = "Tile"+cubicCoordinate.ToString();
             }
         }
     }

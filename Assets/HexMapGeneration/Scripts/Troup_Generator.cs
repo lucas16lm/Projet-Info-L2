@@ -14,7 +14,7 @@ public class Troup_Generator : MonoBehaviour
             Troup_Mouvement troup_Mouvement = troup.GetComponent<Troup_Mouvement>();
 
             troup_Mouvement.setTile(tile);
-            troup_Mouvement.movetoOnTile();
+            troup_Mouvement.setTargets(tile);
 
             
         }

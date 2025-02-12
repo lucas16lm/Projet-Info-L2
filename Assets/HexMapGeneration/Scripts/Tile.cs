@@ -27,6 +27,16 @@ public class Tile : MonoBehaviour
         gridObject[tile]=gameObject;
     }
 
+    public static void RemoveObject(Tile tile)
+    {
+        gridObject[tile] = null;
+    }
+    public static void ChangeTile(Tile previousTile,Tile newTile, GameObject gameObject)
+    {
+        RemoveObject(previousTile);
+        SetObject(gameObject,newTile);
+    }
+
     public static Tile GetTile(Vector3Int coordinates){
         Tile tile = null;
         grid.TryGetValue(coordinates, out tile);
@@ -37,9 +47,13 @@ public class Tile : MonoBehaviour
         return GetTile(new Vector3Int(x,y,z));
     }
 
-
+    
 
     public Vector3Int cubicCoordinates;
+    public Vector3 GetWorldPositionToMouvement()
+    {
+        return transform.position + new Vector3(0,1.5f,0);
+    }
 
     
 
@@ -51,10 +65,7 @@ public class Tile : MonoBehaviour
         }
         return false;
     }
-    void OnMouseDown()
-    {
-        Debug.Log(this.gameObject.name);
-    }
+    
 
 
 

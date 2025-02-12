@@ -127,3 +127,6 @@ MonoBehaviour:
   ThisTile: {fileID: 0}
   DefaultColor: {fileID: 2100000, guid: 668bc560be54d004f850de02b36bb185, type: 2}
   PossibleMoveColor: {fileID: 2100000, guid: d0a940afdbf0b8d49bbe1e0f84cb775c, type: 2}
+  speed: 10
+  targets: []
+  MouvementRange: 3
