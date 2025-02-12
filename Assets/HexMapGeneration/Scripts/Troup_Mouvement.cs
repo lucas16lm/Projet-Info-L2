@@ -5,9 +5,13 @@ using UnityEngine;
 public class Troup_Mouvement : MonoBehaviour
 {
     public Vector3Int cubicCoordinate;
-
+    Ray ray;
+    RaycastHit hit;
 
     public Tile ThisTile;
+
+    public Material DefaultColor;
+    public Material PossibleMoveColor;
 
     
     public Vector3Int getPos()
@@ -29,22 +33,39 @@ public class Troup_Mouvement : MonoBehaviour
         if (ThisTile != null)
         {
             transform.position = ThisTile.transform.position+ new Vector3(0,1.5f,0);
-            List<Tile> tiles = ThisTile.GetNeighbors();
-            foreach(Tile tile in tiles)
-            {
-                if (tile != null)
-                {
-                    Debug.Log(tile);
-                }
-            }
+            ShowPossibleMove();
+           
+            
          }
     }
-    
 
-    public void Awake()
+    public void ShowPossibleMove()
     {
-       
-        
+        foreach (Tile tile in Tile.grid.Values)
+        {
+            tile.GetComponent<MeshRenderer>().material = DefaultColor;
+        }
+        List<Tile> tiles = ThisTile.GetNeighbors();
+        foreach (Tile tile in tiles)
+        {
+            if (tile != null)
+            {
+                tile.GetComponent<MeshRenderer>().material = PossibleMoveColor;
+
+            }
+        }
     }
+
+    void Update()
+    {
+        ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out hit))
+        {
+            if (Input.GetMouseButtonDown(0))
+                print(hit.collider.name);
+        }
+    }
+
+
 
 }

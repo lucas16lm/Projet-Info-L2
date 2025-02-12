@@ -51,8 +51,12 @@ public class Tile : MonoBehaviour
         }
         return false;
     }
+    void OnMouseDown()
+    {
+        Debug.Log(this.gameObject.name);
+    }
 
-   
+
 
 
 
