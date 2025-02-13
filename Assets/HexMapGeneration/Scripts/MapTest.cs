@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class MapTest : MonoBehaviour
 {
-    public GridGenerator gridGenerator;
+    public MapGenerator gridGenerator;
     public TMP_InputField xField;
     public TMP_InputField yField;
     public TMP_InputField zField;

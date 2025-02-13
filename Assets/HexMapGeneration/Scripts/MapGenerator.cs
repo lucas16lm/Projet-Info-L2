@@ -2,19 +2,30 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GridGenerator : MonoBehaviour
+public class MapGenerator : MonoBehaviour
 {
-    public int width=15;
-    public float heightRatio=1.5f;
+    [Header("Tile settings")]
     public GameObject tilePrefab;
     public float tileRadius=1f;
-
+    [Header("Grid size settings")]
+    public int width=15;
+    public float heightRatio=1.5f;
+    [Header("Procedural generation settings")]
     public int seed;
+    public int nbBiomes = 1;
+    [Header("Biome generation percentages")]
+    public int plainPercentage;
+    public int forestPercentage;
+    public int hillPercentage;
+    public int mountainPercentage;
+    public int waterPercentage;
+    
     private System.Random prng;
 
     public void PlaceTiles(int width){
         prng = new System.Random(seed);
         ClearTiles();
+        Tile.tileRadius = tileRadius;
 
         if(width%2==0) width++;
 
@@ -49,11 +60,10 @@ public class GridGenerator : MonoBehaviour
     }
 
     private List<Tile> PlaceRegions(){
+        nbBiomes=Mathf.Clamp(nbBiomes, 1, Tile.GetSize());
         List<Tile> regions = new List<Tile>();
         int nbRegion=0;
-
-        
-        while(nbRegion<Tile.GetSize()/15){
+        while(nbRegion<nbBiomes){
             Tile region =  Tile.GetTile(Tile.GetCoordinates()[prng.Next(0, Tile.GetSize())]);
             regions.Add(region);
             region.transform.GetComponent<Renderer>().material.color=Color.red;
@@ -64,22 +74,27 @@ public class GridGenerator : MonoBehaviour
     }
 
     private void AssignBiome(Tile tile){
-        int rd = prng.Next(0, 100);
-        if(rd < 5){
-            tile.AssignBiome(TerrainType.water);
+        tile.AssignBiome(chooseBiome());
+    }
+
+    private TerrainType chooseBiome(){
+        List<Tuple<int, TerrainType>> choices = new List<Tuple<int, TerrainType>>{
+            new Tuple<int, TerrainType>(plainPercentage, TerrainType.plain),
+            new Tuple<int, TerrainType>(forestPercentage, TerrainType.forest),
+            new Tuple<int, TerrainType>(hillPercentage, TerrainType.hill),
+            new Tuple<int, TerrainType>(mountainPercentage, TerrainType.mountain),
+            new Tuple<int, TerrainType>(waterPercentage, TerrainType.water)
+        };
+        
+        List<TerrainType> normalizedChoices = new List<TerrainType>();
+
+        foreach(Tuple<int, TerrainType> choice in choices){
+            for (int i = 0; i < choice.Item1; i++)
+            {
+                normalizedChoices.Add(choice.Item2);
+            }
         }
-        else if(rd < 75){
-            tile.AssignBiome(TerrainType.plain);
-        }
-        else if(rd < 90){
-            tile.AssignBiome(TerrainType.forest);
-        }
-        else if(rd < 95){
-            tile.AssignBiome(TerrainType.hill);
-        }
-        else{
-            tile.AssignBiome(TerrainType.montain);
-        }
+        return normalizedChoices[prng.Next(0, normalizedChoices.Count-1)];
     }
 
     private void ApplyBiome(){
@@ -87,8 +102,6 @@ public class GridGenerator : MonoBehaviour
             tile.ApplyBiome();
         }
     }
-
-    
 
     public void ClearTiles(){
         foreach(Vector3Int coordinate in Tile.GetCoordinates()){

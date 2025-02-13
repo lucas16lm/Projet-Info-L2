@@ -46,6 +46,7 @@ public class Tile : MonoBehaviour
 
     #region static methods related to tiles
 
+    public static float tileRadius;
     public static float DistanceBetween(Tile tile1, Tile tile2){
         return Vector3.Distance(tile1.transform.position, tile2.transform.position);
     }
@@ -65,7 +66,8 @@ public class Tile : MonoBehaviour
     #region tile related attributes and methods
     public Vector3Int cubicCoordinates;
     public TerrainType terrainType;
-    public float height;
+
+    public GameObject treePrefab;
 
 
     public Tile GetUpNeighbor(){
@@ -92,33 +94,6 @@ public class Tile : MonoBehaviour
         return GetTile(cubicCoordinates.x-1, cubicCoordinates.y, cubicCoordinates.z+1);
     }
 
-    public void AssignBiome(TerrainType terrainType){
-        this.terrainType=terrainType;
-    }
-
-    public void ApplyBiome(){
-        switch(terrainType){
-            case TerrainType.plain:
-                transform.GetComponent<Renderer>().material.color = new Color(0, 1, 0);
-                break;
-            case TerrainType.forest:
-                transform.GetComponent<Renderer>().material.color = new Color(0, 0.7f, 0);
-                break;
-            case TerrainType.hill:
-                transform.GetComponent<Renderer>().material.color = new Color(0.6f, 0.15f, 0.15f);
-                transform.localScale+=0.8f*Vector3.up;
-                break;
-            case TerrainType.montain:
-                transform.GetComponent<Renderer>().material.color = new Color(0.25f, 0.25f, 0.25f);
-                transform.localScale+=1.5f*Vector3.up;
-                break;
-            case TerrainType.water:
-                transform.GetComponent<Renderer>().material.color = new Color(0, 0, 0.8f);
-                transform.localScale+=Vector3.down/2;
-                break;
-        }
-    }
-
     public List<Tile> GetNeighbors(){
         List<Tile> neighbors = new List<Tile>
         {
@@ -131,6 +106,43 @@ public class Tile : MonoBehaviour
         };
         return neighbors;
     }
+
+    public void AssignBiome(TerrainType terrainType){
+        this.terrainType=terrainType;
+    }
+
+    public void ApplyBiome(){
+        switch(terrainType){
+            case TerrainType.plain:
+                transform.GetComponent<Renderer>().material.color = new Color(0, 1, 0);
+                break;
+            case TerrainType.forest:
+                transform.GetComponent<Renderer>().material.color = new Color(0, 0.7f, 0);
+                for (int i = 0; i < 6; i++){
+                    Vector3 pos = new Vector3(
+                        transform.position.x+0.7f*tileRadius*Mathf.Cos((2*Mathf.PI*i)/6),
+                        0,
+                        transform.position.z+0.7f*tileRadius*Mathf.Sin((2*Mathf.PI*i)/6));
+                    Instantiate(treePrefab, pos+transform.localScale.y*Vector3.up, Quaternion.identity, transform.GetChild(0));
+                }
+                break;
+            case TerrainType.hill:
+                transform.GetComponent<Renderer>().materials[0].color = new Color(0.6f, 0.6f, 0);
+                transform.GetComponent<Renderer>().materials[1].color = new Color(0.6f, 0.6f, 0);
+                transform.localScale+=0.8f*Vector3.up;
+                break;
+            case TerrainType.mountain:
+                transform.GetComponent<Renderer>().materials[0].color = new Color(0.25f, 0.25f, 0.25f);
+                transform.GetComponent<Renderer>().materials[1].color = new Color(0.25f, 0.25f, 0.25f);
+                transform.localScale+=1.5f*Vector3.up;
+                break;
+            case TerrainType.water:
+                transform.GetComponent<Renderer>().materials[0].color = new Color(0, 0, 0.8f);
+                transform.GetComponent<Renderer>().materials[1].color = new Color(0, 0, 0.8f);
+                transform.localScale+=Vector3.down/2;
+                break;
+        }
+    }
     #endregion
 }
 
@@ -138,6 +150,6 @@ public enum TerrainType{
     plain,
     forest,
     hill,
-    montain,
+    mountain,
     water
 }
