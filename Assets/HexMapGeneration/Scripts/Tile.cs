@@ -48,7 +48,7 @@ public class Tile : MonoBehaviour
 
     public static float tileRadius;
     public static float DistanceBetween(Tile tile1, Tile tile2){
-        return Vector3.Distance(tile1.transform.position, tile2.transform.position);
+        return (Mathf.Abs(tile1.cubicCoordinates.x-tile2.cubicCoordinates.x)+Mathf.Abs(tile1.cubicCoordinates.y-tile2.cubicCoordinates.y)+Mathf.Abs(tile1.cubicCoordinates.z-tile2.cubicCoordinates.z))/2;
     }
 
     public static Tile FindNearestTile(Tile tile, List<Tile> tiles){
