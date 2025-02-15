@@ -127,7 +127,7 @@ public class Troup_Mouvement : MonoBehaviour
 
     public void ShowPossibleMove()
     {
-        foreach (Tile tile in Tile.grid.Values)
+        foreach (Tile tile in Tile.GetTiles())
         {
             tile.GetComponent<MeshRenderer>().material = DefaultColor;
         }
@@ -145,7 +145,7 @@ public class Troup_Mouvement : MonoBehaviour
     public void ShowPossibleMove(int range)
     {
         //TODO: A Optimiser
-        foreach (Tile tile in Tile.grid.Values)
+        foreach (Tile tile in Tile.GetTiles())
         {
             tile.GetComponent<MeshRenderer>().material = DefaultColor;
         }

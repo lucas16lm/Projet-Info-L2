@@ -6,17 +6,36 @@ using UnityEngine;
 public class Tile : MonoBehaviour
 {
     #region static dictionary and getters
+    
     private static Dictionary<Vector3Int,Tile> grid = new Dictionary<Vector3Int, Tile>();
-     public static Dictionary<Tile,GameObject> gridObject = new Dictionary<Tile, GameObject>();
+    
+    private static Dictionary<Tile,GameObject> gridObject = new Dictionary<Tile, GameObject>();
 
     public static void AddTile(Vector3Int coordinates, Tile tile){
         grid.Add(coordinates, tile);
+    } 
+    public static void AddObject(Tile tile, GameObject gameObject){
+        gridObject.Add(tile, gameObject);
+    }
+     
+    public static void AddObject(Vector3Int vector, GameObject gameObject){
+       AddObject(GetTile(vector), gameObject);
+    }
+     
+    public static void AddObject(int x,int y,int z, GameObject gameObject){
+        AddObject(new Vector3Int(x,y,z), gameObject);
     }
 
-    public static void AddTile(int x, int y, int z, Tile tile){
-        AddTile(new Vector3Int(x,y,z), tile);
-    
-   
+    public static void AddTile(int x, int y, int z, Tile tile)
+    {
+        AddTile(new Vector3Int(x, y, z), tile);
+    }
+    public static void AddObject(int x, int y, int z, Tile tile)
+    {
+        AddTile(new Vector3Int(x, y, z), tile);
+    }
+
+
     public static GameObject GetObject(Tile tile)
     {
         GameObject obj = null;
@@ -59,6 +78,7 @@ public class Tile : MonoBehaviour
 
     public static void Clear(){
         grid.Clear();
+        gridObject.Clear();
     }
 
     public static List<Vector3Int> GetCoordinates(){
@@ -110,7 +130,7 @@ public class Tile : MonoBehaviour
 
     public Boolean hasTroup() 
     {
-        if (gridObject[this] != null)
+        if (GetObject(this) != null)
         {
             return true;
         }

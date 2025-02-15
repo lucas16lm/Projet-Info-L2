@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Troup_Generator : MonoBehaviour
@@ -14,7 +15,7 @@ public class Troup_Generator : MonoBehaviour
             Troup_Mouvement troup_Mouvement = troup.GetComponent<Troup_Mouvement>();
 
             troup_Mouvement.setTile(tile);
-            troup_Mouvement.setTargets(tile);
+            troup_Mouvement.setTargets(new List<Tile>() { tile });
 
             
         }

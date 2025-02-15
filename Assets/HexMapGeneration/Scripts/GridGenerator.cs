@@ -32,20 +32,20 @@ public class GridGenerator : MonoBehaviour
                 Vector3Int cubicCoordinate = Coordinates.OffsetToCubeCoordinates(x, y);
                 Tile tileComponent = tileGameObject.GetComponent<Tile>();
                 tileComponent.cubicCoordinates = cubicCoordinate;
-                Tile.grid.Add(Coordinates.OffsetToCubeCoordinates(x, y), tileComponent);
-                Tile.gridObject.Add(tileComponent, null);
+                Tile.AddTile(Coordinates.OffsetToCubeCoordinates(x, y), tileComponent);
+                Tile.AddObject(tileComponent, null);
                 tileComponent.name = "Tile"+cubicCoordinate.ToString();
             }
         }
     }
 
     public void ClearTiles(){
-        foreach(Vector3Int coordinate in Tile.grid.Keys){
+        foreach(Vector3Int coordinate in Tile.GetCoordinates()){
             Tile tile=null;
-            Tile.grid.TryGetValue(coordinate, out tile);
+            Tile.GetTile(coordinate);
             if(tile != null) Destroy(tile.transform.gameObject);
         }
-        Tile.grid.Clear();
+        Tile.Clear();
     }
 
 
