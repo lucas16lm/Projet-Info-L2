@@ -29,6 +29,7 @@ public class Troup_Mouvement : MonoBehaviour
         targets = new List<Tile>();
         neighbors = new List<Tile>();
         
+        
     }
 
 
@@ -127,7 +128,6 @@ public class Troup_Mouvement : MonoBehaviour
 
     public void ShowPossibleMove()
     {
-        foreach (Tile tile in Tile.grid.Values)
         {
             tile.GetComponent<MeshRenderer>().material = DefaultColor;
         }
@@ -145,7 +145,6 @@ public class Troup_Mouvement : MonoBehaviour
     public void ShowPossibleMove(int range)
     {
         //TODO: A Optimiser
-        foreach (Tile tile in Tile.grid.Values)
         {
             tile.GetComponent<MeshRenderer>().material = DefaultColor;
         }
