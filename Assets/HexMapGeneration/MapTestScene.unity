@@ -150,7 +150,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tilePrefab: {fileID: 8524151667754914690, guid: 99b09d3f1ac42bf449b632560f360521, type: 3}
   tileRadius: 1
-  width: 20
+  width: 21
   heightRatio: 1.5
   seed: 0
   nbBiomes: 80

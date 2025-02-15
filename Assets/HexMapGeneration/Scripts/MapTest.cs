@@ -1,3 +1,4 @@
+using Linework.FastOutline;
 using TMPro;
 using UnityEngine;
 
@@ -12,7 +13,7 @@ public class MapTest : MonoBehaviour
     
 
     public void CreateMapButton(){
-        gridGenerator.PlaceTiles(gridGenerator.width);
+        gridGenerator.CreateMap(gridGenerator.width);
     }
 
     public void ClearMapButton(){
@@ -30,6 +31,21 @@ public class MapTest : MonoBehaviour
             foreach(Tile neighbor in tile.GetNeighbors()){
                 if(neighbor!=null) neighbor.transform.GetComponent<Renderer>().material.color=Color.red;
             }
+        }
+    }
+
+    void Update()
+    {
+        if(Input.GetMouseButtonDown(0)){
+            OutlineTest();
+        }
+    }
+
+    public void OutlineTest(){
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        if(Physics.Raycast(ray, out hit)){
+            Tile.GetTilesInRange(hit.collider.gameObject.GetComponent<Tile>(), 1).ForEach(t => t.GetComponent<OutlineManager>().enabled=true);
         }
     }
 

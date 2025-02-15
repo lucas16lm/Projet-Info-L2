@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 
 public class MapGenerator : MonoBehaviour
 {
@@ -23,20 +22,26 @@ public class MapGenerator : MonoBehaviour
     
     private System.Random prng;
 
-    public void PlaceTiles(int width){
+    public void CreateMap(int width)
+    {
         prng = new System.Random(seed);
         ClearTiles();
+        CreateGrid();
+        CreateBiomes();
+        ApplyBiomeSettings();
+    }
+
+    private void CreateGrid()
+    {
         Tile.tileRadius = tileRadius;
+        if (width % 2 == 0) width++;
+        int height = (int)(heightRatio * width);
 
-        if(width%2==0) width++;
-
-        int height = (int)(heightRatio*width);
-        
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
-                if(x%2!=0 && y==height-1) continue;
+                if (x % 2 != 0 && y == height - 1) continue;
 
                 GameObject tileGameObject = Instantiate(tilePrefab, Coordinates.OffsetToWorldCoordinates(x, y, tileRadius), Quaternion.identity, transform);
 
@@ -46,50 +51,44 @@ public class MapGenerator : MonoBehaviour
                 Tile.AddTile(Coordinates.OffsetToCubeCoordinates(x, y), tileComponent);
             }
         }
-        CreateBiomes();
-        ApplyBiome();
     }
 
-    public void CreateBiomes(){
-        List<Tile> regions = PlaceRegions();
+    private void CreateBiomes(){
+        List<Tile> biomeCenters = PlaceBiomeCenters();
         
         foreach(Tile tile in Tile.GetTiles()){
-            if(regions.Contains(tile)) continue;
-            Tile nearest = Tile.FindNearestTile(tile, regions);
-            tile.AssignBiome(nearest.terrainType);
+            if(biomeCenters.Contains(tile)) continue;
+            Tile nearest = Tile.FindNearestTile(tile, biomeCenters);
+            tile.AssignBiome(nearest.biome);
         }
     }
 
-    private List<Tile> PlaceRegions(){
+    private List<Tile> PlaceBiomeCenters(){
         nbBiomes=Mathf.Clamp(nbBiomes, 1, Tile.GetSize());
-        List<Tile> regions = new List<Tile>();
-        int nbRegion=0;
-        while(nbRegion<nbBiomes){
-            Tile region =  Tile.GetTile(Tile.GetCoordinates()[prng.Next(0, Tile.GetSize())]);
-            regions.Add(region);
-            region.transform.GetComponent<Renderer>().material.color=Color.red;
-            AssignBiome(region);
-            nbRegion++;
+        List<Tile> biomeCenter = new List<Tile>();
+        int nbCenters=0;
+        while(nbCenters<nbBiomes){
+            Tile center =  Tile.GetTile(Tile.GetCoordinates()[prng.Next(0, Tile.GetSize())]);
+            biomeCenter.Add(center);
+            center.transform.GetComponent<Renderer>().material.color=Color.red;
+            center.AssignBiome(chooseBiome());
+            nbCenters++;
         }
-        return regions;
+        return biomeCenter;
     }
 
-    private void AssignBiome(Tile tile){
-        tile.AssignBiome(chooseBiome());
-    }
-
-    private TerrainType chooseBiome(){
-        List<Tuple<int, TerrainType>> choices = new List<Tuple<int, TerrainType>>{
-            new Tuple<int, TerrainType>(plainPercentage, TerrainType.plain),
-            new Tuple<int, TerrainType>(forestPercentage, TerrainType.forest),
-            new Tuple<int, TerrainType>(hillPercentage, TerrainType.hill),
-            new Tuple<int, TerrainType>(mountainPercentage, TerrainType.mountain),
-            new Tuple<int, TerrainType>(waterPercentage, TerrainType.water)
+    private Biome chooseBiome(){
+        List<Tuple<int, Biome>> choices = new List<Tuple<int, Biome>>{
+            new Tuple<int, Biome>(plainPercentage, Biome.plain),
+            new Tuple<int, Biome>(forestPercentage, Biome.forest),
+            new Tuple<int, Biome>(hillPercentage, Biome.hill),
+            new Tuple<int, Biome>(mountainPercentage, Biome.mountain),
+            new Tuple<int, Biome>(waterPercentage, Biome.water)
         };
         
-        List<TerrainType> normalizedChoices = new List<TerrainType>();
+        List<Biome> normalizedChoices = new List<Biome>();
 
-        foreach(Tuple<int, TerrainType> choice in choices){
+        foreach(Tuple<int, Biome> choice in choices){
             for (int i = 0; i < choice.Item1; i++)
             {
                 normalizedChoices.Add(choice.Item2);
@@ -98,7 +97,7 @@ public class MapGenerator : MonoBehaviour
         return normalizedChoices[prng.Next(0, normalizedChoices.Count-1)];
     }
 
-    private void ApplyBiome(){
+    private void ApplyBiomeSettings(){
         foreach(Tile tile in Tile.GetTiles()){
             tile.ApplyBiome();
         }
