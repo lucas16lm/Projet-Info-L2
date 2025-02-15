@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -6,6 +7,7 @@ public class Tile : MonoBehaviour
 {
     #region static dictionary and getters
     private static Dictionary<Vector3Int,Tile> grid = new Dictionary<Vector3Int, Tile>();
+     public static Dictionary<Tile,GameObject> gridObject = new Dictionary<Tile, GameObject>();
 
     public static void AddTile(Vector3Int coordinates, Tile tile){
         grid.Add(coordinates, tile);
@@ -13,6 +15,36 @@ public class Tile : MonoBehaviour
 
     public static void AddTile(int x, int y, int z, Tile tile){
         AddTile(new Vector3Int(x,y,z), tile);
+    
+   
+    public static GameObject GetObject(Tile tile)
+    {
+        GameObject obj = null;
+        gridObject.TryGetValue(tile, out obj );
+        return obj;
+    }
+    public static GameObject GetObject(Vector3Int vector3Int)
+    {
+        return GetObject(GetTile(vector3Int));
+    }
+    public static GameObject GetObject(int x,int y , int z)
+    {
+        return GetObject(GetTile(x,y,z));
+    }
+
+    public static void SetObject(GameObject gameObject,Tile tile)
+    {
+        gridObject[tile]=gameObject;
+    }
+
+    public static void RemoveObject(Tile tile)
+    {
+        gridObject[tile] = null;
+    }
+    public static void ChangeTile(Tile previousTile,Tile newTile, GameObject gameObject)
+    {
+        RemoveObject(previousTile);
+        SetObject(gameObject,newTile);
     }
 
     public static Tile GetTile(Vector3Int coordinates){
@@ -41,6 +73,7 @@ public class Tile : MonoBehaviour
         return grid.Count;
     }
 
+    
 
     #endregion
 
@@ -68,6 +101,26 @@ public class Tile : MonoBehaviour
     public TerrainType terrainType;
 
     public GameObject treePrefab;
+    public Vector3 GetWorldPositionToMouvement()
+    {
+        return transform.position + new Vector3(0,1.5f,0);
+    }
+
+    
+
+    public Boolean hasTroup() 
+    {
+        if (gridObject[this] != null)
+        {
+            return true;
+        }
+        return false;
+    }
+    
+
+
+
+
 
 
     public Tile GetUpNeighbor(){
