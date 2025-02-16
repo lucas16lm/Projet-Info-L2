@@ -2,14 +2,18 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using NUnit.Framework;
 
 public class Tile : MonoBehaviour
 {
     #region static dictionary and getters
-    
-    private static Dictionary<Vector3Int,Tile> grid = new Dictionary<Vector3Int, Tile>();
-    
-    private static Dictionary<Tile,GameObject> gridObject = new Dictionary<Tile, GameObject>();
+
+    private static Dictionary<Vector3Int, Tile> grid = new Dictionary<Vector3Int, Tile>();
+
+    private static Dictionary<Tile, GameObject> gridObject = new Dictionary<Tile, GameObject>();
+
+    [SerializeField]
+    private static List<Biome> Obstacles = new List<Biome>() {Biome.mountain,Biome.water };
 
     public static void AddTile(Vector3Int coordinates, Tile tile){
         grid.Add(coordinates, tile);
@@ -129,6 +133,37 @@ public class Tile : MonoBehaviour
         return tiles;
     }
 
+    public static List<Tile> GetWalkableTilesInRange(Tile tile, int range)
+    {
+        List<Tile> tiles = new List<Tile>();
+        for (int x = -range; x <= range; x++)
+        {
+            for (int y = Mathf.Max(-range, -x - range); y <= Mathf.Min(range, -x + range); y++)
+            {
+                int z = -x - y;
+                Tile inRange = Tile.GetTile(x + tile.cubicCoordinates.x, y + tile.cubicCoordinates.y, z + tile.cubicCoordinates.z);
+                if (IsWalkable(inRange)) tiles.Add(inRange);
+            }
+        }
+        return tiles;
+    }
+
+    private static bool IsWalkable(Tile tile)
+    {
+        if (tile!=null) 
+        {
+            foreach(Biome biome in Obstacles) 
+            {
+                if(tile.biome==biome)return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+        return true;
+    }
+
     #endregion
 
     #region tile related attributes and methods
@@ -138,7 +173,7 @@ public class Tile : MonoBehaviour
     public GameObject treePrefab;
     public Vector3 GetWorldPositionToMouvement()
     {
-        return transform.position + new Vector3(0,1.5f,0);
+        return transform.position + new Vector3(0, 0.5f, 0) + new Vector3(0, transform.localScale.y,0) ;
     }
 
     
@@ -182,7 +217,19 @@ public class Tile : MonoBehaviour
         return GetTile(cubicCoordinates.x-1, cubicCoordinates.y, cubicCoordinates.z+1);
     }
 
-    public List<Tile> GetNeighbors(){
+    public List<Tile> GetWalkableNeighbors(){
+        List<Tile> neighbors = GetNeighbors();
+        for(int i = 0; i< neighbors.Count; i++)
+        {
+            if (!IsWalkable(neighbors[i]))
+            {
+                neighbors.RemoveAt(i);
+            }
+        } 
+        return neighbors;
+    }
+    public List<Tile> GetNeighbors()
+    {
         List<Tile> neighbors = new List<Tile>
         {
             GetUpNeighbor(),
@@ -192,6 +239,7 @@ public class Tile : MonoBehaviour
             GetUpLeftNeighbor(),
             GetDownLeftNeighbor()
         };
+        
         return neighbors;
     }
 

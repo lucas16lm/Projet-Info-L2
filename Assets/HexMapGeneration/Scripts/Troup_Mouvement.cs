@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 using static UnityEngine.GraphicsBuffer;
@@ -22,12 +23,15 @@ public class Troup_Mouvement : MonoBehaviour
     private List<Tile> neighbors;
     public int MouvementRange;
 
+    bool refreshCaseMouvement = true;
+
 
 
     void Awake()
     {
         targets = new List<Tile>();
         neighbors = new List<Tile>();
+        
         
     }
 
@@ -44,7 +48,7 @@ public class Troup_Mouvement : MonoBehaviour
                     Tile tile = hit.collider.GetComponent<Tile>();
                     if (InTileList(neighbors, tile))
                     {
-                        setTargets(new List<Tile>() { tile});
+                        setTargets(FindPath(ThisTile,tile,MouvementRange));
                        
                         
                     }
@@ -65,16 +69,23 @@ public class Troup_Mouvement : MonoBehaviour
     {
         targets = new List<Tile>() { tile };
 
-
+        foreach (Tile tile2 in Tile.GetTiles())
+        {
+            tile2.GetComponent<OutlineManager>().enabled = false;
+        }
 
     }
 
     public void setTargets(List<Tile> tiles)
     {
         targets = tiles;
-        
-        
-        
+        foreach (Tile tile in Tile.GetTiles())
+        {
+            tile.GetComponent<OutlineManager>().enabled = false;
+        }
+
+
+
     }
     private void MoveToTarget()
     {
@@ -83,8 +94,16 @@ public class Troup_Mouvement : MonoBehaviour
             float step = speed * Time.deltaTime;
             transform.position = Vector3.MoveTowards(transform.position, targets[0].GetWorldPositionToMouvement(), step);
             notArrived();
-            
+            refreshCaseMouvement = true;
 
+        }
+        else
+        {
+            if (refreshCaseMouvement)
+            {
+                ShowPossibleMove(MouvementRange);
+                refreshCaseMouvement = false;
+            }
         }
     }
 
@@ -97,7 +116,7 @@ public class Troup_Mouvement : MonoBehaviour
             Tile.ChangeTile(ThisTile, targets[0] , this.gameObject);
             setTile(targets[0]);
             targets.RemoveAt(0);
-            ShowPossibleMove(3);
+            
 
         }
        
@@ -125,66 +144,144 @@ public class Troup_Mouvement : MonoBehaviour
 
    
 
+   
     public void ShowPossibleMove()
     {
-        foreach (Tile tile in Tile.GetTiles())
-        {
-            tile.GetComponent<MeshRenderer>().material = DefaultColor;
-        }
-        neighbors = ThisTile.GetNeighbors();
-        foreach (Tile tile in neighbors)
-        {
-            if (tile != null)
+            neighbors = new List<Tile>();
+            
+            foreach(Tile tile in Tile.GetWalkableTilesInRange(ThisTile, 1))
             {
-                tile.GetComponent<MeshRenderer>().material = PossibleMoveColor;
-
+                tile.GetComponent<OutlineManager>().enabled = true;
+                neighbors.Add(tile);
             }
-        }
+        
     }
-
     public void ShowPossibleMove(int range)
     {
-        //TODO: A Optimiser
-        foreach (Tile tile in Tile.GetTiles())
-        {
-            tile.GetComponent<MeshRenderer>().material = DefaultColor;
-        }
         neighbors = new List<Tile>();
-        List<Tile> tileToExpende = new List<Tile>();
-        tileToExpende.Add(ThisTile);
-        for (int i = 0; i < range; i++)
+
+
+        //foreach (Tile tile in Tile.GetWalkableTilesInRange(ThisTile, range))
+        //{
+        //    tile.GetComponent<OutlineManager>().enabled = true;
+        //  neighbors.Add(tile);
+        //}
+        Tile start = ThisTile;
+        Dictionary<Tile, float> costMap = new Dictionary<Tile, float>(); // Distance depuis le départ
+        Dictionary<Tile, Tile> cameFrom = new Dictionary<Tile, Tile>(); // Pour reconstruire le chemin
+        List<Tile> unvisited = new List<Tile>(); // Liste des tuiles non visitées
+
+        // Initialisation
+        costMap[ThisTile] = 0;
+        unvisited.Add(start);
+
+        while (unvisited.Count > 0)
         {
-            List<Tile> tempTileToExpend = new List<Tile>();
-            while (tileToExpende.Count > 0)
+            // Trier pour prendre la tuile avec le coût le plus faible
+            unvisited.Sort((a, b) => costMap[a].CompareTo(costMap[b]));
+            Tile current = unvisited[0];
+            unvisited.RemoveAt(0);
+
+            // Si on a atteint la destination, on reconstruit le chemin
+            
+
+            // Explorer les voisins
+            foreach (Tile neighbor in current.GetWalkableNeighbors())
             {
-                Debug.Log(tileToExpende.Count);
-                List<Tile> temp = tileToExpende[0].GetNeighbors();
-                foreach (Tile tile in temp)
+
+                if (neighbor == null) continue;
+                Debug.Log(neighbor.name);
+                float newCost = 1;
+                if (costMap.ContainsKey(current))
                 {
-                    if (tile != null)
-                    {
-                        if (!InTileList(neighbors, tile) && tile != ThisTile)
-                        {
-                            neighbors.Add(tile);
-                            tempTileToExpend.Add(tile);
-
-                        }
-                    }
+                    newCost = costMap[current] + 1;
                 }
-                tileToExpende.RemoveAt(0);
+
+
+                if (!costMap.ContainsKey(neighbor) || (newCost < costMap[neighbor]))
+                {
+                    costMap[neighbor] = newCost;
+                    
+                    if (!unvisited.Contains(neighbor))
+                        unvisited.Add(neighbor);
+                }
+
             }
-            tileToExpende = tempTileToExpend;
-
-
+            
         }
-        foreach (Tile tile in neighbors)
+        foreach (Tile tile in costMap.Keys)
         {
-            if (tile != null)
+            if (costMap[tile] >0 && costMap[tile]<=range) 
             {
-                tile.GetComponent<MeshRenderer>().material = PossibleMoveColor;
+                neighbors.Add(tile);
+                tile.GetComponent<OutlineManager>().enabled = true;
 
             }
         }
+            Debug.Log("Pas de Chemin Trouvé");
+        // Aucun chemin trouvé
+
+    }
+
+    public static List<Tile> FindPath(Tile start, Tile goal,int mouvementRange)
+    {
+        Dictionary<Tile, float> costMap = new Dictionary<Tile, float>(); // Distance depuis le départ
+        Dictionary<Tile, Tile> cameFrom = new Dictionary<Tile, Tile>(); // Pour reconstruire le chemin
+        List<Tile> unvisited = new List<Tile>(); // Liste des tuiles non visitées
+
+        // Initialisation
+        costMap[start] = 0;
+        unvisited.Add(start);
+
+        while (unvisited.Count > 0)
+        {
+            // Trier pour prendre la tuile avec le coût le plus faible
+            unvisited.Sort((a, b) => costMap[a].CompareTo(costMap[b]));
+            Tile current = unvisited[0];
+            unvisited.RemoveAt(0);
+
+            // Si on a atteint la destination, on reconstruit le chemin
+            if (current == goal)
+                return ReconstructPath(cameFrom, goal);
+
+            // Explorer les voisins
+            foreach (Tile neighbor in current.GetWalkableNeighbors())
+            {
+             
+                if( neighbor==null) continue;
+                Debug.Log(neighbor.name);
+                float newCost = 1;
+                if (costMap.ContainsKey(current)) {
+                    newCost = costMap[current] + 1; 
+                }
+                
+                
+                if (!costMap.ContainsKey(neighbor) || (newCost < costMap[neighbor]&&newCost<mouvementRange))
+                {
+                    costMap[neighbor] = newCost;
+                    cameFrom[neighbor] = current;
+                    if (!unvisited.Contains(neighbor))
+                        unvisited.Add(neighbor);
+                }
+            }
+        }
+        Debug.Log("Pas de Chemin Trouvé");
+        return null; // Aucun chemin trouvé
+    }
+
+    private static List<Tile> ReconstructPath(Dictionary<Tile, Tile> cameFrom, Tile goal)
+    {
+        List<Tile> path = new List<Tile>();
+        Tile current = goal;
+
+        while (cameFrom.ContainsKey(current))
+        {
+            path.Add(current);
+            current = cameFrom[current];
+        }
+
+        path.Reverse(); // On retourne la liste pour avoir le chemin du début à la fin
+        return path;
     }
 
 
