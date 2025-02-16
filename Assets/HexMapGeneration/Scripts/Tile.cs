@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
+using System.Linq;
 
 public class Tile : MonoBehaviour
 {
@@ -48,7 +48,7 @@ public class Tile : MonoBehaviour
 
     public static float tileRadius;
     public static float DistanceBetween(Tile tile1, Tile tile2){
-        return Vector3.Distance(tile1.transform.position, tile2.transform.position);
+        return (Mathf.Abs(tile1.cubicCoordinates.x-tile2.cubicCoordinates.x)+Mathf.Abs(tile1.cubicCoordinates.y-tile2.cubicCoordinates.y)+Mathf.Abs(tile1.cubicCoordinates.z-tile2.cubicCoordinates.z))/2;
     }
 
     public static Tile FindNearestTile(Tile tile, List<Tile> tiles){
@@ -61,11 +61,26 @@ public class Tile : MonoBehaviour
         }
         return nearest;
     }
+
+    public static List<Tile> GetTilesInRange(Tile tile, int range){
+        List<Tile> tiles = new List<Tile>();
+        for (int x = -range; x <= range; x++)
+        {
+            for (int y = Mathf.Max(-range, -x-range); y <= Mathf.Min(range, -x+range); y++)
+            {
+                int z = -x-y;
+                Tile inRange = Tile.GetTile(x+tile.cubicCoordinates.x,y+tile.cubicCoordinates.y,z+tile.cubicCoordinates.z);
+                if(inRange != null) tiles.Add(inRange);
+            }
+        }
+        return tiles;
+    }
+
     #endregion
 
     #region tile related attributes and methods
     public Vector3Int cubicCoordinates;
-    public TerrainType terrainType;
+    public Biome biome;
 
     public GameObject treePrefab;
 
@@ -107,16 +122,16 @@ public class Tile : MonoBehaviour
         return neighbors;
     }
 
-    public void AssignBiome(TerrainType terrainType){
-        this.terrainType=terrainType;
+    public void AssignBiome(Biome biome){
+        this.biome=biome;
     }
 
     public void ApplyBiome(){
-        switch(terrainType){
-            case TerrainType.plain:
+        switch(biome){
+            case Biome.plain:
                 transform.GetComponent<Renderer>().material.color = new Color(0, 1, 0);
                 break;
-            case TerrainType.forest:
+            case Biome.forest:
                 transform.GetComponent<Renderer>().material.color = new Color(0, 0.7f, 0);
                 for (int i = 0; i < 6; i++){
                     Vector3 pos = new Vector3(
@@ -126,17 +141,17 @@ public class Tile : MonoBehaviour
                     Instantiate(treePrefab, pos+transform.localScale.y*Vector3.up, Quaternion.identity, transform.GetChild(0));
                 }
                 break;
-            case TerrainType.hill:
+            case Biome.hill:
                 transform.GetComponent<Renderer>().materials[0].color = new Color(0.6f, 0.6f, 0);
                 transform.GetComponent<Renderer>().materials[1].color = new Color(0.6f, 0.6f, 0);
                 transform.localScale+=0.8f*Vector3.up;
                 break;
-            case TerrainType.mountain:
+            case Biome.mountain:
                 transform.GetComponent<Renderer>().materials[0].color = new Color(0.25f, 0.25f, 0.25f);
                 transform.GetComponent<Renderer>().materials[1].color = new Color(0.25f, 0.25f, 0.25f);
                 transform.localScale+=1.5f*Vector3.up;
                 break;
-            case TerrainType.water:
+            case Biome.water:
                 transform.GetComponent<Renderer>().materials[0].color = new Color(0, 0, 0.8f);
                 transform.GetComponent<Renderer>().materials[1].color = new Color(0, 0, 0.8f);
                 transform.localScale+=Vector3.down/2;
@@ -146,7 +161,7 @@ public class Tile : MonoBehaviour
     #endregion
 }
 
-public enum TerrainType{
+public enum Biome{
     plain,
     forest,
     hill,
