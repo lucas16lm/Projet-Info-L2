@@ -23,6 +23,7 @@ public class MapTest : MonoBehaviour
     public void SelectTile(){
         Tile tile = Tile.GetTile(int.Parse(xField.text), int.Parse(yField.text), int.Parse(zField.text));
         if(tile!=null) tile.transform.GetComponent<Renderer>().material.color=Color.blue;
+        Debug.Log(Tile.GetObject(tile).name);
     }
 
     public void SelectNeighbors(){
