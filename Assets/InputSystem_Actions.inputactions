@@ -74,6 +74,34 @@
             ]
         },
         {
+            "name": "UnitControl",
+            "id": "050907a5-d7b1-494f-9370-0c7ef59fc3f5",
+            "actions": [
+                {
+                    "name": "Select",
+                    "type": "Button",
+                    "id": "36c3dbec-599c-400b-9e10-e0a8b2860656",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "b85c3c3e-973c-4888-9b46-91e23116a6c2",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Select",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
             "name": "UI",
             "id": "272f6d14-89ba-496f-b7ff-215263d3219f",
             "actions": [
