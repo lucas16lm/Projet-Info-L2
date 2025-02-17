@@ -4,6 +4,7 @@ Membres : Fargas Raphael, Corre-Gonzalez Esteban, Maurin Lucas
 Documentation packages :
 PrimeTween : https://github.com/KyryloKuzyk/PrimeTween
 Linework : https://linework.ameye.dev/
+Cinemachine : https://docs.unity3d.com/Packages/com.unity.cinemachine@3.1/manual/index.html
 
 Systèmes à implémenter :
 Carte procédurale : OK
