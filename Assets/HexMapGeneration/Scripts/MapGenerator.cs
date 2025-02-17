@@ -22,7 +22,7 @@ public class MapGenerator : MonoBehaviour
     
     private System.Random prng;
 
-    public void CreateMap(int width)
+    public void CreateMap()
     {
         prng = new System.Random(seed);
         ClearTiles();

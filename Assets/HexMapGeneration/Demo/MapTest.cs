@@ -13,7 +13,7 @@ public class MapTest : MonoBehaviour
     
 
     public void CreateMapButton(){
-        gridGenerator.CreateMap(gridGenerator.width);
+        gridGenerator.CreateMap();
     }
 
     public void ClearMapButton(){
