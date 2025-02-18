@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d68825d1d7efeb46a3337dbb5ff23f5, type: 3}
+  m_Name: England
+  m_EditorClassIdentifier: 
+  factionName: England
+  description: 
+  factionFlag: {fileID: 0}
+  factionColor: {r: 0.745283, g: 0.0035154943, b: 0.0035154943, a: 0}
+  generalTower: {fileID: 5736156711296493098, guid: 9d5358b657df3d94da82d0e91296d3ce, type: 3}
+  factionUnits:
+  - {fileID: 11400000, guid: 2b8c494168cde33489070ba21853867f, type: 2}
+  factionBonus: {fileID: 0}

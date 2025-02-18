@@ -62,6 +62,10 @@ public class Tile : MonoBehaviour
         return nearest;
     }
 
+    public static List<Tile> GetTilesBetween(int y1, int y2){
+        return Tile.GetTiles().Where(t => Coordinates.CubeToOffset(t.cubicCoordinates).y >= y1 && Coordinates.CubeToOffset(t.cubicCoordinates).y <= y2).ToList();
+    }
+
     public static List<Tile> GetTilesInRange(Tile tile, int range){
         List<Tile> tiles = new List<Tile>();
         for (int x = -range; x <= range; x++)

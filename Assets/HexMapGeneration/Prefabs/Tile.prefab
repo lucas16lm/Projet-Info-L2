@@ -95,10 +95,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d673253b01e525b499bfada49840752b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  outlineLayerMask:
-    serializedVersion: 0
-    m_Bits: 256
-  outlineSettings: {fileID: 11400000, guid: 2785daf9609de824b8bc4e842b0d5072, type: 2}
+  outlineLayerMaskId: 8
+  outlineSettings: {fileID: 11400000, guid: 0bf4b201c3cb12f4fa60d22b936b1467, type: 2}
 --- !u!64 &6842512617904620370
 MeshCollider:
   m_ObjectHideFlags: 0

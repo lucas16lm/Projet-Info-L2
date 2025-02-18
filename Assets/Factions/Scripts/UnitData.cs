@@ -1,10 +1,10 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "UnifInfo", menuName = "Scriptable Objects/UnifInfo")]
-public class UnitInfo : ScriptableObject
+[CreateAssetMenu(fileName = "UnitData", menuName = "Scriptable Objects/UnitData")]
+public class UnitData : ScriptableObject
 {
     public string unitName;
-    public GameObject troopGameObject;
+    public GameObject unitGameObject;
     public UnitClass unitClass;
     public int healthPoints;
     public int baseDamagePoints;

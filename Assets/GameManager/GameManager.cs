@@ -1,26 +1,31 @@
+using System.Linq;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager instance;
+    [Header("System references")]
     public MapGenerator mapGenerator;
+    public CameraManager cameraManager;
     public TurnManager turnManager;
-    public ArmyManager armyManager;
+    public FactionManager factionManager;
+    public UIManager uIManager;
+
+    [Header("Faction settings")]
+    public FactionData firstFactionData;
+    public FactionData secondFactionData;
+
+    void Awake()
+    {
+        if(instance==null) instance=this;
+        else Debug.LogError("Il y a déjà un GameManager !!!");
+    }
 
     void Start()
     {
-        StartGame();
-    }
-
-    public void StartGame(){
         mapGenerator.seed=Random.Range(-100000,100000);
         mapGenerator.CreateMap();
-
-        turnManager.Initialize();
+        factionManager.InitFactions(firstFactionData, secondFactionData);
+        turnManager.InitTurns();
     }
-
-    public void EndGame(){
-        mapGenerator.ClearTiles();
-    }
-
-    
 }

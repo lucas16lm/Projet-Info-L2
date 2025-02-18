@@ -1,3 +1,4 @@
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,17 +8,19 @@ public class RTSCamera : MonoBehaviour
     private InputAction inputAction;
     [SerializeField]
     private Vector2 moveInput;
-    
 
-    void Start()
+
+    void OnEnable()
     {
-         inputAction = InputSystem.actions.FindAction("Movement");
+        inputAction = InputSystem.actions.FindAction("Move");
     }
 
     void Update()
     {
-       moveInput = inputAction.ReadValue<Vector2>();
-       if(moveInput != Vector2.zero) transform.position+=new Vector3(moveInput.x, 0, moveInput.y)*speed*Time.deltaTime;
+        moveInput = inputAction.ReadValue<Vector2>();
+        Vector3 direction = (Camera.main.transform.forward*moveInput.y)+(Camera.main.transform.right*moveInput.x);
+        direction.y=0;
+        if(moveInput != Vector2.zero) transform.position+=direction.normalized*speed*Time.deltaTime;
     }
 
 }

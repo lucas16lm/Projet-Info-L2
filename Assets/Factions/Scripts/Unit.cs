@@ -4,7 +4,7 @@ using UnityEngine.Rendering;
 
 public class Unit : MonoBehaviour
 {
-    public UnitInfo unitInfo;
+    public UnitData data;
     public Tile position;
 
 
