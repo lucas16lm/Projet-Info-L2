@@ -10,12 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 13fc37f6c55544244a9cf59fbb928217, type: 3}
-  m_Name: Fantassin
+  m_Name: Imperial line
   m_EditorClassIdentifier: 
-  unitName: 
-  unitGameObject: {fileID: 7603853739315031201, guid: fa29a41e50cd71144956888a086927b8, type: 3}
+  gameObjectPrefab: {fileID: 7569501417488372956, guid: a40214916bf424547ba0df25ab3a11e9, type: 3}
+  elementName: Imperial line
+  healthPoints: 5
+  image: {fileID: 21300000, guid: 355ce080f7823474da4f723852854b43, type: 3}
   unitClass: 0
-  healthPoints: 0
-  baseDamagePoints: 0
-  baseMovementPoints: 0
+  baseDamagePoints: 5
+  baseMovementPoints: 5
+  cost:
+    gold: 0
+    weapons: 1
+    powder: 0
+    horses: 1
+    wood: 0
   specialAction: {fileID: 0}

@@ -1,12 +1,10 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "UnitData", menuName = "Scriptable Objects/UnitData")]
-public class UnitData : ScriptableObject
+public class UnitData : PlaceableElement
 {
-    public string unitName;
-    public GameObject unitGameObject;
+    public Sprite image;
     public UnitClass unitClass;
-    public int healthPoints;
     public int baseDamagePoints;
     public int baseMovementPoints;
     public SpecialAction specialAction;

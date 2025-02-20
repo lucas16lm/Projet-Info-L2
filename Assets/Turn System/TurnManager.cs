@@ -64,31 +64,24 @@ public class TurnManager : MonoBehaviour
 
     IEnumerator PlaceGeneral(Faction player, List<Tile> possibleTiles){
         Debug.Log("Placement du général de "+player.data.name);
-        possibleTiles.ForEach(tile => tile.GetComponent<OutlineManager>().enabled = true);
+        possibleTiles.ForEach(tile => tile.GetComponent<OutlineManager>().Outline());
         bool generalPlaced = false;
-        InputAction inputAction = InputSystem.actions.FindAction("Select");
         
         while (!generalPlaced)
         {
-            if (inputAction.IsPressed())
-            {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-                if(Physics.Raycast(ray, out hit)){
-                    Tile tile = hit.collider.gameObject?.GetComponent<Tile>();
-                    if(tile.biome != Biome.mountain && tile.biome != Biome.water && possibleTiles.Contains(tile)){
-                        player.PlaceGeneral(tile);
-                        generalPlaced = true;
-                        possibleTiles.ForEach(tile => tile.GetComponent<OutlineManager>().enabled = false);
-                        Debug.Log(player.data.name+" a placé son général");
-                    }
-                    else{
-                        Debug.Log("Position invalide");
-                    }
-                    
-                }
-            }
-            yield return null;
+            StartCoroutine(player.SelectMatchingGameObject(
+                go =>{
+                Tile tile = go?.GetComponent<Tile>();
+                if(tile == null) return false;
+                return possibleTiles.Contains(tile) && tile.isFree && tile.biome!=Biome.mountain && tile.biome!=Biome.water;
+                },
+                go=>{
+                    player.PlaceElement(player.data.generalData, go.GetComponent<Tile>());
+                    player.general.GetComponent<OutlineManager>().Outline();
+                    generalPlaced=true;
+                }));
+            
+            yield return new WaitUntil(()=>generalPlaced);
         }
     }
     IEnumerator FirstPlayerGeneralPlacement()
@@ -106,31 +99,56 @@ public class TurnManager : MonoBehaviour
         yield return PlaceGeneral(player, possibleTiles);
     }
 
-    IEnumerator UnitPlacement(Faction player, List<Tile> possibleTiles){
+    IEnumerator UnitDeployment(Faction player, List<Tile> possibleTiles){
         Debug.Log("Placement des troupes de "+player.data.name);
         
+        List<OutlineManager> outlineManagers = new List<OutlineManager>();
+        possibleTiles.ForEach(tile => outlineManagers.Add(tile.GetComponent<OutlineManager>()));
+        outlineManagers.Add(player.general.GetComponent<OutlineManager>());
+
         bool turnEnded=false;
-        GameManager.instance.uIManager.endTurnButton.GetComponent<Button>().onClick.AddListener(delegate{turnEnded=true ; Debug.Log("turn ended");});
+        GameManager.instance.uIManager.endTurnButton.GetComponent<Button>().onClick.AddListener(delegate{turnEnded=true; Debug.Log("turn ended");});
+
+        UnitData unitToPlace = null;
+        
+        for (int i = 0; i < player.data.factionUnitsData.Count; i++)
+        {
+            UnitData unitData = player.data.factionUnitsData[i];
+            GameManager.instance.uIManager.recruitmentPanel.transform.GetChild(i).GetComponent<Button>().onClick.AddListener(delegate{unitToPlace=unitData ; Debug.Log("selected : "+unitData.elementName);});
+        }
 
         while(!turnEnded){
+            StartCoroutine(player.SelectMatchingGameObject(
+                go =>{
+                Tile tile = go?.GetComponent<Tile>();
+                if(tile == null) return false;
+                return unitToPlace!=null && possibleTiles.Contains(tile) && tile.isFree && tile.biome!=Biome.mountain && tile.biome!=Biome.water;
+                },
+                go=>{
+                    GameObject unitGO = player.PlaceElement(unitToPlace, go.GetComponent<Tile>());
+                    if(unitGO==null)return;
+                    outlineManagers.Add(unitGO.GetComponent<OutlineManager>());
+                    unitGO.GetComponent<OutlineManager>().Outline();
+                    unitToPlace=null;
+                }));
+
             yield return null;
         }
-        
+        outlineManagers.ForEach(outline => outline.DisableOutline());
     }
 
     IEnumerator FirstPlayerUnitPlacement(){
         Faction player = GameManager.instance.factionManager.firstFaction;
         List<Tile> possibleTiles = Tile.GetTilesBetween(0, 3);
-        yield return UnitPlacement(player, possibleTiles);
+        yield return UnitDeployment(player, possibleTiles);
     }
 
     IEnumerator SecondPlayerUnitPlacement(){
         Faction player = GameManager.instance.factionManager.secondFaction;
         int maxY = (int)(GameManager.instance.mapGenerator.width*GameManager.instance.mapGenerator.heightRatio);
         List<Tile> possibleTiles = Tile.GetTilesBetween(maxY-4, maxY);
-        yield return UnitPlacement(player, possibleTiles);
+        yield return UnitDeployment(player, possibleTiles);
     }
-
 }
 
 public enum GameState{

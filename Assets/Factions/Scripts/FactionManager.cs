@@ -8,9 +8,9 @@ public class FactionManager : MonoBehaviour
 
     public void InitFactions(FactionData firstFactionData, FactionData secondFactionData){
         firstFaction = Instantiate(factionPrefab, transform).GetComponent<Faction>();
-        firstFaction.data = firstFactionData;
+        firstFaction.InitializeFaction(firstFactionData);
 
         secondFaction = Instantiate(factionPrefab, transform).GetComponent<Faction>();
-        secondFaction.data = secondFactionData;
+        secondFaction.InitializeFaction(secondFactionData);
     }
 }

@@ -8,7 +8,10 @@ public class FactionData : ScriptableObject
     public string description;
     public Sprite factionFlag;
     public Color factionColor;
-    public GameObject generalTower;
-    public List<UnitData> factionUnits;
+    public RessourceBalance baseBalance;
+    public GeneralData generalData;
+    public OfficerData officerData;
+    public List<UnitData> factionUnitsData;
+    public List<BuildingData> buildingDatas;
     public FactionBonus factionBonus;
 }

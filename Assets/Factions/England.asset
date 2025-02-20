@@ -16,7 +16,15 @@ MonoBehaviour:
   description: 
   factionFlag: {fileID: 0}
   factionColor: {r: 0.745283, g: 0.0035154943, b: 0.0035154943, a: 0}
-  generalTower: {fileID: 5736156711296493098, guid: 9d5358b657df3d94da82d0e91296d3ce, type: 3}
-  factionUnits:
-  - {fileID: 11400000, guid: 2b8c494168cde33489070ba21853867f, type: 2}
+  baseBalance:
+    gold: 15
+    weapons: 10
+    powder: 5
+    horses: 5
+    wood: 5
+  generalData: {fileID: 11400000, guid: 4e41a187b8286a9438adffeb56bc1e78, type: 2}
+  officerData: {fileID: 0}
+  factionUnitsData:
+  - {fileID: 11400000, guid: a429ed781ef3a2a4cbea6996b6a5f07f, type: 2}
+  buildingDatas: []
   factionBonus: {fileID: 0}

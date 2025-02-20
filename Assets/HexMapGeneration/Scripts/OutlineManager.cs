@@ -2,6 +2,7 @@ using UnityEngine;
 using PrimeTween;
 using Linework.SurfaceFill;
 using Linework.SoftOutline;
+using System.Linq;
 
 public class OutlineManager : MonoBehaviour
 {
@@ -9,15 +10,17 @@ public class OutlineManager : MonoBehaviour
     public SoftOutlineSettings outlineSettings;
 
 
-    void OnEnable()
+    public void Outline()
     {
         RenderingLayerMask renderingLayerMask = RenderingLayerMask.defaultRenderingLayerMask;
         renderingLayerMask |= 0x1 << outlineLayerMaskId;
-        GetComponent<Renderer>().renderingLayerMask = renderingLayerMask;
+        GetComponentInChildren<Renderer>().renderingLayerMask = renderingLayerMask;
+        GetComponentsInChildren<Renderer>().ToList().ForEach(renderer => renderer.renderingLayerMask = renderingLayerMask);
     }
-    void OnDisable()
+    public void DisableOutline()
     {
-        GetComponent<Renderer>().renderingLayerMask=RenderingLayerMask.defaultRenderingLayerMask;
+        GetComponentInChildren<Renderer>().renderingLayerMask=RenderingLayerMask.defaultRenderingLayerMask;
+        GetComponentsInChildren<Renderer>().ToList().ForEach(renderer => renderer.renderingLayerMask = RenderingLayerMask.defaultRenderingLayerMask);
     }
 
 

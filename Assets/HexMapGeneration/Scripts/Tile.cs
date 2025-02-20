@@ -83,10 +83,11 @@ public class Tile : MonoBehaviour
     #endregion
 
     #region tile related attributes and methods
+    public GameObject treePrefab;
     public Vector3Int cubicCoordinates;
     public Biome biome;
-
-    public GameObject treePrefab;
+    public bool isFree = true;
+    
 
 
     public Tile GetUpNeighbor(){

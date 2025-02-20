@@ -44,8 +44,8 @@ public class MapGenerator : MonoBehaviour
                 if (x % 2 != 0 && y == height - 1) continue;
 
                 GameObject tileGameObject = Instantiate(tilePrefab, Coordinates.OffsetToWorldCoordinates(x, y, tileRadius), Quaternion.identity, transform);
-
                 Vector3Int cubicCoordinate = Coordinates.OffsetToCubeCoordinates(x, y);
+                tileGameObject.name=""+cubicCoordinate;
                 Tile tileComponent = tileGameObject.GetComponent<Tile>();
                 tileComponent.cubicCoordinates = cubicCoordinate;
                 Tile.AddTile(Coordinates.OffsetToCubeCoordinates(x, y), tileComponent);

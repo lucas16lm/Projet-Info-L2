@@ -48,7 +48,7 @@ MonoBehaviour:
   hardness: 1
   sharedColor: {r: 0, g: 1, b: 0, a: 1}
   intensity: 4.7
-  blendMode: 2
+  blendMode: 0
   dilationMethod: 3
   kernelSize: 20
   blurSpread: 1.35
