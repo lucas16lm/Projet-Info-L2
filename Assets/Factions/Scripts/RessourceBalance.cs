@@ -16,6 +16,9 @@ public struct RessourceBalance
         this.horses+=horses;
         this.wood+=wood;
     }
+    public void AddRessources(RessourceBalance ressourceBalance){
+        AddRessources(ressourceBalance.gold, ressourceBalance.weapons, ressourceBalance.powder, ressourceBalance.horses, ressourceBalance.wood);
+    }
 
     public void RemoveRessources(int gold, int weapons, int powder, int horses, int wood){
         AddRessources(-gold, -weapons, -powder, -horses, - wood);

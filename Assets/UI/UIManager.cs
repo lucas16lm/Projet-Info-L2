@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using PrimeTween;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,28 +13,44 @@ public class UIManager : MonoBehaviour
     public GameObject ressourcePanel;
     public GameObject recruitmentPanel;
     public GameObject messagePanel;
+    public GameObject crossHair;
 
     public void SetUpUI(GameState gameState){
         switch(gameState){
             case GameState.FirstPlayerGeneralPlacement or GameState.SecondPlayerGeneralPlacement:
                 GetBattleUIElements().ForEach(e => e.SetActive(false));
-                messagePanel.SetActive(true);
-                messagePanel.GetComponentInChildren<TMP_Text>().text="Place your general";
+                DesactivateCrossHair();
                 break;
             
-            case GameState.FirstPlayerDeployment or GameState.FirstPlayerTurn:
+            case GameState.FirstPlayerDeployment:
                 GetBattleUIElements().ForEach(e => e.SetActive(true));
-                messagePanel.SetActive(false);
                 UpdateRessourcePanel(GameManager.instance.factionManager.firstFaction);
                 UpdateRecruitmentPanel(GameManager.instance.factionManager.firstFaction);
+                DesactivateCrossHair();
                 break;
-            
-            case GameState.SecondPlayerDeployment or GameState.SecondPlayerTurn:
-                GetBattleUIElements().ForEach(e => e.SetActive(true));
-                messagePanel.SetActive(false);
+
+            case GameState.FirstPlayerTurn:
+                GetBattleUIElements().ForEach(e => e.SetActive(false));
                 UpdateRessourcePanel(GameManager.instance.factionManager.secondFaction);
                 UpdateRecruitmentPanel(GameManager.instance.factionManager.secondFaction);
+                ActivateCrossHair();
                 break;
+
+            case GameState.SecondPlayerDeployment:
+                GetBattleUIElements().ForEach(e => e.SetActive(true));
+                UpdateRessourcePanel(GameManager.instance.factionManager.secondFaction);
+                UpdateRecruitmentPanel(GameManager.instance.factionManager.secondFaction);
+                DesactivateCrossHair();
+                break;
+
+            case GameState.SecondPlayerTurn:
+                GetBattleUIElements().ForEach(e => e.SetActive(false));
+                UpdateRessourcePanel(GameManager.instance.factionManager.secondFaction);
+                UpdateRecruitmentPanel(GameManager.instance.factionManager.secondFaction);
+                ActivateCrossHair();
+                break;
+
+            
         }
     }
 
@@ -72,6 +89,21 @@ public class UIManager : MonoBehaviour
             Instantiate(unitCard, recruitmentPanel.transform);
             maxUnitNumber--;
         }
+    }
+
+    public void ActivateCrossHair(){
+        crossHair.SetActive(true);
+    }
+    public void DesactivateCrossHair(){
+        crossHair.SetActive(false);
+    }
+
+    public void PrintMessage(string message){
+        bool isCrossHairActive=crossHair.activeSelf;
+        crossHair.SetActive(false);
+        messagePanel.SetActive(true);
+        messagePanel.GetComponentInChildren<TMP_Text>().text=message;
+        Tween.Delay(3, ()=>{messagePanel.SetActive(false);crossHair.SetActive(isCrossHairActive);});
     }
 
      

@@ -28,13 +28,35 @@ public class CameraManager : MonoBehaviour
                 firstPlayerRtsCamera.Target.TrackingTarget.GetComponent<RTSCamera>().enabled=false;
                 secondPlayerRtsCamera.Target.TrackingTarget.GetComponent<RTSCamera>().enabled=true;
                 break;
+
+            case CameraState.FirstPlayerPOV:
+                firstPlayerRtsCamera.Priority=0;
+                secondPlayerRtsCamera.Priority=0;
+                firstPlayerCameras.ForEach(cam => cam.Priority=0);
+                secondPlayerCameras.ForEach(cam => cam.Priority=0);
+                firstPlayerRtsCamera.Target.TrackingTarget.GetComponent<RTSCamera>().enabled=false;
+                secondPlayerRtsCamera.Target.TrackingTarget.GetComponent<RTSCamera>().enabled=false;
+
+                firstPlayerCameras[0].Priority=1;
+                Cursor.lockState=CursorLockMode.Locked;
+                break;
+
+            case CameraState.SecondPlayerPOV:
+                firstPlayerRtsCamera.Priority=0;
+                secondPlayerRtsCamera.Priority=0;
+                firstPlayerCameras.ForEach(cam => cam.Priority=0);
+                secondPlayerCameras.ForEach(cam => cam.Priority=0);
+                firstPlayerRtsCamera.Target.TrackingTarget.GetComponent<RTSCamera>().enabled=false;
+                secondPlayerRtsCamera.Target.TrackingTarget.GetComponent<RTSCamera>().enabled=false;
+
+                secondPlayerCameras[0].Priority=1;
+                break;
         }
     }
 
     public void AddFirstPlayerCamera(CinemachineCamera camera){
         firstPlayerCameras.Add(camera);
     }
-
     
 }
 

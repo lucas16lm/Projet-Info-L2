@@ -59,13 +59,13 @@ public class Faction : MonoBehaviour
         
         InputAction selectAction = InputSystem.actions.FindAction("Select");
         InputAction cancelAction = InputSystem.actions.FindAction("Cancel");
-        /*
+        
         bool turnEnded=false;
         GameManager.instance.uIManager.endTurnButton.GetComponent<Button>().onClick.AddListener(delegate{turnEnded=true; Debug.Log("turn ended");});
-        */
+        
         while(!done){
             
-            if((cancelAction.WasPerformedThisFrame() && !EventSystem.current.IsPointerOverGameObject()) /*|| turnEnded*/){
+            if((cancelAction.WasPerformedThisFrame() && !EventSystem.current.IsPointerOverGameObject()) || turnEnded){
                 yield break;
             }
 

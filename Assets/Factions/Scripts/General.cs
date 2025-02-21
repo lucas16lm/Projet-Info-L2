@@ -2,15 +2,11 @@ using UnityEngine;
 
 public class General : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public GeneralData data;
+    public int healthPoints;
+
     void Start()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        healthPoints=data.baseHealthPoints;
     }
 }
