@@ -8,23 +8,20 @@ Cinemachine : https://docs.unity3d.com/Packages/com.unity.cinemachine@3.1/manual
 
 Systèmes à implémenter :
 Carte procédurale : OK
-Structure des pays : TODO
-Structure des unités : TODO
-Structre des batiments statiques : TODO
-Intégration des unités et des batiments sur la carte (déplacement, attaque, placement, etc) : TODO
-Création du système de tours et de gestion des parties : TODO
+Structure des factions : OK
+Structure des éléments placeables : OK
+Intégration des unités et des batiments sur la carte (déplacement, attaque, placement, etc) : En cours
+Création du système de tours et de gestion des parties : OK
 Création du menu principal : TODO
 
-Liste des pays et unités (d'autres seront ajoutés si temps) :
-Empire français :
-Ligne Impériale – Infanterie de ligne bien entraînée
-Garde Impériale – Unité de grenadiers d’élite avec moral élevé
-Cuirassiers – Cavaliers en armure lourde, experts dans la charge dévastatrice
-Grenadiers à Cheval de la Garde – Cavaliers lourds d’élite, surnommés « les Dieux de la Cavalerie »
-Artillerie de Campagne – Batteries de canons bien organisées (12 livres, 6 livres)
-Artillerie de la Garde – Les meilleurs artilleurs de l’armée, dotés des meilleurs canons
-
-Empire britanique
+Liste des factions:
+Royaume de France (cavalerie lourde d'élite)
+Royaume d'Angleterre (archers d'élites)
+Empire Byzantin (Troupes d'élites mais peu nombreuses)
+Saint Empire Romain Germanique (équilibré)
+Ordre du temple (cavalerie et infanterie d'élite mais faiblesse à distance et en déplacement)
+Empire Mongol (archers montés)
+Royaume de Norvège (vikings)
 
 
 
