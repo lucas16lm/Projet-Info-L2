@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using PrimeTween;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -80,7 +81,7 @@ public class TurnManager : MonoBehaviour
 
     IEnumerator PlaceGeneral(Faction player, List<Tile> possibleTiles){
         Debug.Log("Placement du général de "+player.data.name);
-        GameManager.instance.uIManager.PrintMessage(player.data.name+", place your general !");
+        GameManager.instance.uIManager.PrintMessage(player.data.factionName+", place your general !");
         possibleTiles.ForEach(tile => tile.GetComponent<OutlineManager>().Outline());
         bool generalPlaced = false;
         
@@ -90,7 +91,7 @@ public class TurnManager : MonoBehaviour
                 go =>{
                 Tile tile = go?.GetComponent<Tile>();
                 if(tile == null) return false;
-                return possibleTiles.Contains(tile) && tile.isFree && tile.biome!=Biome.mountain && tile.biome!=Biome.water;
+                return possibleTiles.Contains(tile) && !tile.occupied && tile.occupable;
                 },
                 go=>{
                     player.PlaceElement(player.data.generalData, go.GetComponent<Tile>());
@@ -117,7 +118,7 @@ public class TurnManager : MonoBehaviour
     }
 
     IEnumerator UnitDeployment(Faction player, List<Tile> possibleTiles){
-        Debug.Log("Placement des troupes de "+player.data.name);
+        Debug.Log("Placement des troupes de "+player.data.factionName);
         GameManager.instance.uIManager.PrintMessage(player.data.name+", compose your army !");
         
         List<OutlineManager> outlineManagers = new List<OutlineManager>();
@@ -142,7 +143,7 @@ public class TurnManager : MonoBehaviour
                     if(go?.GetComponent<Tile>()==null && go?.GetComponent<Unit>()==null) return false;
                     Tile tile = go?.GetComponent<Tile>();
                     Unit unit = go?.GetComponent<Unit>();
-                    if(tile!=null) return unitToPlace!=null && possibleTiles.Contains(tile) && tile.isFree && tile.biome!=Biome.mountain && tile.biome!=Biome.water;
+                    if(tile!=null) return unitToPlace!=null && possibleTiles.Contains(tile) && !tile.occupied && tile.occupable;
                     else return player.units.Contains(unit);
                     },
                 go=>{
@@ -157,9 +158,9 @@ public class TurnManager : MonoBehaviour
                         }
                     }
                     else{
-                        player.ressourceBalance.AddRessources(unit.data.cost);
+                        player.ressourceBalance.AddRessources(unit.cost);
                         GameManager.instance.uIManager.UpdateRessourcePanel(player);
-                        unit.position.isFree=true;
+                        unit.position.occupied=false;
                         player.units.Remove(unit);
                         outlineManagers.Remove(unit.GetComponent<OutlineManager>());
                         Destroy(go);
@@ -192,17 +193,32 @@ public class TurnManager : MonoBehaviour
         
         InputAction endTurnAction = InputSystem.actions.FindAction("EndTurn");
         endTurnAction.performed+=ctx=>turnEnded=true;
+
+        InputAction openPanelAction = InputSystem.actions.FindAction("OpenMenu");
+        openPanelAction.performed+=ctx=>GameManager.instance.uIManager.OpenPovPanel(player);
+        openPanelAction.canceled+=ctx=>GameManager.instance.uIManager.ClosePovPanel();
         
         while(!turnEnded){
             Unit selectedUnit = null;
             yield return player.SelectMatchingGameObject(
-                go=>go?.GetComponent<Unit>()!=null,
-                go=>{selectedUnit=go.GetComponent<Unit>();}
+                go=>go?.GetComponent<Unit>()!=null && player.units.Contains(go?.GetComponent<Unit>()),
+                go=>{
+                    selectedUnit=go.GetComponent<Unit>();
+                    selectedUnit.GetComponent<OutlineManager>().Outline();}
             );
-            yield return player.SelectMatchingGameObject(
-                go=>go?.GetComponent<Tile>()!=null,
-                go=>selectedUnit.Move(go.GetComponent<Tile>())
-            );
+            if(selectedUnit!=null){
+                Tile selectedTile = null;
+                yield return player.SelectMatchingGameObject(
+                    go=>go?.GetComponent<Tile>()!=null,
+                    go=>selectedTile=go.GetComponent<Tile>()
+                );
+                if(selectedTile!=null){
+                    selectedUnit.GetComponent<OutlineManager>().DisableOutline();
+                    yield return selectedUnit.Move(selectedTile);
+                }
+                selectedUnit.GetComponent<OutlineManager>().DisableOutline();
+            }
+            
         }
         
     }

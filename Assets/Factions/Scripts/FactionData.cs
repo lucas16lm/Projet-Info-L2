@@ -13,5 +13,4 @@ public class FactionData : ScriptableObject
     public OfficerData officerData;
     public List<UnitData> factionUnitsData;
     public List<BuildingData> buildingDatas;
-    public FactionBonus factionBonus;
 }

@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d68825d1d7efeb46a3337dbb5ff23f5, type: 3}
+  m_Name: France
+  m_EditorClassIdentifier: 
+  factionName: Kingdom of France
+  description: 
+  factionFlag: {fileID: 0}
+  factionColor: {r: 0.14653791, g: 0.17266914, b: 0.8396226, a: 0}
+  baseBalance:
+    gold: 10
+    meleeWeapons: 5
+    rangedWeapons: 5
+    horses: 5
+    wood: 5
+  generalData: {fileID: 11400000, guid: 4e41a187b8286a9438adffeb56bc1e78, type: 2}
+  officerData: {fileID: 0}
+  factionUnitsData:
+  - {fileID: 11400000, guid: 75d079e8e22ff5845889375b393cb620, type: 2}
+  - {fileID: 11400000, guid: 1cce58da2ca233b4bb6fef1aeae8770c, type: 2}
+  - {fileID: 11400000, guid: 532ca22500c66634db2eb5707eaf9164, type: 2}
+  buildingDatas: []

@@ -18,8 +18,8 @@ public class UnitCard : MonoBehaviour
         unitName.text=unitData.elementName;
         backGround.sprite=unitData.image;
         goldAmount.text=""+unitData.cost.gold;
-        weaponAmount.text=""+unitData.cost.weapons;
-        powderAmount.text=""+unitData.cost.powder;
+        weaponAmount.text=""+unitData.cost.meleeWeapons;
+        powderAmount.text=""+unitData.cost.rangedWeapons;
         horsesAmount.text=""+unitData.cost.horses;
         woodAmount.text=""+unitData.cost.wood;
     }

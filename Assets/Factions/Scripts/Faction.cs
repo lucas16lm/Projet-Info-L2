@@ -16,22 +16,29 @@ public class Faction : MonoBehaviour
     public List<Officer> officers;
     public List<Unit> units;
     public List<Building> buildings;
+    public List<PlaceableObject> placeableObjects{get{
+        List<PlaceableObject> list = new List<PlaceableObject>(){general};
+        list.AddRange(officers);
+        list.AddRange(units);
+        list.AddRange(buildings);
+        return list;
+    }}
 
     public void InitializeFaction(FactionData factionData)
     {
         transform.name=factionData.name;
         data=factionData;
-        ressourceBalance = data.baseBalance;
+        ressourceBalance = factionData.baseBalance;
     }
 
-    public GameObject PlaceElement(PlaceableElement placeableElement, Tile tile){
-        if(placeableElement.cost.gold>ressourceBalance.gold || placeableElement.cost.weapons>ressourceBalance.weapons || placeableElement.cost.powder>ressourceBalance.powder || placeableElement.cost.horses>ressourceBalance.horses || placeableElement.cost.wood>ressourceBalance.wood){
+    public GameObject PlaceElement(PlaceableData placeableElement, Tile tile){
+        if(!ressourceBalance.RemoveRessources(placeableElement.cost)){
             Debug.Log("Not enought ressources !");
             return null;
         }
         
-        GameObject element = Instantiate(placeableElement.gameObjectPrefab, tile.gameObject.transform.position+(tile.transform.localScale.y/2)*Vector3.up, Quaternion.identity, transform);
-        ressourceBalance.RemoveRessources(placeableElement.cost);
+        GameObject element = Instantiate(placeableElement.gameObjectPrefab, tile.gameObject.transform.position+(tile.transform.localScale.y/2)*Vector3.up, Quaternion.LookRotation(new Vector3(Camera.main.transform.forward.x, 0, Camera.main.transform.forward.z)), transform);
+        
         if(placeableElement is GeneralData){
             general=element.GetComponent<General>();
         }
@@ -42,15 +49,13 @@ public class Faction : MonoBehaviour
             UnitData unitData = (UnitData)placeableElement;
             Unit unit = element.GetComponent<Unit>();
             units.Add(unit);
-            unit.data= (UnitData)placeableElement;
-            unit.position=tile;
-            unit.GetComponentInChildren<Renderer>().material.color=data.factionColor;
+            unit.Initialize(unitData, tile);
             GameManager.instance.uIManager.UpdateRessourcePanel(this);
         }
         else if(placeableElement is BuildingData){
             buildings.Add(element.GetComponent<Building>());
         }
-        tile.isFree=false;
+        tile.occupied=true;
         return element;
     }
 
