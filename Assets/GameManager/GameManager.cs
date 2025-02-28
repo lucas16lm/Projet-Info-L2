@@ -3,17 +3,19 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    [Header("Player factions")]
+    public FactionData firstPlayerFaction;
+    public FactionData secondPlayerFaction;
     public static GameManager instance;
     [Header("System references")]
     public MapGenerator mapGenerator;
+    public PlayerManager playerManager;
     public CameraManager cameraManager;
     public TurnManager turnManager;
-    public FactionManager factionManager;
     public UIManager uIManager;
 
-    [Header("Faction settings")]
-    public FactionData firstFactionData;
-    public FactionData secondFactionData;
+    
+    
 
     void Awake()
     {
@@ -25,7 +27,7 @@ public class GameManager : MonoBehaviour
     {
         mapGenerator.seed=Random.Range(-100000,100000);
         mapGenerator.CreateMap();
-        factionManager.InitFactions(firstFactionData, secondFactionData);
+        playerManager.InitializePlayers(firstPlayerFaction, secondPlayerFaction);
         uIManager.InitializeRecruitmentPanel();
         turnManager.InitTurns();
     }

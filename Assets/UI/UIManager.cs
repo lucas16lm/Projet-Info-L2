@@ -9,7 +9,6 @@ public class UIManager : MonoBehaviour
     [Header("UI prefabs")]
     public GameObject unitCard;
     [Header("UI elements")]
-    public GameObject endTurnButton;
     public GameObject ressourcePanel;
     public GameObject recruitmentPanel;
     public GameObject messagePanel;
@@ -18,6 +17,7 @@ public class UIManager : MonoBehaviour
 
     public void SetUpUI(GameState gameState){
         switch(gameState){
+            /*
             case GameState.FirstPlayerGeneralPlacement or GameState.SecondPlayerGeneralPlacement:
                 GetBattleUIElements().ForEach(e => e.SetActive(false));
                 DesactivateCrossHair();
@@ -50,32 +50,32 @@ public class UIManager : MonoBehaviour
                 UpdateRecruitmentPanel(GameManager.instance.factionManager.secondFaction);
                 ActivateCrossHair();
                 break;
-
+            */
             
         }
     }
 
     private List<GameObject> GetBattleUIElements(){
-        return new List<GameObject>(){endTurnButton, ressourcePanel, recruitmentPanel};
+        return new List<GameObject>(){ressourcePanel, recruitmentPanel};
     }
 
-    public void UpdateRessourcePanel(Faction faction){
-        ressourcePanel.transform.GetChild(0).GetComponentInChildren<TMP_Text>().text=""+faction.ressourceBalance.gold;
-        ressourcePanel.transform.GetChild(1).GetComponentInChildren<TMP_Text>().text=""+faction.ressourceBalance.meleeWeapons;
-        ressourcePanel.transform.GetChild(2).GetComponentInChildren<TMP_Text>().text=""+faction.ressourceBalance.rangedWeapons;
-        ressourcePanel.transform.GetChild(3).GetComponentInChildren<TMP_Text>().text=""+faction.ressourceBalance.horses;
-        ressourcePanel.transform.GetChild(4).GetComponentInChildren<TMP_Text>().text=""+faction.ressourceBalance.wood;
+    public void UpdateRessourcePanel(Player player){
+        ressourcePanel.transform.GetChild(0).GetComponentInChildren<TMP_Text>().text=""+player.ressourceBalance.gold;
+        ressourcePanel.transform.GetChild(1).GetComponentInChildren<TMP_Text>().text=""+player.ressourceBalance.meleeWeapons;
+        ressourcePanel.transform.GetChild(2).GetComponentInChildren<TMP_Text>().text=""+player.ressourceBalance.rangedWeapons;
+        ressourcePanel.transform.GetChild(3).GetComponentInChildren<TMP_Text>().text=""+player.ressourceBalance.horses;
+        ressourcePanel.transform.GetChild(4).GetComponentInChildren<TMP_Text>().text=""+player.ressourceBalance.wood;
     }
 
-    private void UpdateRecruitmentPanel(Faction faction){
+    private void UpdateRecruitmentPanel(Player player){
         ClearRecruitmentPanel();
-        for (int i = 0; i < faction.data.factionUnitsData.Count; i++)
+        for (int i = 0; i < player.factionData.factionUnitsData.Count; i++)
         {
             recruitmentPanel.transform.GetChild(i).gameObject.SetActive(true);
-            recruitmentPanel.transform.GetChild(i).GetComponent<UnitCard>().ApplyData(faction.data.factionUnitsData[i]);
+            recruitmentPanel.transform.GetChild(i).GetComponent<UnitCard>().ApplyData(player.factionData.factionUnitsData[i]);
 
             povPanel.transform.GetChild(i).gameObject.SetActive(true);
-            povPanel.transform.GetChild(i).GetComponent<UnitCard>().ApplyData(faction.data.factionUnitsData[i]);
+            povPanel.transform.GetChild(i).GetComponent<UnitCard>().ApplyData(player.factionData.factionUnitsData[i]);
         }
     }
 
@@ -88,7 +88,7 @@ public class UIManager : MonoBehaviour
     }
 
     public void InitializeRecruitmentPanel(){
-        int maxUnitNumber=Mathf.Max(GameManager.instance.factionManager.firstFaction.data.factionUnitsData.Count, GameManager.instance.factionManager.secondFaction.data.factionUnitsData.Count);
+        int maxUnitNumber=Mathf.Max(GameManager.instance.playerManager.firstPlayer.factionData.factionUnitsData.Count, GameManager.instance.playerManager.secondPlayer.factionData.factionUnitsData.Count);
         while (maxUnitNumber>0)
         {
             Instantiate(unitCard, recruitmentPanel.transform);
@@ -112,7 +112,7 @@ public class UIManager : MonoBehaviour
         Tween.Delay(3, ()=>{messagePanel.SetActive(false);crossHair.SetActive(isCrossHairActive);});
     }
 
-    public void OpenPovPanel(Faction player){
+    public void OpenPovPanel(Player player){
         povPanel.SetActive(true);
         UpdateRecruitmentPanel(player);
         Time.timeScale=0;
@@ -126,4 +126,8 @@ public class UIManager : MonoBehaviour
     }
 
      
+}
+
+public enum UiState{
+    
 }

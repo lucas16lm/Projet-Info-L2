@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[RequireComponent(typeof(OutlineManager), typeof(AnimationManager))]
+[RequireComponent(typeof(OutlineManager), typeof(AnimationManager), typeof(AudioSource))]
 public abstract class PlaceableObject : MonoBehaviour
 {
     public int healthPoints;
