@@ -16,11 +16,7 @@ MonoBehaviour:
   elementName: Archer
   baseHealthPoints: 30
   cost:
-    gold: 1
-    meleeWeapons: 0
-    rangedWeapons: 1
-    horses: 0
-    wood: 0
+    gold: 2
   image: {fileID: 21300000, guid: 355ce080f7823474da4f723852854b43, type: 3}
   unitClass: 1
   baseDamagePoints: 20

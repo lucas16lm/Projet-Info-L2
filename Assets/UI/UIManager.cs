@@ -10,99 +10,73 @@ public class UIManager : MonoBehaviour
     public GameObject unitCard;
     [Header("UI elements")]
     public GameObject ressourcePanel;
-    public GameObject recruitmentPanel;
+    public GameObject deploymentPanel;
     public GameObject messagePanel;
-    public GameObject povPanel;
+    public GameObject reinforcementPanel;
     public GameObject crossHair;
 
-    public void SetUpUI(GameState gameState){
-        switch(gameState){
-            /*
-            case GameState.FirstPlayerGeneralPlacement or GameState.SecondPlayerGeneralPlacement:
-                GetBattleUIElements().ForEach(e => e.SetActive(false));
-                DesactivateCrossHair();
-                break;
-            
-            case GameState.FirstPlayerDeployment:
-                GetBattleUIElements().ForEach(e => e.SetActive(true));
-                UpdateRessourcePanel(GameManager.instance.factionManager.firstFaction);
-                UpdateRecruitmentPanel(GameManager.instance.factionManager.firstFaction);
-                DesactivateCrossHair();
-                break;
 
-            case GameState.FirstPlayerTurn:
-                GetBattleUIElements().ForEach(e => e.SetActive(false));
-                UpdateRessourcePanel(GameManager.instance.factionManager.secondFaction);
-                UpdateRecruitmentPanel(GameManager.instance.factionManager.secondFaction);
-                ActivateCrossHair();
+    public void SetUpUI(UiState uiState, Player player){
+        switch(uiState){
+            case UiState.Nothing:
+                ressourcePanel.SetActive(false);
+                deploymentPanel.SetActive(false);
+                reinforcementPanel.SetActive(false);
+                crossHair.SetActive(false);
                 break;
-
-            case GameState.SecondPlayerDeployment:
-                GetBattleUIElements().ForEach(e => e.SetActive(true));
-                UpdateRessourcePanel(GameManager.instance.factionManager.secondFaction);
-                UpdateRecruitmentPanel(GameManager.instance.factionManager.secondFaction);
-                DesactivateCrossHair();
+            case UiState.Deployment:
+                UpdateRessourcePanel(player);
+                deploymentPanel.SetActive(true);
+                reinforcementPanel.SetActive(false);
+                crossHair.SetActive(false);
                 break;
-
-            case GameState.SecondPlayerTurn:
-                GetBattleUIElements().ForEach(e => e.SetActive(false));
-                UpdateRessourcePanel(GameManager.instance.factionManager.secondFaction);
-                UpdateRecruitmentPanel(GameManager.instance.factionManager.secondFaction);
-                ActivateCrossHair();
+            case UiState.POV:
+                UpdateRessourcePanel(player);
+                deploymentPanel.SetActive(false);
+                reinforcementPanel.SetActive(false);
+                crossHair.SetActive(true);
+                Time.timeScale=1;
                 break;
-            */
-            
+            default:
+                break;
         }
     }
 
-    private List<GameObject> GetBattleUIElements(){
-        return new List<GameObject>(){ressourcePanel, recruitmentPanel};
-    }
-
-    public void UpdateRessourcePanel(Player player){
+    private void UpdateRessourcePanel(Player player){
         ressourcePanel.transform.GetChild(0).GetComponentInChildren<TMP_Text>().text=""+player.ressourceBalance.gold;
-        ressourcePanel.transform.GetChild(1).GetComponentInChildren<TMP_Text>().text=""+player.ressourceBalance.meleeWeapons;
-        ressourcePanel.transform.GetChild(2).GetComponentInChildren<TMP_Text>().text=""+player.ressourceBalance.rangedWeapons;
-        ressourcePanel.transform.GetChild(3).GetComponentInChildren<TMP_Text>().text=""+player.ressourceBalance.horses;
-        ressourcePanel.transform.GetChild(4).GetComponentInChildren<TMP_Text>().text=""+player.ressourceBalance.wood;
     }
 
-    private void UpdateRecruitmentPanel(Player player){
-        ClearRecruitmentPanel();
+    public void UpdateDeploymentPanel(Player player)
+    {
+        ClearDeploymentPanel();
         for (int i = 0; i < player.factionData.factionUnitsData.Count; i++)
         {
-            recruitmentPanel.transform.GetChild(i).gameObject.SetActive(true);
-            recruitmentPanel.transform.GetChild(i).GetComponent<UnitCard>().ApplyData(player.factionData.factionUnitsData[i]);
+            deploymentPanel.transform.GetChild(i).gameObject.SetActive(true);
+            deploymentPanel.transform.GetChild(i).GetComponent<UnitCard>().ApplyData(player.factionData.factionUnitsData[i]);
 
-            povPanel.transform.GetChild(i).gameObject.SetActive(true);
-            povPanel.transform.GetChild(i).GetComponent<UnitCard>().ApplyData(player.factionData.factionUnitsData[i]);
+            reinforcementPanel.transform.GetChild(i).gameObject.SetActive(true);
+            reinforcementPanel.transform.GetChild(i).GetComponent<UnitCard>().ApplyData(player.factionData.factionUnitsData[i]);
         }
     }
 
-    private void ClearRecruitmentPanel(){
-        for (int i = 0; i < recruitmentPanel.transform.childCount; i++)
+    private void ClearDeploymentPanel(){
+        for (int i = 0; i < deploymentPanel.transform.childCount; i++)
         {
-            recruitmentPanel.transform.GetChild(i).gameObject.SetActive(false);
-            povPanel.transform.GetChild(i).gameObject.SetActive(false);
+            deploymentPanel.transform.GetChild(i).gameObject.SetActive(false);
+            reinforcementPanel.transform.GetChild(i).gameObject.SetActive(false);
         }
     }
 
-    public void InitializeRecruitmentPanel(){
+    public void InitializeDeploymentPanel(){
         int maxUnitNumber=Mathf.Max(GameManager.instance.playerManager.firstPlayer.factionData.factionUnitsData.Count, GameManager.instance.playerManager.secondPlayer.factionData.factionUnitsData.Count);
         while (maxUnitNumber>0)
         {
-            Instantiate(unitCard, recruitmentPanel.transform);
-            Instantiate(unitCard, povPanel.transform);
+            Instantiate(unitCard, deploymentPanel.transform);
+            Instantiate(unitCard, reinforcementPanel.transform);
             maxUnitNumber--;
         }
     }
 
-    public void ActivateCrossHair(){
-        crossHair.SetActive(true);
-    }
-    public void DesactivateCrossHair(){
-        crossHair.SetActive(false);
-    }
 
     public void PrintMessage(string message){
         bool isCrossHairActive=crossHair.activeSelf;
@@ -112,15 +86,15 @@ public class UIManager : MonoBehaviour
         Tween.Delay(3, ()=>{messagePanel.SetActive(false);crossHair.SetActive(isCrossHairActive);});
     }
 
-    public void OpenPovPanel(Player player){
-        povPanel.SetActive(true);
-        UpdateRecruitmentPanel(player);
+    public void OpenReinforcementPanel(Player player){
+        reinforcementPanel.SetActive(true);
+        UpdateDeploymentPanel(player);
         Time.timeScale=0;
         Cursor.lockState=CursorLockMode.Confined;
     }
     
-    public void ClosePovPanel(){
-        povPanel.SetActive(false);
+    public void CloseReinforcementPanel(){
+        reinforcementPanel.SetActive(false);
         Time.timeScale=1;
         Cursor.lockState=CursorLockMode.Locked;
     }
@@ -129,5 +103,7 @@ public class UIManager : MonoBehaviour
 }
 
 public enum UiState{
-    
+    Nothing,
+    Deployment,
+    POV,
 }

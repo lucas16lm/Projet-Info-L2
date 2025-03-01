@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -10,14 +11,34 @@ public class HumanPlayer : Player
 {
     public override IEnumerator Deployment(Action onComplete)
     {
-        yield return GeneralDeployment();
-        yield return UnitDeployment();
+        List<Tile> deploymentZone = GetDeploymentZone();
+        deploymentZone.ForEach(tile=>tile.SetOutline(true));
+
+        GameManager.instance.uIManager.SetUpUI(UiState.Deployment, this);
+        bool turnEnded = false;
+
+        yield return GeneralDeployment(deploymentZone);
+
+        Coroutine unitDeployment = StartCoroutine(UnitDeployment(deploymentZone));
+        InputSystem.actions.FindAction("EndTurn").performed+=ctx=>turnEnded=true;
+        
+
+        yield return new WaitUntil(()=>turnEnded);
+        
+        deploymentZone.ForEach(tile=>tile.SetOutline(false));
+        GameManager.instance.uIManager.SetUpUI(UiState.Nothing, this);
+        StopCoroutine(unitDeployment);
         onComplete();
     }
 
     public override IEnumerator PlayTurn(Action onComplete)
     {
-        yield return null;
+        bool turnEnded = false;
+        GameManager.instance.uIManager.SetUpUI(UiState.POV, this);
+
+        InputSystem.actions.FindAction("EndTurn").performed+=ctx=>turnEnded=true;
+        
+        yield return new WaitUntil(()=>turnEnded);
         onComplete();
     }
 
@@ -27,90 +48,62 @@ public class HumanPlayer : Player
         onComplete();
     }
 
-    IEnumerator GeneralDeployment(){
-        List<Tile> deploymentZone = GetDeploymentZone();
+    IEnumerator GeneralDeployment(List<Tile> deploymentZone){
         Debug.Log("Placement du général de "+factionData.name);
         GameManager.instance.uIManager.PrintMessage(factionData.factionName+", place your general !");
-        deploymentZone.ForEach(tile => tile.GetComponent<OutlineManager>().Outline());
+
         bool generalPlaced = false;
+        Coroutine generalPlacement = StartCoroutine(MouseListener(
+            go=>go?.GetComponent<Tile>()!=null,
+            go=>{},
+            go=>{},
+            go=>{PlaceElement(factionData.generalData, go.GetComponent<Tile>()); generalPlaced=true;}
+        ));
+
+        yield return new WaitUntil(()=>generalPlaced);
+        StopCoroutine(generalPlacement);
         
-        while (!generalPlaced)
-        {
-            StartCoroutine(SelectMatchingGameObject(
-                go =>{
-                Tile tile = go?.GetComponent<Tile>();
-                if(tile == null) return false;
-                return deploymentZone.Contains(tile) && !tile.occupied && tile.occupable;
-                },
-                go=>{
-                    PlaceElement(factionData.generalData, go.GetComponent<Tile>());
-                    general.GetComponent<OutlineManager>().Outline();
-                    generalPlaced=true;
-                }));
-            
-            yield return new WaitUntil(()=>generalPlaced);
-        }
     }
-    IEnumerator UnitDeployment(){
-
-        InputAction endTurnAction = InputSystem.actions.FindAction("EndTurn");
-        if(endTurnAction.WasPerformedThisFrame()){
-            Debug.Log("end");
-            yield break;
-        }
-
-        List<Tile> deploymentZone = GetDeploymentZone();
+    IEnumerator UnitDeployment(List<Tile> deploymentZone){
         Debug.Log("Placement des troupes de "+factionData.factionName);
         GameManager.instance.uIManager.PrintMessage(factionData.name+", compose your army !");
-        
-        List<OutlineManager> outlineManagers = new List<OutlineManager>();
-        deploymentZone.ForEach(tile => outlineManagers.Add(tile.GetComponent<OutlineManager>()));
-        outlineManagers.Add(general.GetComponent<OutlineManager>());
-
         bool turnEnded=false;
+        InputSystem.actions.FindAction("EndTurn").performed+=ctx=>turnEnded=true;
+
 
         UnitData unitToPlace = null;
         
         for (int i = 0; i < factionData.factionUnitsData.Count; i++)
         {
             UnitData unitData = factionData.factionUnitsData[i];
-            GameManager.instance.uIManager.recruitmentPanel.transform.GetChild(i).GetComponent<Button>().onClick.AddListener(delegate{unitToPlace=unitData ; Debug.Log("selected : "+unitData.elementName);});
+            GameManager.instance.uIManager.deploymentPanel.transform.GetChild(i).GetComponent<Button>().onClick.AddListener(delegate{unitToPlace=unitData ; Debug.Log("selected : "+unitData.elementName);});
         }
+        
+        Coroutine unitPlacement = StartCoroutine(MouseListener(
+            go=>go?.GetComponent<Tile>()!=null || go?.GetComponent<Unit>()!=null,
+            go=>{if(go?.GetComponent<Unit>()!=null) go.GetComponent<Unit>().SetOutline(true);},
+            go=>{if(go?.GetComponent<Unit>()!=null) go.GetComponent<Unit>().SetOutline(false);},
+            go=>{
+                Tile tile = go?.GetComponent<Tile>();
+                Unit unit = go?.GetComponent<Unit>();
 
-        while(!turnEnded){
-            
-            yield return SelectMatchingGameObject(
-                go =>{
-                    if(go?.GetComponent<Tile>()==null && go?.GetComponent<Unit>()==null) return false;
-                    Tile tile = go?.GetComponent<Tile>();
-                    Unit unit = go?.GetComponent<Unit>();
-                    if(tile!=null) return unitToPlace!=null && deploymentZone.Contains(tile) && !tile.occupied && tile.occupable;
-                    else return units.Contains(unit);
-                    },
-                go=>{
-                    Tile tile = go?.GetComponent<Tile>();
-                    Unit unit = go?.GetComponent<Unit>();
-                    if(tile != null){
-                        GameObject unitGO = PlaceElement(unitToPlace, go.GetComponent<Tile>());
-                        if(unitGO!=null){
-                            outlineManagers.Add(unitGO.GetComponent<OutlineManager>());
-                            unitGO.GetComponent<OutlineManager>().Outline();
-                            unitToPlace=null;
-                        }
-                    }
-                    else{
-                        ressourceBalance.AddRessources(unit.cost);
-                        //GameManager.instance.uIManager.UpdateRessourcePanel(playerFaction);
-                        unit.position.occupied=false;
-                        units.Remove(unit);
-                        outlineManagers.Remove(unit.GetComponent<OutlineManager>());
-                        Destroy(go);
-                    }
-                });
+                if(tile!=null && unitToPlace != null && !tile.occupied && tile.occupable && deploymentZone.Contains(tile)){
+                    PlaceElement(factionData.factionUnitsData[0], tile);
+                    GameManager.instance.uIManager.SetUpUI(UiState.Deployment, this);
+                }
+                if(unit!=null){
+                    ressourceBalance.AddRessources(unit.cost);
+                    GameManager.instance.uIManager.SetUpUI(UiState.Deployment, this);
+                    unit.position.occupied=false;
+                    units.Remove(unit);
+                    Destroy(go);
+                }
+            }
+        ));
 
-            yield return null;
-        }
-        outlineManagers.ForEach(outline => outline.DisableOutline());
+        yield return new WaitUntil(()=>turnEnded);
+        StopCoroutine(unitPlacement);
+
     }
 
     public GameObject PlaceElement(PlaceableData placeableElement, Tile tile){
@@ -123,6 +116,7 @@ public class HumanPlayer : Player
         
         if(placeableElement is GeneralData){
             general=element.GetComponent<General>();
+            GameManager.instance.cameraManager.AddFirstPlayerCamera(element.GetComponentInChildren<CinemachineCamera>());
         }
         else if(placeableElement is OfficerData){
             officers.Add(element.GetComponent<Officer>());
@@ -132,7 +126,7 @@ public class HumanPlayer : Player
             Unit unit = element.GetComponent<Unit>();
             units.Add(unit);
             unit.Initialize(unitData, tile);
-            //GameManager.instance.uIManager.UpdateRessourcePanel(this);
+            GameManager.instance.uIManager.SetUpUI(UiState.Deployment, this);
         }
         else if(placeableElement is BuildingData){
             buildings.Add(element.GetComponent<Building>());
@@ -141,32 +135,42 @@ public class HumanPlayer : Player
         return element;
     }
 
-    public IEnumerator SelectMatchingGameObject(Predicate<GameObject> predicate, Action<GameObject> action){
-        bool done = false;
-        
-        InputAction selectAction = InputSystem.actions.FindAction("Select");
-        InputAction cancelAction = InputSystem.actions.FindAction("Cancel");
-        
-        bool turnEnded=false;
-        
-        while(!done){
-            
-            if((cancelAction.WasPerformedThisFrame() && !EventSystem.current.IsPointerOverGameObject()) || turnEnded){
-                yield break;
+
+    public IEnumerator MouseListener(Predicate<GameObject> predicate, Action<GameObject> onEnter, Action<GameObject> onExit, Action<GameObject> onClick){
+        GameObject previousObject = null;
+
+        while (true)
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+            RaycastHit hit;
+            GameObject currentObject = null;
+
+            if (Physics.Raycast(ray, out hit))
+            {
+                currentObject = hit.collider.gameObject;
+                if (currentObject != previousObject)
+                {
+                    if (previousObject != null && predicate(previousObject))
+                    {
+                        onExit(previousObject);
+                    }
+
+                    if(predicate(currentObject)) onEnter(currentObject);
+                }
+                if(InputSystem.actions.FindAction("Select").WasPerformedThisFrame()) onClick(currentObject);
+            }
+            else
+            {
+                if (previousObject != null && predicate(previousObject))
+                {
+                    onExit(previousObject);
+                }
+                currentObject = null;
             }
 
-            if (selectAction.WasPerformedThisFrame() && !EventSystem.current.IsPointerOverGameObject()){
-                Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
-                RaycastHit hit;
-                if(Physics.Raycast(ray, out hit)){
-                    GameObject clicked = hit.collider.gameObject;
-                    if(predicate(clicked)){
-                        action(clicked);
-                        done = true;
-                    }
-                }
-            }
+            previousObject = currentObject;
+
             yield return null;
         }
-    }
+        }
 }

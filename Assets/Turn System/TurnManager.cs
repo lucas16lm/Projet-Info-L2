@@ -31,7 +31,6 @@ public class TurnManager : MonoBehaviour
     {
         while (currentState != GameState.GameOver)
         {
-            GameManager.instance.uIManager.SetUpUI(currentState);
             Coroutine firstCoroutine;
             Coroutine secondCoroutine;
             bool firstPlayerPlayed = false;

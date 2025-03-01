@@ -41,7 +41,6 @@ GameObject:
   m_Component:
   - component: {fileID: 153099044652978212}
   - component: {fileID: 3741163606258226246}
-  - component: {fileID: 4074865068028132568}
   - component: {fileID: 6842512617904620370}
   - component: {fileID: 617153634211520499}
   - component: {fileID: 740265382024499291}
@@ -80,24 +79,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 681ca919c8c17aa41b68a19e5e9f8f42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tileLayerMaskId: 8
   treePrefab: {fileID: 387980774264358068, guid: 0369177291e98ac4fa680dea8ed3d7f2, type: 3}
   cubicCoordinates: {x: 0, y: 0, z: 0}
   biome: 0
   occupied: 0
---- !u!114 &4074865068028132568
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8524151667754914690}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d673253b01e525b499bfada49840752b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outlineLayerMaskId: 8
-  outlineSettings: {fileID: 11400000, guid: 0bf4b201c3cb12f4fa60d22b936b1467, type: 2}
 --- !u!64 &6842512617904620370
 MeshCollider:
   m_ObjectHideFlags: 0

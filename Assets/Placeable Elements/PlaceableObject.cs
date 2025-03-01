@@ -1,7 +1,7 @@
 using UnityEngine;
 
-[RequireComponent(typeof(OutlineManager), typeof(AnimationManager), typeof(AudioSource))]
-public abstract class PlaceableObject : MonoBehaviour
+[RequireComponent(typeof(AnimationManager), typeof(AudioSource))]
+public abstract class PlaceableObject : MonoBehaviour, IOutlinable
 {
     public int healthPoints;
     public Tile position;
@@ -25,5 +25,20 @@ public abstract class PlaceableObject : MonoBehaviour
         //GameManager.instance.factionManager.firstFaction.units.Remove(this);
         //GameManager.instance.factionManager.secondFaction.units.Remove(this);
         Destroy(gameObject);
+    }
+
+    public void SetOutline(bool value)
+    {
+        //TODO adapter couleur
+        Renderer[] renderers = GetComponentsInChildren<Renderer>();
+        RenderingLayerMask renderingLayerMask = renderers[0].renderingLayerMask;
+        if(value){
+            renderingLayerMask |= 0x1 << 10;
+        }
+        else{
+            renderingLayerMask  &= ~(0x1 << 10);
+        }
+        
+        foreach(Renderer renderer in renderers) renderer.renderingLayerMask = renderingLayerMask;
     }
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Linq;
 using Unity.VisualScripting;
 
-public class Tile : MonoBehaviour
+public class Tile : MonoBehaviour, IOutlinable
 {
     #region static dictionary and getters
     private static Dictionary<Vector3Int,Tile> grid = new Dictionary<Vector3Int, Tile>();
@@ -84,6 +84,7 @@ public class Tile : MonoBehaviour
     #endregion
 
     #region tile related attributes and methods
+    public int tileLayerMaskId;
     public GameObject treePrefab;
     public Vector3Int cubicCoordinates;
     public Biome biome;
@@ -193,6 +194,18 @@ public class Tile : MonoBehaviour
                 transform.localScale+=2*Vector3.down;
                 break;
         }
+    }
+
+    public void SetOutline(bool value){
+        Renderer renderer = GetComponentInChildren<Renderer>();
+        RenderingLayerMask renderingLayerMask = renderer.renderingLayerMask;
+        if(value){
+            renderingLayerMask |= 0x1 << tileLayerMaskId;
+        }
+        else{
+            renderingLayerMask  &= ~(0x1 << tileLayerMaskId);
+        }
+        renderer.renderingLayerMask = renderingLayerMask;
     }
     #endregion
 }

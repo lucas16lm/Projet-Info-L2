@@ -34,20 +34,5 @@ public class MapTest : MonoBehaviour
         }
     }
 
-    void Update()
-    {
-        if(Input.GetMouseButtonDown(0)){
-            OutlineTest();
-        }
-    }
-
-    public void OutlineTest(){
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-        if(Physics.Raycast(ray, out hit)){
-            Tile.GetTilesInRange(hit.collider.gameObject.GetComponent<Tile>(), 1).ForEach(t => t.GetComponent<OutlineManager>().enabled=true);
-        }
-    }
-
     
 }
