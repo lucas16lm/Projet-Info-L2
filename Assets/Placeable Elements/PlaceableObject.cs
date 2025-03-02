@@ -22,22 +22,28 @@ public abstract class PlaceableObject : MonoBehaviour, IOutlinable
     public void Kill()
     {
         position.occupied=false;
-        //GameManager.instance.factionManager.firstFaction.units.Remove(this);
-        //GameManager.instance.factionManager.secondFaction.units.Remove(this);
         Destroy(gameObject);
     }
 
-    public void SetOutline(bool value)
+    public void SetOutline(bool value, int renderingLayerMaskId)
     {
-        //TODO adapter couleur
         Renderer[] renderers = GetComponentsInChildren<Renderer>();
         RenderingLayerMask renderingLayerMask = renderers[0].renderingLayerMask;
         if(value){
-            renderingLayerMask |= 0x1 << 10;
+            renderingLayerMask |= 0x1 << renderingLayerMaskId;
         }
         else{
-            renderingLayerMask  &= ~(0x1 << 10);
+            renderingLayerMask  &= ~(0x1 << renderingLayerMaskId);
         }
+        
+        foreach(Renderer renderer in renderers) renderer.renderingLayerMask = renderingLayerMask;
+    }
+    
+    public void DisableOutlines(){
+        Renderer[] renderers = GetComponentsInChildren<Renderer>();
+        RenderingLayerMask renderingLayerMask = renderers[0].renderingLayerMask;
+        renderingLayerMask  &= ~(0x1 << GameManager.instance.AllyLayerId);
+        renderingLayerMask  &= ~(0x1 << GameManager.instance.EnnemyLayerId);
         
         foreach(Renderer renderer in renderers) renderer.renderingLayerMask = renderingLayerMask;
     }

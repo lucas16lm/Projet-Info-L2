@@ -84,7 +84,6 @@ public class Tile : MonoBehaviour, IOutlinable
     #endregion
 
     #region tile related attributes and methods
-    public int tileLayerMaskId;
     public GameObject treePrefab;
     public Vector3Int cubicCoordinates;
     public Biome biome;
@@ -196,15 +195,25 @@ public class Tile : MonoBehaviour, IOutlinable
         }
     }
 
-    public void SetOutline(bool value){
+    public void SetOutline(bool value, int renderingLayerMaskId)
+    {
         Renderer renderer = GetComponentInChildren<Renderer>();
         RenderingLayerMask renderingLayerMask = renderer.renderingLayerMask;
         if(value){
-            renderingLayerMask |= 0x1 << tileLayerMaskId;
+            renderingLayerMask |= 0x1 << GameManager.instance.TileLayerId;
         }
         else{
-            renderingLayerMask  &= ~(0x1 << tileLayerMaskId);
+            renderingLayerMask  &= ~(0x1 << GameManager.instance.TileLayerId);
         }
+        renderer.renderingLayerMask = renderingLayerMask;
+    }
+
+    public void DisableOutlines()
+    {
+        Renderer renderer = GetComponentInChildren<Renderer>();
+        RenderingLayerMask renderingLayerMask = renderer.renderingLayerMask;
+        renderingLayerMask  &= ~(0x1 << GameManager.instance.TileLayerId);
+        renderingLayerMask  &= ~(0x1 << GameManager.instance.TileFillLayerId);
         renderer.renderingLayerMask = renderingLayerMask;
     }
     #endregion

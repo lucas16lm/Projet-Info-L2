@@ -30,6 +30,8 @@ public class TurnManager : MonoBehaviour
             bool firstPlayerPlayed = false;
             bool secondPlayerPlayed = false;
 
+            GameManager.instance.uIManager.UpdateUI(currentState);
+
             switch (currentState)
             {
                 case GameState.Initialization:
@@ -41,11 +43,15 @@ public class TurnManager : MonoBehaviour
                     
                     firstCoroutine = StartCoroutine(GameManager.instance.playerManager.firstPlayer.Deployment(()=>firstPlayerPlayed=true));
                     secondCoroutine = StartCoroutine(GameManager.instance.playerManager.secondPlayer.Wait(()=>secondPlayerPlayed=true));
+                    
                     yield return new WaitUntil(()=>firstPlayerPlayed && secondPlayerPlayed);
+                    
+                    GameManager.instance.playerManager.firstPlayer.GetPlaceableObject().ForEach(element=>element.DisableOutlines());
                     StopCoroutine(firstCoroutine);
                     StopCoroutine(secondCoroutine);
                     
                     currentState = GameState.SecondPlayerDeployment;
+ 
                     break;
 
                 case GameState.SecondPlayerDeployment:
@@ -53,11 +59,14 @@ public class TurnManager : MonoBehaviour
                     
                     firstCoroutine = StartCoroutine(GameManager.instance.playerManager.firstPlayer.Wait(()=>firstPlayerPlayed=true));
                     secondCoroutine = StartCoroutine(GameManager.instance.playerManager.secondPlayer.Deployment(()=>secondPlayerPlayed=true));
+                    
                     yield return new WaitUntil(()=>firstPlayerPlayed && secondPlayerPlayed);
+                    
+                    GameManager.instance.playerManager.secondPlayer.GetPlaceableObject().ForEach(element=>element.DisableOutlines());
                     StopCoroutine(firstCoroutine);
                     StopCoroutine(secondCoroutine);
                     
-                    currentState = GameState.SecondPlayerDeployment;
+                    currentState = GameState.FirstPlayerTurn;
                     break;
                     
                 case GameState.FirstPlayerTurn:
@@ -69,7 +78,7 @@ public class TurnManager : MonoBehaviour
                     StopCoroutine(firstCoroutine);
                     StopCoroutine(secondCoroutine);
                     
-                    currentState=GameState.SecondPlayerDeployment;
+                    currentState=GameState.SecondPlayerTurn;
                     break;
                 
                 case GameState.SecondPlayerTurn:

@@ -12,21 +12,20 @@ public class HumanPlayer : Player
     public override IEnumerator Deployment(Action onComplete)
     {
         List<Tile> deploymentZone = GetDeploymentZone();
-        deploymentZone.ForEach(tile=>tile.SetOutline(true));
-
-        GameManager.instance.uIManager.SetUpUI(UiState.Deployment, this);
+        deploymentZone.ForEach(tile=>tile.SetOutline(true, GameManager.instance.TileLayerId));
+        
         bool turnEnded = false;
 
         yield return GeneralDeployment(deploymentZone);
 
+        GameManager.instance.uIManager.deploymentPanel.SetActive(true);
         Coroutine unitDeployment = StartCoroutine(UnitDeployment(deploymentZone));
         InputSystem.actions.FindAction("EndTurn").performed+=ctx=>turnEnded=true;
         
 
         yield return new WaitUntil(()=>turnEnded);
         
-        deploymentZone.ForEach(tile=>tile.SetOutline(false));
-        GameManager.instance.uIManager.SetUpUI(UiState.Nothing, this);
+        deploymentZone.ForEach(tile=>tile.SetOutline(false, GameManager.instance.TileLayerId));
         StopCoroutine(unitDeployment);
         onComplete();
     }
@@ -34,7 +33,6 @@ public class HumanPlayer : Player
     public override IEnumerator PlayTurn(Action onComplete)
     {
         bool turnEnded = false;
-        GameManager.instance.uIManager.SetUpUI(UiState.POV, this);
 
         InputSystem.actions.FindAction("EndTurn").performed+=ctx=>turnEnded=true;
         
@@ -54,10 +52,10 @@ public class HumanPlayer : Player
 
         bool generalPlaced = false;
         Coroutine generalPlacement = StartCoroutine(MouseListener(
-            go=>go?.GetComponent<Tile>()!=null,
+            go=>go?.GetComponent<Tile>()!=null && deploymentZone.Contains(go?.GetComponent<Tile>()),
             go=>{},
             go=>{},
-            go=>{PlaceElement(factionData.generalData, go.GetComponent<Tile>()); generalPlaced=true;}
+            go=>{GameObject GO = PlaceElement(factionData.generalData, go.GetComponent<Tile>()); if(GO!=null)generalPlaced=true;}
         ));
 
         yield return new WaitUntil(()=>generalPlaced);
@@ -80,20 +78,19 @@ public class HumanPlayer : Player
         }
         
         Coroutine unitPlacement = StartCoroutine(MouseListener(
-            go=>go?.GetComponent<Tile>()!=null || go?.GetComponent<Unit>()!=null,
-            go=>{if(go?.GetComponent<Unit>()!=null) go.GetComponent<Unit>().SetOutline(true);},
-            go=>{if(go?.GetComponent<Unit>()!=null) go.GetComponent<Unit>().SetOutline(false);},
+            go=>go?.GetComponent<Tile>()!=null || (go?.GetComponent<Unit>()!=null && units.Contains(go.GetComponent<Unit>())),
+            go=>{if(go?.GetComponent<Unit>()!=null) go.GetComponent<Unit>().SetOutline(true, GameManager.instance.AllyLayerId);},
+            go=>{if(go?.GetComponent<Unit>()!=null) go.GetComponent<Unit>().DisableOutlines();},
             go=>{
                 Tile tile = go?.GetComponent<Tile>();
                 Unit unit = go?.GetComponent<Unit>();
 
                 if(tile!=null && unitToPlace != null && !tile.occupied && tile.occupable && deploymentZone.Contains(tile)){
-                    PlaceElement(factionData.factionUnitsData[0], tile);
-                    GameManager.instance.uIManager.SetUpUI(UiState.Deployment, this);
+                    PlaceElement(unitToPlace, tile);
                 }
                 if(unit!=null){
                     ressourceBalance.AddRessources(unit.cost);
-                    GameManager.instance.uIManager.SetUpUI(UiState.Deployment, this);
+                    GameManager.instance.uIManager.UpdateRessourcePanel(this);
                     unit.position.occupied=false;
                     units.Remove(unit);
                     Destroy(go);
@@ -111,9 +108,14 @@ public class HumanPlayer : Player
             Debug.Log("Not enought ressources !");
             return null;
         }
+        if(tile.occupied || !tile.occupable){
+            Debug.Log("innacessible");
+            return null;
+        }
         
         GameObject element = Instantiate(placeableElement.gameObjectPrefab, tile.gameObject.transform.position+(tile.transform.localScale.y/2)*Vector3.up, Quaternion.LookRotation(new Vector3(Camera.main.transform.forward.x, 0, Camera.main.transform.forward.z)), transform);
-        
+        GameManager.instance.uIManager.UpdateRessourcePanel(this);
+
         if(placeableElement is GeneralData){
             general=element.GetComponent<General>();
             GameManager.instance.cameraManager.AddFirstPlayerCamera(element.GetComponentInChildren<CinemachineCamera>());
@@ -126,7 +128,6 @@ public class HumanPlayer : Player
             Unit unit = element.GetComponent<Unit>();
             units.Add(unit);
             unit.Initialize(unitData, tile);
-            GameManager.instance.uIManager.SetUpUI(UiState.Deployment, this);
         }
         else if(placeableElement is BuildingData){
             buildings.Add(element.GetComponent<Building>());
@@ -134,6 +135,8 @@ public class HumanPlayer : Player
         tile.occupied=true;
         return element;
     }
+
+    
 
 
     public IEnumerator MouseListener(Predicate<GameObject> predicate, Action<GameObject> onEnter, Action<GameObject> onExit, Action<GameObject> onClick){
@@ -145,7 +148,7 @@ public class HumanPlayer : Player
             RaycastHit hit;
             GameObject currentObject = null;
 
-            if (Physics.Raycast(ray, out hit))
+            if (Physics.Raycast(ray, out hit) && !EventSystem.current.IsPointerOverGameObject())
             {
                 currentObject = hit.collider.gameObject;
                 if (currentObject != previousObject)
@@ -157,7 +160,7 @@ public class HumanPlayer : Player
 
                     if(predicate(currentObject)) onEnter(currentObject);
                 }
-                if(InputSystem.actions.FindAction("Select").WasPerformedThisFrame()) onClick(currentObject);
+                if(InputSystem.actions.FindAction("Select").WasPerformedThisFrame() && predicate(currentObject)) onClick(currentObject);
             }
             else
             {

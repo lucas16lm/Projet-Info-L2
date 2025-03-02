@@ -16,34 +16,78 @@ public class UIManager : MonoBehaviour
     public GameObject crossHair;
 
 
-    public void SetUpUI(UiState uiState, Player player){
-        switch(uiState){
-            case UiState.Nothing:
+    public void UpdateUI(GameState gameState){
+        switch(gameState){
+            case GameState.Initialization:
+                
                 ressourcePanel.SetActive(false);
                 deploymentPanel.SetActive(false);
                 reinforcementPanel.SetActive(false);
                 crossHair.SetActive(false);
+                
                 break;
-            case UiState.Deployment:
-                UpdateRessourcePanel(player);
-                UpdateDeploymentPanel(player);
-                deploymentPanel.SetActive(true);
+
+            case GameState.FirstPlayerDeployment:
+
+                ressourcePanel.SetActive(true);
+                deploymentPanel.SetActive(false);
                 reinforcementPanel.SetActive(false);
                 crossHair.SetActive(false);
+
+                UpdateDeploymentPanel(GameManager.instance.playerManager.firstPlayer);
+                UpdateRessourcePanel(GameManager.instance.playerManager.firstPlayer);
+                
                 break;
-            case UiState.POV:
-                UpdateRessourcePanel(player);
+
+            case GameState.SecondPlayerDeployment:
+                
+                ressourcePanel.SetActive(true);
+                deploymentPanel.SetActive(false);
+                reinforcementPanel.SetActive(false);
+                crossHair.SetActive(false);
+
+                UpdateDeploymentPanel(GameManager.instance.playerManager.secondPlayer);
+                UpdateRessourcePanel(GameManager.instance.playerManager.secondPlayer);
+                
+                break;
+
+            case GameState.FirstPlayerTurn:
+                
+                ressourcePanel.SetActive(true);
                 deploymentPanel.SetActive(false);
                 reinforcementPanel.SetActive(false);
                 crossHair.SetActive(true);
-                Time.timeScale=1;
+
+                UpdateRessourcePanel(GameManager.instance.playerManager.firstPlayer);
+                
                 break;
+
+            case GameState.SecondPlayerTurn:
+                
+                ressourcePanel.SetActive(true);
+                deploymentPanel.SetActive(false);
+                reinforcementPanel.SetActive(false);
+                crossHair.SetActive(true);
+
+                UpdateRessourcePanel(GameManager.instance.playerManager.secondPlayer);
+                
+                break;
+
+            case GameState.GameOver:
+                
+                ressourcePanel.SetActive(false);
+                deploymentPanel.SetActive(false);
+                reinforcementPanel.SetActive(false);
+                crossHair.SetActive(false);
+                
+                break;
+            
             default:
                 break;
         }
     }
 
-    private void UpdateRessourcePanel(Player player){
+    public void UpdateRessourcePanel(Player player){
         ressourcePanel.transform.GetChild(0).GetComponentInChildren<TMP_Text>().text=""+player.ressourceBalance.gold;
     }
 
@@ -99,10 +143,4 @@ public class UIManager : MonoBehaviour
     }
 
      
-}
-
-public enum UiState{
-    Nothing,
-    Deployment,
-    POV,
 }

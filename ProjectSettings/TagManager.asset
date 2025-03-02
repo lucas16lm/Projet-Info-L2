@@ -55,3 +55,4 @@ TagManager:
   - TileMask
   - AllyOutline
   - HostileOutline
+  - TileFill

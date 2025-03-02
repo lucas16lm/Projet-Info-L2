@@ -21,5 +21,6 @@ public class PlayerManager : MonoBehaviour
         secondPlayer = spGO.GetComponent<Player>();
         secondPlayer.factionData=secondPlayerFaction;
         secondPlayer.playerRole=PlayerRole.SecondPlayer;
+        secondPlayer.ressourceBalance=secondPlayerFaction.baseBalance;
     }
 }

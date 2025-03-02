@@ -13,6 +13,11 @@ public class GameManager : MonoBehaviour
     public CameraManager cameraManager;
     public TurnManager turnManager;
     public UIManager uIManager;
+    [Header("Settings")]
+    public int TileLayerId;
+    public int TileFillLayerId;
+    public int AllyLayerId;
+    public int EnnemyLayerId;
 
     
     

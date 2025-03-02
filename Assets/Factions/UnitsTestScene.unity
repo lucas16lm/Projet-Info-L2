@@ -914,7 +914,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9024e2e0a39fa14fb045033cae262fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 25
+  speed: 50
   moveInput: {x: 0, y: 0}
 --- !u!1 &905359389
 GameObject:
@@ -1221,7 +1221,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9024e2e0a39fa14fb045033cae262fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 25
+  speed: 50
   moveInput: {x: 0, y: 0}
 --- !u!1 &1177795840
 GameObject:
@@ -1872,6 +1872,10 @@ MonoBehaviour:
   cameraManager: {fileID: 1931077976}
   turnManager: {fileID: 53722068}
   uIManager: {fileID: 1441878870}
+  TileLayerId: 8
+  TileFillLayerId: 12
+  AllyLayerId: 10
+  EnnemyLayerId: 11
 --- !u!4 &1980342098
 Transform:
   m_ObjectHideFlags: 0
