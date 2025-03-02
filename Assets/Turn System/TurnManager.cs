@@ -1,11 +1,5 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using PrimeTween;
-using Unity.Cinemachine;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 public class TurnManager : MonoBehaviour
 {   
@@ -62,8 +56,8 @@ public class TurnManager : MonoBehaviour
                     yield return new WaitUntil(()=>firstPlayerPlayed && secondPlayerPlayed);
                     StopCoroutine(firstCoroutine);
                     StopCoroutine(secondCoroutine);
-
-                    currentState = GameState.FirstPlayerTurn;
+                    
+                    currentState = GameState.SecondPlayerDeployment;
                     break;
                     
                 case GameState.FirstPlayerTurn:
@@ -104,7 +98,12 @@ public class TurnManager : MonoBehaviour
 
         Debug.Log("Fin du jeu !");
     }
+
+
+
 }
+
+
 
 public enum GameState{
     Initialization,

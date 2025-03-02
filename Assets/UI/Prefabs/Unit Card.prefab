@@ -477,7 +477,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitName: {fileID: 6372596133714948694}
-  backGround: {fileID: 7511367026883758251}
+  image: {fileID: 7511367026883758251}
+  unitData: {fileID: 0}
   goldAmount: {fileID: 1172859009520967682}
 --- !u!222 &4686815976835361455
 CanvasRenderer:

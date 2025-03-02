@@ -26,6 +26,7 @@ public class UIManager : MonoBehaviour
                 break;
             case UiState.Deployment:
                 UpdateRessourcePanel(player);
+                UpdateDeploymentPanel(player);
                 deploymentPanel.SetActive(true);
                 reinforcementPanel.SetActive(false);
                 crossHair.SetActive(false);
@@ -49,13 +50,12 @@ public class UIManager : MonoBehaviour
     public void UpdateDeploymentPanel(Player player)
     {
         ClearDeploymentPanel();
-        for (int i = 0; i < player.factionData.factionUnitsData.Count; i++)
+        for (int i = 0; i < deploymentPanel.transform.childCount; i++)
         {
-            deploymentPanel.transform.GetChild(i).gameObject.SetActive(true);
-            deploymentPanel.transform.GetChild(i).GetComponent<UnitCard>().ApplyData(player.factionData.factionUnitsData[i]);
-
-            reinforcementPanel.transform.GetChild(i).gameObject.SetActive(true);
-            reinforcementPanel.transform.GetChild(i).GetComponent<UnitCard>().ApplyData(player.factionData.factionUnitsData[i]);
+            if(player.factionData.factionUnitsData.Contains(deploymentPanel.transform.GetChild(i).GetComponent<UnitCard>().unitData)){
+                deploymentPanel.transform.GetChild(i).gameObject.SetActive(true);
+            }
+            
         }
     }
 
@@ -63,17 +63,16 @@ public class UIManager : MonoBehaviour
         for (int i = 0; i < deploymentPanel.transform.childCount; i++)
         {
             deploymentPanel.transform.GetChild(i).gameObject.SetActive(false);
-            reinforcementPanel.transform.GetChild(i).gameObject.SetActive(false);
         }
     }
 
     public void InitializeDeploymentPanel(){
-        int maxUnitNumber=Mathf.Max(GameManager.instance.playerManager.firstPlayer.factionData.factionUnitsData.Count, GameManager.instance.playerManager.secondPlayer.factionData.factionUnitsData.Count);
-        while (maxUnitNumber>0)
-        {
-            Instantiate(unitCard, deploymentPanel.transform);
-            Instantiate(unitCard, reinforcementPanel.transform);
-            maxUnitNumber--;
+        HashSet<UnitData> unitDatas = new HashSet<UnitData>(GameManager.instance.playerManager.firstPlayer.factionData.factionUnitsData);    
+        GameManager.instance.playerManager.secondPlayer.factionData.factionUnitsData.ForEach(data=>unitDatas.Add(data));
+        
+        foreach(UnitData unitData in unitDatas){
+            GameObject cardGO = Instantiate(unitCard, deploymentPanel.transform);
+            cardGO.GetComponent<UnitCard>().ApplyData(unitData);
         }
     }
 
