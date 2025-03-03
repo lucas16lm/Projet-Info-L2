@@ -12,7 +12,15 @@ public class ShaderLibE :MonoBehaviour
     public List<Material> MaterialLibs;
     public void Awake()
     {
-        
+        if (MaterialLibs.Count != MaterialNames.Count)
+        {
+            Debug.Log("Shader Lib Erreur nombre , material et nom materiel");
+
+        }
+        for (int i = 0; i < Math.Min(MaterialLibs.Count, MaterialNames.Count); i++)
+        {
+            MaterialLib.Add(MaterialNames[i], MaterialLibs[i]);
+        }
     }
 
 

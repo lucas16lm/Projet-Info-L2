@@ -20,6 +20,7 @@ public class MapGenerator : MonoBehaviour
     public int mountainPercentage;
     public int waterPercentage;
     
+    public List<Material> materials;
     private System.Random prng;
 
     public void CreateMap()
@@ -47,6 +48,7 @@ public class MapGenerator : MonoBehaviour
                 Vector3Int cubicCoordinate = Coordinates.OffsetToCubeCoordinates(x, y);
                 tileGameObject.name=""+cubicCoordinate;
                 Tile tileComponent = tileGameObject.GetComponent<Tile>();
+                tileComponent.materials=materials;
                 tileComponent.cubicCoordinates = cubicCoordinate;
                 Tile.AddTile(Coordinates.OffsetToCubeCoordinates(x, y), tileComponent);
             }

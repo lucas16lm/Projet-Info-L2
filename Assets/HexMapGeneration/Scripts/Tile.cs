@@ -2,11 +2,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using Unity.VisualScripting;
+using System;
 
 public class Tile : MonoBehaviour, IOutlinable
 {
     #region static dictionary and getters
     private static Dictionary<Vector3Int,Tile> grid = new Dictionary<Vector3Int, Tile>();
+    public List<Material> materials;
 
     public static void AddTile(Vector3Int coordinates, Tile tile){
         grid.Add(coordinates, tile);
@@ -188,8 +190,20 @@ public class Tile : MonoBehaviour, IOutlinable
                 transform.localScale+=10f*Vector3.up;
                 break;
             case Biome.water:
-                transform.GetComponent<Renderer>().materials[0] = ShaderLibE.MaterialLib["water"];
-                transform.GetComponent<Renderer>().materials[1].color = new Color(0, 0, 0.8f);
+                Renderer renderer = transform.GetComponent<Renderer>();
+                renderer.materials[1].color = new Color(0f, 0f, 0.8f);
+                renderer.materials[1]=materials[0];
+                for(int i = 0; i < renderer.materials.Count(); i++)
+                {
+                    Debug.Log(renderer.materials[i].name);
+                    renderer.materials[1] = materials[0];
+                }
+                renderer.material=materials[0];
+                renderer.materials[1]=renderer.material;
+                
+                
+               
+                
                 transform.localScale+=2*Vector3.down;
                 break;
         }
