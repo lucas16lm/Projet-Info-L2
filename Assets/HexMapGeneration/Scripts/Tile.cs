@@ -188,7 +188,7 @@ public class Tile : MonoBehaviour, IOutlinable
                 transform.localScale+=10f*Vector3.up;
                 break;
             case Biome.water:
-                transform.GetComponent<Renderer>().materials[0].color = new Color(0, 0, 0.8f);
+                transform.GetComponent<Renderer>().materials[0] = ShaderLibE.MaterialLib["water"];
                 transform.GetComponent<Renderer>().materials[1].color = new Color(0, 0, 0.8f);
                 transform.localScale+=2*Vector3.down;
                 break;
