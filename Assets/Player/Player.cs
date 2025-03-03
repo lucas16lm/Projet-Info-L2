@@ -23,7 +23,7 @@ public abstract class Player : MonoBehaviour
         return playerRole==PlayerRole.FirstPlayer ? Tile.GetTilesBetween(0, 3) : Tile.GetTilesBetween(maxY-4, maxY);
     }
 
-    public List<PlaceableObject> GetPlaceableObject(){
+    public List<PlaceableObject> GetPlaceableObjects(){
         List<PlaceableObject> list = new List<PlaceableObject>(){general};
         list.AddRange(officers);
         list.AddRange(units);

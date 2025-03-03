@@ -33,7 +33,6 @@ public class GameManager : MonoBehaviour
         mapGenerator.seed=Random.Range(-100000,100000);
         mapGenerator.CreateMap();
         playerManager.InitializePlayers(firstPlayerFaction, secondPlayerFaction);
-        uIManager.InitializeDeploymentPanel();
         turnManager.InitTurns();
     }
 }

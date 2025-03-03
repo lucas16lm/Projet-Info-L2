@@ -9,6 +9,8 @@ using UnityEngine.UI;
 
 public class HumanPlayer : Player
 {
+    
+    #region Deployment
     public override IEnumerator Deployment(Action onComplete)
     {
         List<Tile> deploymentZone = GetDeploymentZone();
@@ -29,23 +31,6 @@ public class HumanPlayer : Player
         StopCoroutine(unitDeployment);
         onComplete();
     }
-
-    public override IEnumerator PlayTurn(Action onComplete)
-    {
-        bool turnEnded = false;
-
-        InputSystem.actions.FindAction("EndTurn").performed+=ctx=>turnEnded=true;
-        
-        yield return new WaitUntil(()=>turnEnded);
-        onComplete();
-    }
-
-    public override IEnumerator Wait(Action onComplete)
-    {
-        yield return null;
-        onComplete();
-    }
-
     IEnumerator GeneralDeployment(List<Tile> deploymentZone){
         Debug.Log("Placement du général de "+factionData.name);
         GameManager.instance.uIManager.PrintMessage(factionData.factionName+", place your general !");
@@ -55,7 +40,7 @@ public class HumanPlayer : Player
             go=>go?.GetComponent<Tile>()!=null && deploymentZone.Contains(go?.GetComponent<Tile>()),
             go=>{},
             go=>{},
-            go=>{GameObject GO = PlaceElement(factionData.generalData, go.GetComponent<Tile>()); if(GO!=null)generalPlaced=true;}
+            go=>{PlaceableObject.Instantiate(factionData.generalData, go.GetComponent<Tile>(), this); if(general!=null)generalPlaced=true;}
         ));
 
         yield return new WaitUntil(()=>generalPlaced);
@@ -74,8 +59,10 @@ public class HumanPlayer : Player
         for (int i = 0; i < factionData.factionUnitsData.Count; i++)
         {
             UnitData unitData = factionData.factionUnitsData[i];
-            GameManager.instance.uIManager.deploymentPanel.transform.GetChild(i).GetComponent<Button>().onClick.AddListener(delegate{unitToPlace=unitData ; Debug.Log("selected : "+unitData.elementName);});
+            GameManager.instance.uIManager.deploymentPanel.transform.GetChild(i).GetComponent<Button>().onClick.AddListener(delegate{unitToPlace=unitData;});
         }
+
+        
         
         Coroutine unitPlacement = StartCoroutine(MouseListener(
             go=>go?.GetComponent<Tile>()!=null || (go?.GetComponent<Unit>()!=null && units.Contains(go.GetComponent<Unit>())),
@@ -86,7 +73,7 @@ public class HumanPlayer : Player
                 Unit unit = go?.GetComponent<Unit>();
 
                 if(tile!=null && unitToPlace != null && !tile.occupied && tile.occupable && deploymentZone.Contains(tile)){
-                    PlaceElement(unitToPlace, tile);
+                    PlaceableObject.Instantiate(unitToPlace, tile, this);
                 }
                 if(unit!=null){
                     ressourceBalance.AddRessources(unit.cost);
@@ -102,43 +89,50 @@ public class HumanPlayer : Player
         StopCoroutine(unitPlacement);
 
     }
+    #endregion
 
-    public GameObject PlaceElement(PlaceableData placeableElement, Tile tile){
-        if(!ressourceBalance.RemoveRessources(placeableElement.cost)){
-            Debug.Log("Not enought ressources !");
-            return null;
-        }
-        if(tile.occupied || !tile.occupable){
-            Debug.Log("innacessible");
-            return null;
-        }
+    #region Turn
+    public override IEnumerator PlayTurn(Action onComplete)
+    {
+        bool turnEnded = false;
+
+        InputSystem.actions.FindAction("EndTurn").performed+=ctx=>turnEnded=true;
+
+        Coroutine selectCoroutine = StartCoroutine(MouseListener(
+            go=>go?.GetComponent<PlaceableObject>()!=null,
+            go=>{
+                PlaceableObject placeableObject = go.GetComponent<PlaceableObject>();
+                if(GetPlaceableObjects().Contains(placeableObject)) placeableObject.SetOutline(true, GameManager.instance.AllyLayerId);
+                else placeableObject.SetOutline(true, GameManager.instance.EnnemyLayerId);
+            },
+            go=>{
+                go.GetComponent<PlaceableObject>().DisableOutlines();
+            },
+            go=>{
+                if(go.GetComponent<PlaceableObject>() is Unit){
+                    Unit unit = go.GetComponent<PlaceableObject>() as Unit;
+                    Debug.Log(unit.name);
+                }
+            })
+        );
         
-        GameObject element = Instantiate(placeableElement.gameObjectPrefab, tile.gameObject.transform.position+(tile.transform.localScale.y/2)*Vector3.up, Quaternion.LookRotation(new Vector3(Camera.main.transform.forward.x, 0, Camera.main.transform.forward.z)), transform);
-        GameManager.instance.uIManager.UpdateRessourcePanel(this);
+        yield return new WaitUntil(()=>turnEnded);
 
-        if(placeableElement is GeneralData){
-            general=element.GetComponent<General>();
-            GameManager.instance.cameraManager.AddFirstPlayerCamera(element.GetComponentInChildren<CinemachineCamera>());
-        }
-        else if(placeableElement is OfficerData){
-            officers.Add(element.GetComponent<Officer>());
-        }
-        else if(placeableElement is UnitData){
-            UnitData unitData = (UnitData)placeableElement;
-            Unit unit = element.GetComponent<Unit>();
-            units.Add(unit);
-            unit.Initialize(unitData, tile);
-        }
-        else if(placeableElement is BuildingData){
-            buildings.Add(element.GetComponent<Building>());
-        }
-        tile.occupied=true;
-        return element;
+        GameManager.instance.playerManager.firstPlayer.GetPlaceableObjects().ForEach(o=>o.DisableOutlines());
+        GameManager.instance.playerManager.secondPlayer.GetPlaceableObjects().ForEach(o=>o.DisableOutlines());
+
+        StopCoroutine(selectCoroutine);
+        onComplete();
     }
+    #endregion
 
-    
-
-
+    #region Wait
+    public override IEnumerator Wait(Action onComplete)
+    {
+        yield return null;
+        onComplete();
+    }
+    #endregion
     public IEnumerator MouseListener(Predicate<GameObject> predicate, Action<GameObject> onEnter, Action<GameObject> onExit, Action<GameObject> onClick){
         GameObject previousObject = null;
 

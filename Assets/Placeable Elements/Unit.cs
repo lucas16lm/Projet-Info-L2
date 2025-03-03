@@ -12,9 +12,10 @@ public class Unit : PlaceableObject
     public int movementPoints;
     public RessourceBalance cost;
 
-    public override void Initialize(PlaceableData placeableData, Tile position)
+    public override void Initialize(PlaceableData placeableData, Tile position, Player player)
     {
         UnitData unitData = (UnitData) placeableData;
+        player.units.Add(this);
         unitClass=unitData.unitClass;
         healthPoints=unitData.baseHealthPoints;
         movementPoints=unitData.baseMovementPoints;
@@ -22,6 +23,12 @@ public class Unit : PlaceableObject
         gameObject.name=unitData.elementName;
         this.position=position;
         position.occupied=true;
+
+        foreach(Renderer renderer in transform.GetChild(0).GetComponentsInChildren<Renderer>()) renderer.material=player.factionData.bannerMaterial;
+        for (int i = 1; i < transform.childCount; i++)
+        {
+            foreach(Renderer renderer in transform.GetChild(i).GetComponentsInChildren<Renderer>()) renderer.material=player.factionData.unitsMaterial;
+        }
     }
 
     public IEnumerator Move(Tile destination)

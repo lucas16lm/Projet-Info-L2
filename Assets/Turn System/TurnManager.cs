@@ -46,7 +46,7 @@ public class TurnManager : MonoBehaviour
                     
                     yield return new WaitUntil(()=>firstPlayerPlayed && secondPlayerPlayed);
                     
-                    GameManager.instance.playerManager.firstPlayer.GetPlaceableObject().ForEach(element=>element.DisableOutlines());
+                    GameManager.instance.playerManager.firstPlayer.GetPlaceableObjects().ForEach(element=>element.DisableOutlines());
                     StopCoroutine(firstCoroutine);
                     StopCoroutine(secondCoroutine);
                     
@@ -62,7 +62,7 @@ public class TurnManager : MonoBehaviour
                     
                     yield return new WaitUntil(()=>firstPlayerPlayed && secondPlayerPlayed);
                     
-                    GameManager.instance.playerManager.secondPlayer.GetPlaceableObject().ForEach(element=>element.DisableOutlines());
+                    GameManager.instance.playerManager.secondPlayer.GetPlaceableObjects().ForEach(element=>element.DisableOutlines());
                     StopCoroutine(firstCoroutine);
                     StopCoroutine(secondCoroutine);
                     

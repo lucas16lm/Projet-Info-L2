@@ -10,19 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7d68825d1d7efeb46a3337dbb5ff23f5, type: 3}
-  m_Name: France
+  m_Name: Eastern Rome
   m_EditorClassIdentifier: 
-  factionName: Kingdom of France
+  factionName: Eastern Rome
   description: 
-  bannerMaterial: {fileID: 2100000, guid: e8077999935278e4caabc0d0be1484c5, type: 2}
-  unitsMaterial: {fileID: 2100000, guid: 19f3b2158b0cd134798555d774de0b3f, type: 2}
-  factionColor: {r: 0.14653791, g: 0.17266914, b: 0.8396226, a: 0}
+  bannerMaterial: {fileID: 2100000, guid: f1054a5fd2635164daa56e73c083ce16, type: 2}
+  unitsMaterial: {fileID: 2100000, guid: 3fb3053a2c6c4b346b51634e6d401ff2, type: 2}
+  factionColor: {r: 0.778893, g: 0, b: 1, a: 0}
   baseBalance:
     gold: 10
   generalData: {fileID: 11400000, guid: 4e41a187b8286a9438adffeb56bc1e78, type: 2}
   officerData: {fileID: 0}
   factionUnitsData:
-  - {fileID: 11400000, guid: 75d079e8e22ff5845889375b393cb620, type: 2}
-  - {fileID: 11400000, guid: 1cce58da2ca233b4bb6fef1aeae8770c, type: 2}
-  - {fileID: 11400000, guid: 532ca22500c66634db2eb5707eaf9164, type: 2}
+  - {fileID: 11400000, guid: bd44d5330648406459af3e385e558193, type: 2}
   buildingDatas: []

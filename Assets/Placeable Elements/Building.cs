@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class Building : PlaceableObject
 {
-    public override void Initialize(PlaceableData placeableData, Tile position)
+    public override void Initialize(PlaceableData placeableData, Tile position, Player player)
     {
-        throw new System.NotImplementedException();
+        player.buildings.Add(this);
     }
 }

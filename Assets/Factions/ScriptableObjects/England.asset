@@ -14,17 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   factionName: England
   description: 
-  factionFlag: {fileID: 0}
+  bannerMaterial: {fileID: 2100000, guid: 5b3184522dc5e5041810df0af22f4b47, type: 2}
+  unitsMaterial: {fileID: 2100000, guid: 98a7fdcb4ebb44344b4afe0424d44b82, type: 2}
   factionColor: {r: 0.745283, g: 0.0035154943, b: 0.0035154943, a: 0}
   baseBalance:
     gold: 15
-    weapons: 10
-    powder: 5
-    horses: 5
-    wood: 5
   generalData: {fileID: 11400000, guid: 4e41a187b8286a9438adffeb56bc1e78, type: 2}
   officerData: {fileID: 0}
   factionUnitsData:
   - {fileID: 11400000, guid: 75d079e8e22ff5845889375b393cb620, type: 2}
   buildingDatas: []
-  factionBonus: {fileID: 0}

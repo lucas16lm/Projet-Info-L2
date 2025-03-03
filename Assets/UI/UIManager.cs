@@ -57,7 +57,7 @@ public class UIManager : MonoBehaviour
                 deploymentPanel.SetActive(false);
                 reinforcementPanel.SetActive(false);
                 crossHair.SetActive(true);
-
+            
                 UpdateRessourcePanel(GameManager.instance.playerManager.firstPlayer);
                 
                 break;
@@ -94,29 +94,16 @@ public class UIManager : MonoBehaviour
     public void UpdateDeploymentPanel(Player player)
     {
         ClearDeploymentPanel();
-        for (int i = 0; i < deploymentPanel.transform.childCount; i++)
+        for (int i = 0; i < player.factionData.factionUnitsData.Count; i++)
         {
-            if(player.factionData.factionUnitsData.Contains(deploymentPanel.transform.GetChild(i).GetComponent<UnitCard>().unitData)){
-                deploymentPanel.transform.GetChild(i).gameObject.SetActive(true);
-            }
-            
+            UnitCard.Instantiate(player.factionData.factionUnitsData[i]);
         }
     }
 
     private void ClearDeploymentPanel(){
         for (int i = 0; i < deploymentPanel.transform.childCount; i++)
         {
-            deploymentPanel.transform.GetChild(i).gameObject.SetActive(false);
-        }
-    }
-
-    public void InitializeDeploymentPanel(){
-        HashSet<UnitData> unitDatas = new HashSet<UnitData>(GameManager.instance.playerManager.firstPlayer.factionData.factionUnitsData);    
-        GameManager.instance.playerManager.secondPlayer.factionData.factionUnitsData.ForEach(data=>unitDatas.Add(data));
-        
-        foreach(UnitData unitData in unitDatas){
-            GameObject cardGO = Instantiate(unitCard, deploymentPanel.transform);
-            cardGO.GetComponent<UnitCard>().ApplyData(unitData);
+            Destroy(deploymentPanel.transform.GetChild(i).gameObject);
         }
     }
 

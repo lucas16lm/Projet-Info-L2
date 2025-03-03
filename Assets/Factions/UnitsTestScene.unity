@@ -1866,7 +1866,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   firstPlayerFaction: {fileID: 11400000, guid: 1a4de64f879c0134f9598c9c76384be9, type: 2}
-  secondPlayerFaction: {fileID: 11400000, guid: deb7be077b21ea5488c9540645f7fe79, type: 2}
+  secondPlayerFaction: {fileID: 11400000, guid: bf2156f817687134a9b85d1ba1d47e72, type: 2}
   mapGenerator: {fileID: 376526548}
   playerManager: {fileID: 905359390}
   cameraManager: {fileID: 1931077976}
