@@ -192,18 +192,15 @@ public class Tile : MonoBehaviour, IOutlinable
             case Biome.water:
                 Renderer renderer = transform.GetComponent<Renderer>();
                 renderer.materials[1].color = new Color(0f, 0f, 0.8f);
-                renderer.materials[1]=materials[0];
-                for(int i = 0; i < renderer.materials.Count(); i++)
-                {
-                    Debug.Log(renderer.materials[i].name);
-                    renderer.materials[1] = materials[0];
-                }
-                renderer.material=materials[0];
-                renderer.materials[1]=renderer.material;
+                Material[] mats = renderer.materials; // Copie du tableau de matériaux
+                mats[1] = materials[0]; // Changer le deuxième matériau
+                renderer.materials = mats; 
+             
                 
-                
-               
-                
+
+
+
+
                 transform.localScale+=2*Vector3.down;
                 break;
         }

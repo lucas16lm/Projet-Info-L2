@@ -79,7 +79,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 681ca919c8c17aa41b68a19e5e9f8f42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  materials: []
+  materials:
+  - {fileID: 0}
   treePrefab: {fileID: 387980774264358068, guid: 0369177291e98ac4fa680dea8ed3d7f2, type: 3}
   cubicCoordinates: {x: 0, y: 0, z: 0}
   biome: 0
@@ -105,7 +106,7 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 1
   m_CookingOptions: 30
-  m_Mesh: {fileID: 675060902385462148, guid: df0aab3b499990e43bc8fc9d2754911f, type: 3}
+  m_Mesh: {fileID: 675060902385462148, guid: 915fbd8d7b88ec449bfe5b0b8b104ba3, type: 3}
 --- !u!33 &617153634211520499
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -113,7 +114,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8524151667754914690}
-  m_Mesh: {fileID: 675060902385462148, guid: df0aab3b499990e43bc8fc9d2754911f, type: 3}
+  m_Mesh: {fileID: 675060902385462148, guid: 915fbd8d7b88ec449bfe5b0b8b104ba3, type: 3}
 --- !u!23 &740265382024499291
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -137,8 +138,8 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 21d5f14eb3a54504ea7f6a83f213316b, type: 2}
   - {fileID: 2100000, guid: 513a15dbc5685a3488d29689027fa11a, type: 2}
+  - {fileID: 2100000, guid: 21d5f14eb3a54504ea7f6a83f213316b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
