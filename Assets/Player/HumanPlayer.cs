@@ -98,10 +98,14 @@ public class HumanPlayer : Player
 
         InputSystem.actions.FindAction("EndTurn").performed+=ctx=>turnEnded=true;
 
-        Coroutine selectCoroutine = StartCoroutine(MouseListener(
-            go=>go?.GetComponent<PlaceableObject>()!=null,
+        PlaceableObject selected = null;
+        PlaceableObject target = null;
+        Tile destination = null;
+
+        Coroutine selectCoroutine = StartCoroutine(MouseListener(   //idée éventuelle : surcharge méthode MouseListener prenant des IENumerator au lieu des actions en paramètre
+            go=>go?.GetComponent<PlaceableObject>()!=null,      //TODO : créer méthode retournant bool pour gérer chaque cas de figure
             go=>{
-                PlaceableObject placeableObject = go.GetComponent<PlaceableObject>();
+                PlaceableObject placeableObject = go.GetComponent<PlaceableObject>();   //TODO : idem pour les actions
                 if(GetPlaceableObjects().Contains(placeableObject)) placeableObject.SetOutline(true, GameManager.instance.AllyLayerId);
                 else placeableObject.SetOutline(true, GameManager.instance.EnnemyLayerId);
             },
@@ -109,10 +113,7 @@ public class HumanPlayer : Player
                 go.GetComponent<PlaceableObject>().DisableOutlines();
             },
             go=>{
-                if(go.GetComponent<PlaceableObject>() is Unit){
-                    Unit unit = go.GetComponent<PlaceableObject>() as Unit;
-                    Debug.Log(unit.name);
-                }
+                selected=go.GetComponent<PlaceableObject>();
             })
         );
         
@@ -124,6 +125,42 @@ public class HumanPlayer : Player
         StopCoroutine(selectCoroutine);
         onComplete();
     }
+
+    IEnumerator HandleSelectedObject(PlaceableObject placeableObject){
+        switch(placeableObject){
+            case Unit:
+                Unit unit = placeableObject as Unit;
+                break;
+            case General or Officer:
+                placeableObject.GetComponentInChildren<CinemachineCamera>().Prioritize();
+                break;
+            default:
+                Debug.Log("pas unit");
+                break;
+        }
+        yield return null;
+    }
+
+    IEnumerator ChooseTarget(Unit unit, Action<PlaceableObject> onComplete){
+        bool completed=false;
+        Coroutine chooseCoroutine = StartCoroutine(MouseListener(
+            go=>{
+                PlaceableObject placeableObject = go?.GetComponent<PlaceableObject>();
+                if(placeableObject==null) return false;
+                return true;
+            },
+            go=>{},
+            go=>{},
+            go=>{onComplete(go.GetComponent<PlaceableObject>()); completed=true;}
+        ));
+
+        yield return new WaitUntil(()=>completed);
+        
+        StopCoroutine(chooseCoroutine);
+    }
+
+
+
     #endregion
 
     #region Wait

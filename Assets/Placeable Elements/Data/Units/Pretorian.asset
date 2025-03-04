@@ -17,7 +17,7 @@ MonoBehaviour:
   baseHealthPoints: 50
   cost:
     gold: 3
-  image: {fileID: 21300000, guid: 5e27186962c78fd41ba2caf7c2395f1e, type: 3}
+  image: {fileID: 21300000, guid: 4e811a1ccb598654ebb0b15d4cfaaf14, type: 3}
   unitClass: 0
   baseDamagePoints: 0
-  baseMovementPoints: 0
+  baseMovementPoints: 2

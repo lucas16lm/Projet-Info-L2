@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   factionName: Kingdom of France
   description: 
-  bannerMaterial: {fileID: 2100000, guid: e8077999935278e4caabc0d0be1484c5, type: 2}
-  unitsMaterial: {fileID: 2100000, guid: 19f3b2158b0cd134798555d774de0b3f, type: 2}
+  bannerMaterial: {fileID: 2100000, guid: 32cdc6527b112444baec692c92300b32, type: 2}
+  unitsMaterial: {fileID: 2100000, guid: 2795c5d9ef4b2374ca829d0e6a019567, type: 2}
   factionColor: {r: 0.14653791, g: 0.17266914, b: 0.8396226, a: 0}
   baseBalance:
     gold: 10

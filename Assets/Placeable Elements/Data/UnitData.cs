@@ -12,6 +12,7 @@ public class UnitData : PlaceableData
 public enum UnitClass{
     Infantry,
     Ranged,
-    Cavalry,
+    MeleeCavalry,
+    RangedCavalry,
     Engineer
 }

@@ -87,6 +87,7 @@ public class Tile : MonoBehaviour, IOutlinable
     public GameObject treePrefab;
     public Vector3Int cubicCoordinates;
     public Biome biome;
+    public PlaceableObject content;
     public int moveCost {get{
         switch(biome){
             case Biome.plain:
@@ -158,6 +159,11 @@ public class Tile : MonoBehaviour, IOutlinable
         return neighbors;
     }
 
+    public bool IsAccessible(){
+        if(biome==Biome.mountain || biome==Biome.water) return false;
+        return content==null;
+    }
+
     public void AssignBiome(Biome biome){
         this.biome=biome;
     }
@@ -193,6 +199,7 @@ public class Tile : MonoBehaviour, IOutlinable
                 transform.localScale+=2*Vector3.down;
                 break;
         }
+        
     }
 
     public void SetOutline(bool value, int renderingLayerMaskId)
