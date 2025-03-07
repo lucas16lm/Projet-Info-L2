@@ -20,8 +20,8 @@ public class UnitCard : MonoBehaviour
         goldAmount.text=""+unitData.cost.gold;
     }
 
-    public static void Instantiate(UnitData unitData){
-        GameObject card = Instantiate(GameManager.instance.uIManager.unitCard, GameManager.instance.uIManager.deploymentPanel.transform);
+    public static void Instantiate(UnitData unitData, Transform transform){
+        GameObject card = Instantiate(GameManager.instance.uIManager.unitCard, transform);
         card.GetComponent<UnitCard>().ApplyData(unitData);
     }
 }

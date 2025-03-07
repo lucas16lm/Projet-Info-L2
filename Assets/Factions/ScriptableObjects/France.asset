@@ -22,6 +22,7 @@ MonoBehaviour:
   generalData: {fileID: 11400000, guid: 4e41a187b8286a9438adffeb56bc1e78, type: 2}
   officerData: {fileID: 0}
   factionUnitsData:
+  - {fileID: 11400000, guid: d9e97144a1ef42a45a085c18799c50df, type: 2}
   - {fileID: 11400000, guid: 75d079e8e22ff5845889375b393cb620, type: 2}
   - {fileID: 11400000, guid: 1cce58da2ca233b4bb6fef1aeae8770c, type: 2}
   - {fileID: 11400000, guid: 532ca22500c66634db2eb5707eaf9164, type: 2}

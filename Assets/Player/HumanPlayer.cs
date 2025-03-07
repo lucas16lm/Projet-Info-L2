@@ -98,68 +98,32 @@ public class HumanPlayer : Player
 
         InputSystem.actions.FindAction("EndTurn").performed+=ctx=>turnEnded=true;
 
-        PlaceableObject selected = null;
-        PlaceableObject target = null;
-        Tile destination = null;
-
-        Coroutine selectCoroutine = StartCoroutine(MouseListener(   //idée éventuelle : surcharge méthode MouseListener prenant des IENumerator au lieu des actions en paramètre
-            go=>go?.GetComponent<PlaceableObject>()!=null,      //TODO : créer méthode retournant bool pour gérer chaque cas de figure
+        Coroutine hoverCoroutine = StartCoroutine(MouseListener(
+            go=>go?.GetComponent<PlaceableObject>()!=null,
             go=>{
-                PlaceableObject placeableObject = go.GetComponent<PlaceableObject>();   //TODO : idem pour les actions
+                PlaceableObject placeableObject = go.GetComponent<PlaceableObject>();
                 if(GetPlaceableObjects().Contains(placeableObject)) placeableObject.SetOutline(true, GameManager.instance.AllyLayerId);
                 else placeableObject.SetOutline(true, GameManager.instance.EnnemyLayerId);
             },
             go=>{
                 go.GetComponent<PlaceableObject>().DisableOutlines();
             },
-            go=>{
-                selected=go.GetComponent<PlaceableObject>();
-            })
+            go=>{})
         );
+
+        while(!turnEnded){
+            yield return HandlePlayerSelection();
+        }
+        
         
         yield return new WaitUntil(()=>turnEnded);
 
         GameManager.instance.playerManager.firstPlayer.GetPlaceableObjects().ForEach(o=>o.DisableOutlines());
         GameManager.instance.playerManager.secondPlayer.GetPlaceableObjects().ForEach(o=>o.DisableOutlines());
 
-        StopCoroutine(selectCoroutine);
+        StopCoroutine(hoverCoroutine);
         onComplete();
     }
-
-    IEnumerator HandleSelectedObject(PlaceableObject placeableObject){
-        switch(placeableObject){
-            case Unit:
-                Unit unit = placeableObject as Unit;
-                break;
-            case General or Officer:
-                placeableObject.GetComponentInChildren<CinemachineCamera>().Prioritize();
-                break;
-            default:
-                Debug.Log("pas unit");
-                break;
-        }
-        yield return null;
-    }
-
-    IEnumerator ChooseTarget(Unit unit, Action<PlaceableObject> onComplete){
-        bool completed=false;
-        Coroutine chooseCoroutine = StartCoroutine(MouseListener(
-            go=>{
-                PlaceableObject placeableObject = go?.GetComponent<PlaceableObject>();
-                if(placeableObject==null) return false;
-                return true;
-            },
-            go=>{},
-            go=>{},
-            go=>{onComplete(go.GetComponent<PlaceableObject>()); completed=true;}
-        ));
-
-        yield return new WaitUntil(()=>completed);
-        
-        StopCoroutine(chooseCoroutine);
-    }
-
-
 
     #endregion
 
@@ -206,5 +170,103 @@ public class HumanPlayer : Player
 
             yield return null;
         }
+    }
+
+    public IEnumerator SelectGameObject(Predicate<GameObject> predicate, Action<GameObject> action){
+        bool completed = false;
+        InputSystem.actions.FindAction("EndTurn").performed += ctx=>completed=true;
+        InputSystem.actions.FindAction("Cancel").performed += ctx=>completed=true;
+
+        while(!completed){
+            if(InputSystem.actions.FindAction("Select").WasPerformedThisFrame()){
+                Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+                RaycastHit hit;
+
+                if (Physics.Raycast(ray, out hit) && !EventSystem.current.IsPointerOverGameObject() && predicate.Invoke(hit.collider.gameObject)){
+                    
+                    action?.Invoke(hit.collider.gameObject);
+                    completed=true;
+                }
+            }
+            yield return null;
         }
+    }
+
+    public IEnumerator HandlePlayerSelection(){
+        
+        GameObject firstSelection=null;
+        yield return SelectGameObject(
+            go=>IsTileRecruitable(go) || IsOwnUnit(go) || IsOwnGeneral(go) || IsOwnOfficer(go),
+            go=>firstSelection=go
+        );
+
+        if(firstSelection==null) yield break;
+
+        if(IsOwnGeneral(firstSelection) || IsOwnOfficer(firstSelection)){
+            Debug.Log("TODO : click on general and officers");
+            yield return null;
+        }else if(IsTileRecruitable(firstSelection))
+        {
+            GameManager.instance.uIManager.OpenReinforcementPanel(this);
+            Debug.Log("TODO : reinforcement");
+            yield return null;
+        }
+        else if(IsOwnUnit(firstSelection)){
+            GameObject secondObject = null;
+            while(secondObject==null){
+                yield return SelectGameObject(
+                    go=>IsTile(go) || IsRivalElement(go),
+                    go=>secondObject=go
+                );
+            }
+            if(IsTile(secondObject)){
+                yield return firstSelection.GetComponent<Unit>().Move(secondObject.GetComponent<Tile>());
+            }
+            else if(IsRivalElement(secondObject)){
+                Debug.Log("TODO : attack");
+            yield return null;
+            }
+            else{
+                Debug.LogError("not supposed to be here");
+            }
+        }
+        
+
+        
+    }
+
+    bool IsTileRecruitable(GameObject go){
+        Tile tile = go?.GetComponent<Tile>();
+        if(tile==null) return false;
+        return tile.IsAccessible() && Tile.GetTilesInRange(general.position, general.orderRange).Contains(tile);
+    }
+
+    bool IsOwnUnit(GameObject go){
+        Unit unit = go?.GetComponent<Unit>();
+        if(unit==null) return false;
+        return units.Contains(unit);
+    }
+
+    bool IsOwnGeneral(GameObject go){
+        General general = go?.GetComponent<General>();
+        if(general==null) return false;
+        return general==this.general;
+    }
+
+    bool IsOwnOfficer(GameObject go){
+        Officer officer = go?.GetComponent<Officer>();
+        if(officer==null) return false;
+        return officers.Contains(officer);
+    }
+
+    bool IsTile(GameObject go){
+        Tile tile = go?.GetComponent<Tile>();
+        return tile!=null;
+    }
+
+    bool IsRivalElement(GameObject go){
+        PlaceableObject placeableObject = go?.GetComponent<PlaceableObject>();
+        if(placeableObject==null) return false;
+        return !GetPlaceableObjects().Contains(placeableObject);
+    }
 }

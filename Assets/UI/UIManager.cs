@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using PrimeTween;
 using TMPro;
@@ -12,8 +14,8 @@ public class UIManager : MonoBehaviour
     public GameObject ressourcePanel;
     public GameObject deploymentPanel;
     public GameObject messagePanel;
-    public GameObject reinforcementPanel;
     public GameObject crossHair;
+    public GameObject reinforcementPanel;
 
 
     public void UpdateUI(GameState gameState){
@@ -22,7 +24,6 @@ public class UIManager : MonoBehaviour
                 
                 ressourcePanel.SetActive(false);
                 deploymentPanel.SetActive(false);
-                reinforcementPanel.SetActive(false);
                 crossHair.SetActive(false);
                 
                 break;
@@ -31,7 +32,6 @@ public class UIManager : MonoBehaviour
 
                 ressourcePanel.SetActive(true);
                 deploymentPanel.SetActive(false);
-                reinforcementPanel.SetActive(false);
                 crossHair.SetActive(false);
 
                 UpdateDeploymentPanel(GameManager.instance.playerManager.firstPlayer);
@@ -43,7 +43,6 @@ public class UIManager : MonoBehaviour
                 
                 ressourcePanel.SetActive(true);
                 deploymentPanel.SetActive(false);
-                reinforcementPanel.SetActive(false);
                 crossHair.SetActive(false);
 
                 UpdateDeploymentPanel(GameManager.instance.playerManager.secondPlayer);
@@ -55,7 +54,6 @@ public class UIManager : MonoBehaviour
                 
                 ressourcePanel.SetActive(true);
                 deploymentPanel.SetActive(false);
-                reinforcementPanel.SetActive(false);
                 crossHair.SetActive(true);
             
                 UpdateRessourcePanel(GameManager.instance.playerManager.firstPlayer);
@@ -66,7 +64,6 @@ public class UIManager : MonoBehaviour
                 
                 ressourcePanel.SetActive(true);
                 deploymentPanel.SetActive(false);
-                reinforcementPanel.SetActive(false);
                 crossHair.SetActive(true);
 
                 UpdateRessourcePanel(GameManager.instance.playerManager.secondPlayer);
@@ -77,7 +74,6 @@ public class UIManager : MonoBehaviour
                 
                 ressourcePanel.SetActive(false);
                 deploymentPanel.SetActive(false);
-                reinforcementPanel.SetActive(false);
                 crossHair.SetActive(false);
                 
                 break;
@@ -96,7 +92,7 @@ public class UIManager : MonoBehaviour
         ClearDeploymentPanel();
         for (int i = 0; i < player.factionData.factionUnitsData.Count; i++)
         {
-            UnitCard.Instantiate(player.factionData.factionUnitsData[i]);
+            UnitCard.Instantiate(player.factionData.factionUnitsData[i], deploymentPanel.transform);
         }
     }
 
@@ -107,27 +103,21 @@ public class UIManager : MonoBehaviour
         }
     }
 
-
     public void PrintMessage(string message){
-        bool isCrossHairActive=crossHair.activeSelf;
-        crossHair.SetActive(false);
         messagePanel.SetActive(true);
         messagePanel.GetComponentInChildren<TMP_Text>().text=message;
-        Tween.Delay(3, ()=>{messagePanel.SetActive(false);crossHair.SetActive(isCrossHairActive);});
+        Tween.Delay(3, ()=>{messagePanel.SetActive(false);});
     }
 
-    public void OpenReinforcementPanel(Player player){
+    public void OpenReinforcementPanel(Player player)
+    {
         reinforcementPanel.SetActive(true);
-        UpdateDeploymentPanel(player);
-        Time.timeScale=0;
-        Cursor.lockState=CursorLockMode.Confined;
+        foreach(UnitData unitData in player.factionData.factionUnitsData)
+        {
+            UnitCard.Instantiate(unitData, reinforcementPanel.transform.GetChild(0).transform);
+        }
+        Time.timeScale = 0;
+        Cursor.lockState = CursorLockMode.Confined;
     }
-    
-    public void CloseReinforcementPanel(){
-        reinforcementPanel.SetActive(false);
-        Time.timeScale=1;
-        Cursor.lockState=CursorLockMode.Locked;
-    }
-
      
 }

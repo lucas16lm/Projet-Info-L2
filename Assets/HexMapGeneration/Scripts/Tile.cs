@@ -207,10 +207,10 @@ public class Tile : MonoBehaviour, IOutlinable
         Renderer renderer = GetComponentInChildren<Renderer>();
         RenderingLayerMask renderingLayerMask = renderer.renderingLayerMask;
         if(value){
-            renderingLayerMask |= 0x1 << GameManager.instance.TileLayerId;
+            renderingLayerMask |= 0x1 << renderingLayerMaskId;
         }
         else{
-            renderingLayerMask  &= ~(0x1 << GameManager.instance.TileLayerId);
+            renderingLayerMask  &= ~(0x1 << renderingLayerMaskId);
         }
         renderer.renderingLayerMask = renderingLayerMask;
     }
