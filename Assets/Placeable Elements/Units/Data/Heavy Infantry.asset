@@ -20,4 +20,4 @@ MonoBehaviour:
   image: {fileID: 21300000, guid: 17a0bebd09e511b4ebd65badf0e0475e, type: 3}
   unitClass: 0
   baseDamagePoints: 25
-  baseMovementPoints: 2
+  baseMovementPoints: 5

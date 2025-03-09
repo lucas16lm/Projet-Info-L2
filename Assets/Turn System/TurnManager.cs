@@ -1,19 +1,28 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class TurnManager : MonoBehaviour
 {   
     [Header("Settings")]
-    public int maxTurnNumber = 30;
+    public int nbTurn = 1;
     public GameState currentState;
-
+    private List<ITurnObserver> observers;
     public Player firstPlayer;
     public Player secondPlayer;
     public bool gameEnded = false;
 
+    public void AddObserver(ITurnObserver observer){
+        observers.Add(observer);
+    }
+
+    public void RemoveObserver(ITurnObserver observer){
+        observers.Remove(observer);
+    }
 
     public void InitTurns()
     {
+        observers = new List<ITurnObserver>();
         gameEnded=false;
         currentState = GameState.Initialization;
         StartCoroutine(RunGameLoop());
@@ -36,10 +45,11 @@ public class TurnManager : MonoBehaviour
             {
                 case GameState.Initialization:
                     currentState=GameState.FirstPlayerDeployment;
+                    nbTurn=1;
                     break;
 
                 case GameState.FirstPlayerDeployment:
-                    GameManager.instance.cameraManager.SetCameraState(CameraState.FirstPlayerRTS);
+                    GameManager.instance.cameraManager.ActivateFirstRTS();
                     
                     firstCoroutine = StartCoroutine(GameManager.instance.playerManager.firstPlayer.Deployment(()=>firstPlayerPlayed=true));
                     secondCoroutine = StartCoroutine(GameManager.instance.playerManager.secondPlayer.Wait(()=>secondPlayerPlayed=true));
@@ -55,7 +65,7 @@ public class TurnManager : MonoBehaviour
                     break;
 
                 case GameState.SecondPlayerDeployment:
-                    GameManager.instance.cameraManager.SetCameraState(CameraState.SecondPlayerRTS);
+                    GameManager.instance.cameraManager.ActivateSecondRTS();
                     
                     firstCoroutine = StartCoroutine(GameManager.instance.playerManager.firstPlayer.Wait(()=>firstPlayerPlayed=true));
                     secondCoroutine = StartCoroutine(GameManager.instance.playerManager.secondPlayer.Deployment(()=>secondPlayerPlayed=true));
@@ -70,7 +80,7 @@ public class TurnManager : MonoBehaviour
                     break;
                     
                 case GameState.FirstPlayerTurn:
-                    GameManager.instance.cameraManager.SetCameraState(CameraState.FirstPlayerPOV);
+                    GameManager.instance.playerManager.firstPlayer.general.SetPriority();
 
                     firstCoroutine = StartCoroutine(GameManager.instance.playerManager.firstPlayer.PlayTurn(()=>firstPlayerPlayed=true));
                     secondCoroutine = StartCoroutine(GameManager.instance.playerManager.secondPlayer.Wait(()=>secondPlayerPlayed=true));
@@ -82,7 +92,7 @@ public class TurnManager : MonoBehaviour
                     break;
                 
                 case GameState.SecondPlayerTurn:
-                    GameManager.instance.cameraManager.SetCameraState(CameraState.SecondPlayerPOV);
+                    GameManager.instance.playerManager.secondPlayer.general.SetPriority();
 
                     firstCoroutine = StartCoroutine(GameManager.instance.playerManager.firstPlayer.Wait(()=>firstPlayerPlayed=true));
                     secondCoroutine = StartCoroutine(GameManager.instance.playerManager.secondPlayer.PlayTurn(()=>secondPlayerPlayed=true));
@@ -91,6 +101,8 @@ public class TurnManager : MonoBehaviour
                     StopCoroutine(secondCoroutine);
                     
                     currentState=GameState.FirstPlayerTurn;
+                    nbTurn++;
+                    observers?.ForEach(observer=>observer.OnTurnEnded());
                     break;
 
                 case GameState.GameOver:
@@ -108,8 +120,6 @@ public class TurnManager : MonoBehaviour
         Debug.Log("Fin du jeu !");
     }
 
-
-
 }
 
 
@@ -121,4 +131,8 @@ public enum GameState{
     FirstPlayerTurn,
     SecondPlayerTurn,
     GameOver
+}
+
+public interface ITurnObserver{
+    void OnTurnEnded();
 }

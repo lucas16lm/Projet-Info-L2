@@ -104,17 +104,6 @@ public class Tile : MonoBehaviour, IOutlinable
                 return -1;
         }
     }}
-    public bool occupable {get{
-        switch(biome){
-            case Biome.water or Biome.mountain:
-                return false;
-            default:
-                return true;
-        }
-    }}
-    public bool occupied = false;
-    
-
 
     public Tile GetUpNeighbor(){
         return GetTile(cubicCoordinates.x, cubicCoordinates.y+1, cubicCoordinates.z-1);
@@ -219,8 +208,8 @@ public class Tile : MonoBehaviour, IOutlinable
     {
         Renderer renderer = GetComponentInChildren<Renderer>();
         RenderingLayerMask renderingLayerMask = renderer.renderingLayerMask;
-        renderingLayerMask  &= ~(0x1 << GameManager.instance.TileLayerId);
-        renderingLayerMask  &= ~(0x1 << GameManager.instance.TileFillLayerId);
+        renderingLayerMask  &= ~(0x1 << GameManager.instance.TileZoneLayerID);
+        renderingLayerMask  &= ~(0x1 << GameManager.instance.TileSelectLayerID);
         renderer.renderingLayerMask = renderingLayerMask;
     }
     #endregion

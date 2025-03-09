@@ -11,7 +11,6 @@ public class FactionData : ScriptableObject
     public Color factionColor;
     public RessourceBalance baseBalance;
     public GeneralData generalData;
-    public OfficerData officerData;
+    public OutpostData outpostData;
     public List<UnitData> factionUnitsData;
-    public List<BuildingData> buildingDatas;
 }

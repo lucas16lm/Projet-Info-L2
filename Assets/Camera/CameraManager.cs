@@ -6,63 +6,56 @@ public class CameraManager : MonoBehaviour
 {
     public CinemachineCamera firstPlayerRtsCamera;
     public CinemachineCamera secondPlayerRtsCamera;
-    public List<CinemachineCamera> firstPlayerCameras;
-    public List<CinemachineCamera> secondPlayerCameras;
+    
+    private List<ICamera> cameras;
 
-    public void SetCameraState(CameraState cameraState){
-        switch(cameraState){
-            case CameraState.FirstPlayerRTS:
-                firstPlayerRtsCamera.Priority=1;
-                secondPlayerRtsCamera.Priority=0;
-                firstPlayerCameras.ForEach(cam => cam.Priority=0);
-                secondPlayerCameras.ForEach(cam => cam.Priority=0);
-                firstPlayerRtsCamera.Target.TrackingTarget.GetComponent<RTSCamera>().enabled=true;
-                secondPlayerRtsCamera.Target.TrackingTarget.GetComponent<RTSCamera>().enabled=false;
-                break;
-
-            case CameraState.SecondPlayerRTS:
-                firstPlayerRtsCamera.Priority=0;
-                secondPlayerRtsCamera.Priority=1;
-                firstPlayerCameras.ForEach(cam => cam.Priority=0);
-                secondPlayerCameras.ForEach(cam => cam.Priority=0);
-                firstPlayerRtsCamera.Target.TrackingTarget.GetComponent<RTSCamera>().enabled=false;
-                secondPlayerRtsCamera.Target.TrackingTarget.GetComponent<RTSCamera>().enabled=true;
-                break;
-
-            case CameraState.FirstPlayerPOV:
-                firstPlayerRtsCamera.Priority=0;
-                secondPlayerRtsCamera.Priority=0;
-                firstPlayerCameras.ForEach(cam => cam.Priority=0);
-                secondPlayerCameras.ForEach(cam => cam.Priority=0);
-                firstPlayerRtsCamera.Target.TrackingTarget.GetComponent<RTSCamera>().enabled=false;
-                secondPlayerRtsCamera.Target.TrackingTarget.GetComponent<RTSCamera>().enabled=false;
-
-                firstPlayerCameras[0].Priority=1;
-                Cursor.lockState=CursorLockMode.Locked;
-                break;
-
-            case CameraState.SecondPlayerPOV:
-                firstPlayerRtsCamera.Priority=0;
-                secondPlayerRtsCamera.Priority=0;
-                firstPlayerCameras.ForEach(cam => cam.Priority=0);
-                secondPlayerCameras.ForEach(cam => cam.Priority=0);
-                firstPlayerRtsCamera.Target.TrackingTarget.GetComponent<RTSCamera>().enabled=false;
-                secondPlayerRtsCamera.Target.TrackingTarget.GetComponent<RTSCamera>().enabled=false;
-
-                secondPlayerCameras[0].Priority=1;
-                break;
-        }
+    void Awake()
+    {
+        cameras = new List<ICamera>();
     }
 
-    public void AddFirstPlayerCamera(CinemachineCamera camera){
-        firstPlayerCameras.Add(camera);
+    public void ActivateFirstRTS(){
+        cameras?.ForEach(cam=>cam.RemovePriority());
+        firstPlayerRtsCamera.Priority=1;
+        secondPlayerRtsCamera.Priority=0;
+
+        firstPlayerRtsCamera.Target.TrackingTarget.GetComponent<RTSCamera>().enabled=true;
+        secondPlayerRtsCamera.Target.TrackingTarget.GetComponent<RTSCamera>().enabled=false;
+    }
+    public void ActivateSecondRTS(){
+        cameras?.ForEach(cam=>cam.RemovePriority());
+        firstPlayerRtsCamera.Priority=0;
+        secondPlayerRtsCamera.Priority=1;
+        
+        firstPlayerRtsCamera.Target.TrackingTarget.GetComponent<RTSCamera>().enabled=false;
+        secondPlayerRtsCamera.Target.TrackingTarget.GetComponent<RTSCamera>().enabled=true;
+    }
+
+    public void DesactivateRTS(){
+        firstPlayerRtsCamera.Priority=0;
+        secondPlayerRtsCamera.Priority=0;
+
+        firstPlayerRtsCamera.Target.TrackingTarget.GetComponent<RTSCamera>().enabled=false;
+        secondPlayerRtsCamera.Target.TrackingTarget.GetComponent<RTSCamera>().enabled=false;
+    }
+
+    public List<ICamera> GetPOVCameras(){
+        return cameras;
+    }
+
+    
+
+    public void RegisterCamera(ICamera camera){
+        cameras.Add(camera);
+    }
+
+    public void UnregisterCamera(ICamera camera){
+        cameras.Remove(camera);
     }
     
 }
 
-public enum CameraState{
-    FirstPlayerRTS,
-    SecondPlayerRTS,
-    FirstPlayerPOV,
-    SecondPlayerPOV
+public interface ICamera{
+    void SetPriority();
+    void RemovePriority();
 }

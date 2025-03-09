@@ -1,17 +1,17 @@
 using Unity.Cinemachine;
 using UnityEngine;
 
-public class General : PlaceableObject, ICamera
+public class Outpost : PlaceableObject, ICamera
 {
     public int orderRange;
     public override void Initialize(PlaceableData placeableData, Tile position, Player player)
     {
-        GeneralData data = placeableData as GeneralData;
+        OutpostData data = placeableData as OutpostData;
         
         GameManager.instance.cameraManager.RegisterCamera(this);
-
+        
         orderRange=data.orderRange;
-        player.general=this;
+        player.outposts.Add(this);
         healthPoints=data.baseHealthPoints;
         this.position=position;
         position.content=this;

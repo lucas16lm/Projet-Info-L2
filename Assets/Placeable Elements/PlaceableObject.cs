@@ -9,7 +9,7 @@ public abstract class PlaceableObject : MonoBehaviour, IOutlinable
     public abstract void Initialize(PlaceableData placeableData, Tile position, Player player);
 
     public static void Instantiate(PlaceableData placeableData, Tile tile, Player player){
-        if(tile.occupied || !tile.occupable) return;
+        if(!tile.IsAccessible()) return;
         if(!player.ressourceBalance.RemoveRessources(placeableData.cost)) return;
         GameManager.instance.uIManager.UpdateRessourcePanel(player);
         
@@ -30,7 +30,7 @@ public abstract class PlaceableObject : MonoBehaviour, IOutlinable
 
     public void Kill()
     {
-        position.occupied=false;
+        position.content=null;
         Destroy(gameObject);
     }
 

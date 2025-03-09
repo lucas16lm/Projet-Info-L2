@@ -10,9 +10,8 @@ public abstract class Player : MonoBehaviour
     public PlayerRole playerRole;
 
     public General general;
-    public List<Officer> officers;
+    public List<Outpost> outposts;
     public List<Unit> units;
-    public List<Building> buildings;
     
     public abstract IEnumerator Deployment(Action onComplete);
     public abstract IEnumerator Wait(Action onComplete);
@@ -25,9 +24,8 @@ public abstract class Player : MonoBehaviour
 
     public List<PlaceableObject> GetPlaceableObjects(){
         List<PlaceableObject> list = new List<PlaceableObject>(){general};
-        list.AddRange(officers);
+        list.AddRange(outposts);
         list.AddRange(units);
-        list.AddRange(buildings);
         return list;
     }
 }

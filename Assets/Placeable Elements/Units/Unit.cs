@@ -5,8 +5,9 @@ using System.Linq;
 using PrimeTween;
 using UnityEngine;
 
-public abstract class Unit : PlaceableObject
+public abstract class Unit : PlaceableObject, ITurnObserver
 {
+    public UnitData unitData;
     public UnitClass unitClass;
     public int damagePoints;
     public int movementPoints;
@@ -14,7 +15,8 @@ public abstract class Unit : PlaceableObject
 
     public override void Initialize(PlaceableData placeableData, Tile position, Player player)
     {
-        UnitData unitData = (UnitData) placeableData;
+        GameManager.instance.turnManager.AddObserver(this);
+        unitData = (UnitData) placeableData;
         player.units.Add(this);
         unitClass=unitData.unitClass;
         healthPoints=unitData.baseHealthPoints;
@@ -22,7 +24,7 @@ public abstract class Unit : PlaceableObject
         cost=unitData.cost;
         gameObject.name=unitData.elementName;
         this.position=position;
-        position.occupied=true;
+        position.content=this;
 
         foreach(Renderer renderer in transform.GetChild(0).GetComponentsInChildren<Renderer>()) renderer.material=player.factionData.bannerMaterial;
         for (int i = 1; i < transform.childCount; i++)
@@ -34,7 +36,13 @@ public abstract class Unit : PlaceableObject
     public IEnumerator Move(Tile destination)
     {
         //AStar(position, destination).ForEach(t=>t.gameObject.GetComponent<Renderer>().material.color=Color.red);
-        yield return Move(AStar(position, destination));
+        List<Tile> path = AStar(position, destination);
+        int moveCost=GetMoveCost(path);
+        if(moveCost<=movementPoints){
+            yield return Move(path);
+            movementPoints-=moveCost;
+        }
+        
     }
 
     public IEnumerator Move(List<Tile> path)
@@ -43,24 +51,24 @@ public abstract class Unit : PlaceableObject
             yield break;
         }
 
-        for (int i = 0; i < path.Count-1; i++)
+        for (int i = 0; i < path.Count; i++)
         {
-            gameObject.transform.rotation=Quaternion.LookRotation(path[i+1].transform.position-position.transform.position);
+            gameObject.transform.rotation=Quaternion.LookRotation(path[i].transform.position-position.transform.position);
             GetComponent<AnimationManager>().SetMovementAnimation(true);
             float speed = unitClass==UnitClass.Infantry||unitClass==UnitClass.Ranged ? 2 : 1;
-            yield return Tween.Position(transform,  path[i+1].transform.position+(path[i+1].transform.localScale.y/2)*Vector3.up, speed, Ease.Linear).ToYieldInstruction();
-            position.occupied=false;
-            path[i+1].occupied=true;
-            position=path[i+1];
+            yield return Tween.Position(transform,  path[i].transform.position+(path[i].transform.localScale.y/2)*Vector3.up, speed, Ease.Linear).ToYieldInstruction();
+            position.content=null;
+            path[i].content=this;
+            position=path[i];
             GetComponent<AnimationManager>().SetMovementAnimation(false);
         }
     }
 
-    public abstract void Attack(Unit target);
+    public abstract void Attack(PlaceableObject target);
 
     public static List<Tile> AStar(Tile position, Tile destination){
         
-        if (position == destination || destination.occupied || !destination.occupable) return null;
+        if (position == destination || !destination.IsAccessible()) return null;
 
         List<Tuple<Tile, int>> openList = new List<Tuple<Tile, int>>() { new Tuple<Tile, int>(position, 0) };
         List<Tuple<Tile, int>> closedList = new List<Tuple<Tile, int>>();
@@ -98,7 +106,7 @@ public abstract class Unit : PlaceableObject
 
             foreach (Tile neighbor in current.GetNeighbors())
             {
-                if (closedList.Any(t => t.Item1 == neighbor) || neighbor.occupied || !neighbor.occupable)
+                if (closedList.Any(t => t.Item1 == neighbor) || !neighbor.IsAccessible())
                     continue;
 
                 int tentativeGScore = gScore[current] + neighbor.moveCost;
@@ -126,7 +134,33 @@ public abstract class Unit : PlaceableObject
             path.Add(current);
         }
         path.Reverse();
+        path.Remove(path[0]);
         return path;
     }
+
+    private int GetMoveCost(List<Tile> path){
+        return path != null ? path.Sum(tile=>tile.moveCost) : 0;
+    }
+
+    public bool CanGoToTile(Tile tile){
+        return GetMoveCost(AStar(position, tile))<=movementPoints;
+    }
+
+    public List<Tile> GetAccessibleTiles(){
+        List<Tile> accessibles = Tile.GetTilesInRange(position, movementPoints).FindAll(tile=>{
+            List<Tile> path = AStar(position, tile);
+            return path!=null && GetMoveCost(path)<=movementPoints && tile.IsAccessible();
+        });
+        return accessibles;
+    }
+
+    public void OnTurnEnded()
+    {
+        movementPoints=unitData.baseMovementPoints;
+    }
+}
+
+public interface ISpecialAction{
+    public IEnumerator SpecialAction(GameObject target);
 }
 
