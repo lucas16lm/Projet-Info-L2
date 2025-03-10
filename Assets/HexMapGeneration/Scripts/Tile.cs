@@ -89,6 +89,7 @@ public class Tile : MonoBehaviour, IOutlinable
     public GameObject treePrefab;
     public Vector3Int cubicCoordinates;
     public Biome biome;
+    public PlaceableObject content;
     public int moveCost {get{
         switch(biome){
             case Biome.plain:
@@ -105,17 +106,6 @@ public class Tile : MonoBehaviour, IOutlinable
                 return -1;
         }
     }}
-    public bool occupable {get{
-        switch(biome){
-            case Biome.water or Biome.mountain:
-                return false;
-            default:
-                return true;
-        }
-    }}
-    public bool occupied = false;
-    
-
 
     public Tile GetUpNeighbor(){
         return GetTile(cubicCoordinates.x, cubicCoordinates.y+1, cubicCoordinates.z-1);
@@ -158,6 +148,11 @@ public class Tile : MonoBehaviour, IOutlinable
         if(downLeft!=null) neighbors.Add(downLeft);
         
         return neighbors;
+    }
+
+    public bool IsAccessible(){
+        if(biome==Biome.mountain || biome==Biome.water) return false;
+        return content==null;
     }
 
     public void AssignBiome(Biome biome){
@@ -208,6 +203,7 @@ public class Tile : MonoBehaviour, IOutlinable
                 transform.localScale+=2*Vector3.down;
                 break;
         }
+        
     }
 
     public void SetOutline(bool value, int renderingLayerMaskId)
@@ -215,10 +211,10 @@ public class Tile : MonoBehaviour, IOutlinable
         Renderer renderer = GetComponentInChildren<Renderer>();
         RenderingLayerMask renderingLayerMask = renderer.renderingLayerMask;
         if(value){
-            renderingLayerMask |= 0x1 << GameManager.instance.TileLayerId;
+            renderingLayerMask |= 0x1 << renderingLayerMaskId;
         }
         else{
-            renderingLayerMask  &= ~(0x1 << GameManager.instance.TileLayerId);
+            renderingLayerMask  &= ~(0x1 << renderingLayerMaskId);
         }
         renderer.renderingLayerMask = renderingLayerMask;
     }
@@ -227,8 +223,8 @@ public class Tile : MonoBehaviour, IOutlinable
     {
         Renderer renderer = GetComponentInChildren<Renderer>();
         RenderingLayerMask renderingLayerMask = renderer.renderingLayerMask;
-        renderingLayerMask  &= ~(0x1 << GameManager.instance.TileLayerId);
-        renderingLayerMask  &= ~(0x1 << GameManager.instance.TileFillLayerId);
+        renderingLayerMask  &= ~(0x1 << GameManager.instance.TileZoneLayerID);
+        renderingLayerMask  &= ~(0x1 << GameManager.instance.TileSelectLayerID);
         renderer.renderingLayerMask = renderingLayerMask;
     }
     #endregion

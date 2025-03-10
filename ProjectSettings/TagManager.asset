@@ -51,8 +51,9 @@ TagManager:
   - Light Layer 5
   - Light Layer 6
   - Light Layer 7
-  - TileOutline
+  - TileZone
   - TileMask
   - AllyOutline
   - HostileOutline
-  - TileFill
+  - TileSelect
+  - MoveRange

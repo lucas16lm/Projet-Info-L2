@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    [Header("Settings")]
+    public int goldGainPerTurn=1;
     [Header("Player factions")]
     public FactionData firstPlayerFaction;
     public FactionData secondPlayerFaction;
@@ -13,9 +15,10 @@ public class GameManager : MonoBehaviour
     public CameraManager cameraManager;
     public TurnManager turnManager;
     public UIManager uIManager;
-    [Header("Settings")]
-    public int TileLayerId;
-    public int TileFillLayerId;
+    [Header("Rendering layer masks")]
+    public int TileZoneLayerID;
+    public int TileSelectLayerID;
+    public int MoveRangeLayerID;
     public int AllyLayerId;
     public int EnnemyLayerId;
 
@@ -33,7 +36,6 @@ public class GameManager : MonoBehaviour
         mapGenerator.seed=Random.Range(-100000,100000);
         mapGenerator.CreateMap();
         playerManager.InitializePlayers(firstPlayerFaction, secondPlayerFaction);
-        uIManager.InitializeDeploymentPanel();
         turnManager.InitTurns();
     }
 }

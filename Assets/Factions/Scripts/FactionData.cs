@@ -6,11 +6,11 @@ public class FactionData : ScriptableObject
 {
     public string factionName;
     public string description;
-    public Sprite factionFlag;
+    public Material bannerMaterial;
+    public Material unitsMaterial;
     public Color factionColor;
     public RessourceBalance baseBalance;
     public GeneralData generalData;
-    public OfficerData officerData;
+    public OutpostData outpostData;
     public List<UnitData> factionUnitsData;
-    public List<BuildingData> buildingDatas;
 }

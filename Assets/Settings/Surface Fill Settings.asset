@@ -16,6 +16,45 @@ MonoBehaviour:
   showInSceneView: 1
   fills:
   - {fileID: 9206077997209744288}
+  - {fileID: 543216674613303351}
+--- !u!114 &543216674613303351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d0a7dc71beb4da8aba332c635284136, type: 3}
+  m_Name: Fill
+  m_EditorClassIdentifier: 
+  material: {fileID: 0}
+  isActive: 1
+  RenderingLayer:
+    serializedVersion: 0
+    m_Bits: 8192
+  occlusion: 2
+  blendMode: 0
+  alphaCutout: 0
+  alphaCutoutTexture: {fileID: 0}
+  alphaCutoutThreshold: 0.5
+  pattern: 0
+  primaryColor: {r: 0.72434586, g: 0.8018868, b: 0.02647741, a: 0.7058824}
+  secondaryColor: {r: 0.934319, g: 1, b: 0, a: 0.78039217}
+  texture: {fileID: 2800000, guid: cf1462bc694c3c249831ad8ac5293aa2, type: 3}
+  channel: 0
+  frequencyX: 40
+  frequencyY: 2
+  density: 0.793
+  rotation: 42
+  direction: 24
+  offset: 0
+  speed: 0.0311
+  scale: 1.9
+  width: 0.452
+  softness: 0.053
+  power: 0.772
 --- !u!114 &9206077997209744288
 MonoBehaviour:
   m_ObjectHideFlags: 0

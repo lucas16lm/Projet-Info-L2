@@ -6,7 +6,16 @@ public abstract class PlaceableObject : MonoBehaviour, IOutlinable
     public int healthPoints;
     public Tile position;
 
-    public abstract void Initialize(PlaceableData placeableData, Tile position);
+    public abstract void Initialize(PlaceableData placeableData, Tile position, Player player);
+
+    public static void Instantiate(PlaceableData placeableData, Tile tile, Player player){
+        if(!tile.IsAccessible()) return;
+        if(!player.ressourceBalance.RemoveRessources(placeableData.cost)) return;
+        GameManager.instance.uIManager.UpdateRessourcePanel(player);
+        
+        GameObject placeableGameObject = Instantiate(placeableData.gameObjectPrefab, tile.gameObject.transform.position+(tile.transform.localScale.y/2)*Vector3.up, Quaternion.LookRotation(new Vector3(Camera.main.transform.forward.x, 0, Camera.main.transform.forward.z)), player.transform);
+        placeableGameObject.GetComponent<PlaceableObject>().Initialize(placeableData, tile, player);
+    }
 
     public void ApplyDamage(int amount)
     {
@@ -21,7 +30,7 @@ public abstract class PlaceableObject : MonoBehaviour, IOutlinable
 
     public void Kill()
     {
-        position.occupied=false;
+        position.content=null;
         Destroy(gameObject);
     }
 

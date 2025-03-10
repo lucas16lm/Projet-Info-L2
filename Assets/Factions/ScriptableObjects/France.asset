@@ -14,18 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   factionName: Kingdom of France
   description: 
-  factionFlag: {fileID: 0}
+  bannerMaterial: {fileID: 2100000, guid: 32cdc6527b112444baec692c92300b32, type: 2}
+  unitsMaterial: {fileID: 2100000, guid: 2795c5d9ef4b2374ca829d0e6a019567, type: 2}
   factionColor: {r: 0.14653791, g: 0.17266914, b: 0.8396226, a: 0}
   baseBalance:
     gold: 10
-    meleeWeapons: 5
-    rangedWeapons: 5
-    horses: 5
-    wood: 5
   generalData: {fileID: 11400000, guid: 4e41a187b8286a9438adffeb56bc1e78, type: 2}
-  officerData: {fileID: 0}
+  outpostData: {fileID: 11400000, guid: e3f17f2f748a2a94ca4b81346707df9e, type: 2}
   factionUnitsData:
   - {fileID: 11400000, guid: 75d079e8e22ff5845889375b393cb620, type: 2}
   - {fileID: 11400000, guid: 1cce58da2ca233b4bb6fef1aeae8770c, type: 2}
   - {fileID: 11400000, guid: 532ca22500c66634db2eb5707eaf9164, type: 2}
-  buildingDatas: []

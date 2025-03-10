@@ -7,45 +7,32 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class HumanPlayer : Player
+public class HumanPlayer : Player, ITurnObserver
 {
+    
+    #region Deployment
     public override IEnumerator Deployment(Action onComplete)
     {
+        GameManager.instance.turnManager.AddObserver(this);
         List<Tile> deploymentZone = GetDeploymentZone();
-        deploymentZone.ForEach(tile=>tile.SetOutline(true, GameManager.instance.TileLayerId));
+        deploymentZone.ForEach(tile=>tile.SetOutline(true, GameManager.instance.TileZoneLayerID));
         
         bool turnEnded = false;
 
         yield return GeneralDeployment(deploymentZone);
 
-        GameManager.instance.uIManager.deploymentPanel.SetActive(true);
+        GameManager.instance.uIManager.deploymentPanel.OpenFor(this);
         Coroutine unitDeployment = StartCoroutine(UnitDeployment(deploymentZone));
         InputSystem.actions.FindAction("EndTurn").performed+=ctx=>turnEnded=true;
         
 
         yield return new WaitUntil(()=>turnEnded);
         
-        deploymentZone.ForEach(tile=>tile.SetOutline(false, GameManager.instance.TileLayerId));
+        GameManager.instance.uIManager.deploymentPanel.Close();
+        deploymentZone.ForEach(tile=>tile.SetOutline(false, GameManager.instance.TileZoneLayerID));
         StopCoroutine(unitDeployment);
         onComplete();
     }
-
-    public override IEnumerator PlayTurn(Action onComplete)
-    {
-        bool turnEnded = false;
-
-        InputSystem.actions.FindAction("EndTurn").performed+=ctx=>turnEnded=true;
-        
-        yield return new WaitUntil(()=>turnEnded);
-        onComplete();
-    }
-
-    public override IEnumerator Wait(Action onComplete)
-    {
-        yield return null;
-        onComplete();
-    }
-
     IEnumerator GeneralDeployment(List<Tile> deploymentZone){
         Debug.Log("Placement du général de "+factionData.name);
         GameManager.instance.uIManager.PrintMessage(factionData.factionName+", place your general !");
@@ -55,7 +42,7 @@ public class HumanPlayer : Player
             go=>go?.GetComponent<Tile>()!=null && deploymentZone.Contains(go?.GetComponent<Tile>()),
             go=>{},
             go=>{},
-            go=>{GameObject GO = PlaceElement(factionData.generalData, go.GetComponent<Tile>()); if(GO!=null)generalPlaced=true;}
+            go=>{PlaceableObject.Instantiate(factionData.generalData, go.GetComponent<Tile>(), this); if(general!=null)generalPlaced=true;}
         ));
 
         yield return new WaitUntil(()=>generalPlaced);
@@ -68,14 +55,7 @@ public class HumanPlayer : Player
         bool turnEnded=false;
         InputSystem.actions.FindAction("EndTurn").performed+=ctx=>turnEnded=true;
 
-
-        UnitData unitToPlace = null;
-        
-        for (int i = 0; i < factionData.factionUnitsData.Count; i++)
-        {
-            UnitData unitData = factionData.factionUnitsData[i];
-            GameManager.instance.uIManager.deploymentPanel.transform.GetChild(i).GetComponent<Button>().onClick.AddListener(delegate{unitToPlace=unitData ; Debug.Log("selected : "+unitData.elementName);});
-        }
+        DeploymentPanel deploymentPanel = GameManager.instance.uIManager.deploymentPanel;        
         
         Coroutine unitPlacement = StartCoroutine(MouseListener(
             go=>go?.GetComponent<Tile>()!=null || (go?.GetComponent<Unit>()!=null && units.Contains(go.GetComponent<Unit>())),
@@ -85,13 +65,13 @@ public class HumanPlayer : Player
                 Tile tile = go?.GetComponent<Tile>();
                 Unit unit = go?.GetComponent<Unit>();
 
-                if(tile!=null && unitToPlace != null && !tile.occupied && tile.occupable && deploymentZone.Contains(tile)){
-                    PlaceElement(unitToPlace, tile);
+                if(tile!=null && deploymentPanel.GetSelectedUnit() != null && tile.IsAccessible() && deploymentZone.Contains(tile)){
+                    PlaceableObject.Instantiate(deploymentPanel.GetSelectedUnit(), tile, this);
                 }
                 if(unit!=null){
                     ressourceBalance.AddRessources(unit.cost);
                     GameManager.instance.uIManager.UpdateRessourcePanel(this);
-                    unit.position.occupied=false;
+                    unit.position.content=null;
                     units.Remove(unit);
                     Destroy(go);
                 }
@@ -102,43 +82,65 @@ public class HumanPlayer : Player
         StopCoroutine(unitPlacement);
 
     }
+    #endregion
 
-    public GameObject PlaceElement(PlaceableData placeableElement, Tile tile){
-        if(!ressourceBalance.RemoveRessources(placeableElement.cost)){
-            Debug.Log("Not enought ressources !");
-            return null;
-        }
-        if(tile.occupied || !tile.occupable){
-            Debug.Log("innacessible");
-            return null;
+    #region Turn
+    public override IEnumerator PlayTurn(Action onComplete)
+    {
+        bool turnEnded = false;
+
+        InputSystem.actions.FindAction("EndTurn").performed+=ctx=>turnEnded=true;
+        //TODO : améliorer la coroutine pour adpater et mettre en évidence si une action est possible seulement
+        Coroutine hoverCoroutine = StartCoroutine(MouseListener(
+            go=>go?.GetComponent<PlaceableObject>()!=null || IsTile(go),
+            go=>{
+                if(IsTile(go)){
+                    go.GetComponent<Tile>().SetOutline(true, GameManager.instance.TileSelectLayerID);
+                }
+                else{
+                    PlaceableObject placeableObject = go.GetComponent<PlaceableObject>();
+                    if(GetPlaceableObjects().Contains(placeableObject)) placeableObject.SetOutline(true, GameManager.instance.AllyLayerId);
+                    else placeableObject.SetOutline(true, GameManager.instance.EnnemyLayerId);
+                }
+                
+            },
+            go=>{
+                if(IsTile(go)){
+                    go.GetComponent<Tile>().SetOutline(false, GameManager.instance.TileSelectLayerID);
+                }
+                else{
+                    go.GetComponent<IOutlinable>().DisableOutlines();
+                }
+                
+            },
+            go=>{})
+        );
+
+        Tile.GetTilesInRange(general.position, general.orderRange).ForEach(tile=>tile.SetOutline(true, GameManager.instance.TileZoneLayerID));
+        while(!turnEnded){
+            yield return HandlePlayerSelection();
         }
         
-        GameObject element = Instantiate(placeableElement.gameObjectPrefab, tile.gameObject.transform.position+(tile.transform.localScale.y/2)*Vector3.up, Quaternion.LookRotation(new Vector3(Camera.main.transform.forward.x, 0, Camera.main.transform.forward.z)), transform);
-        GameManager.instance.uIManager.UpdateRessourcePanel(this);
+        
+        yield return new WaitUntil(()=>turnEnded);
 
-        if(placeableElement is GeneralData){
-            general=element.GetComponent<General>();
-            GameManager.instance.cameraManager.AddFirstPlayerCamera(element.GetComponentInChildren<CinemachineCamera>());
-        }
-        else if(placeableElement is OfficerData){
-            officers.Add(element.GetComponent<Officer>());
-        }
-        else if(placeableElement is UnitData){
-            UnitData unitData = (UnitData)placeableElement;
-            Unit unit = element.GetComponent<Unit>();
-            units.Add(unit);
-            unit.Initialize(unitData, tile);
-        }
-        else if(placeableElement is BuildingData){
-            buildings.Add(element.GetComponent<Building>());
-        }
-        tile.occupied=true;
-        return element;
+        GameManager.instance.playerManager.firstPlayer.GetPlaceableObjects().ForEach(o=>o.DisableOutlines());
+        GameManager.instance.playerManager.secondPlayer.GetPlaceableObjects().ForEach(o=>o.DisableOutlines());
+        Tile.GetTiles().ForEach(tile=>tile.DisableOutlines());
+
+        StopCoroutine(hoverCoroutine);
+        onComplete();
     }
 
-    
+    #endregion
 
-
+    #region Wait
+    public override IEnumerator Wait(Action onComplete)
+    {
+        yield return null;
+        onComplete();
+    }
+    #endregion
     public IEnumerator MouseListener(Predicate<GameObject> predicate, Action<GameObject> onEnter, Action<GameObject> onExit, Action<GameObject> onClick){
         GameObject previousObject = null;
 
@@ -175,5 +177,115 @@ public class HumanPlayer : Player
 
             yield return null;
         }
+    }
+
+    public IEnumerator SelectGameObject(Predicate<GameObject> predicate, Action<GameObject> action){
+        bool completed = false;
+        InputSystem.actions.FindAction("EndTurn").performed += ctx=>completed=true;
+        InputSystem.actions.FindAction("Cancel").performed += ctx=>completed=true;
+
+        while(!completed){
+            if(InputSystem.actions.FindAction("Select").WasPerformedThisFrame()){
+                Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+                RaycastHit hit;
+
+                if (Physics.Raycast(ray, out hit) && !EventSystem.current.IsPointerOverGameObject() && predicate.Invoke(hit.collider.gameObject)){
+                    
+                    action?.Invoke(hit.collider.gameObject);
+                    completed=true;
+                }
+            }
+            yield return null;
         }
+    }
+
+    public IEnumerator HandlePlayerSelection(){
+        
+        GameObject firstSelection=null;
+        yield return SelectGameObject(
+            go=>IsTileRecruitable(go) || IsOwnUnit(go) || IsOwnGeneral(go) || IsOwnOutpost(go),
+            go=>firstSelection=go
+        );
+
+        if(firstSelection==null) yield break;
+
+        if(IsOwnGeneral(firstSelection) || IsOwnOutpost(firstSelection)){
+            firstSelection.GetComponent<ICamera>().SetPriority();
+        }else if(IsTileRecruitable(firstSelection))
+        {
+            PlaceableData elementToPlace=null;
+            yield return GameManager.instance.uIManager.reinforcementPanel.OpenFor(this, data=>elementToPlace=data);
+            if(elementToPlace!=null) PlaceableObject.Instantiate(elementToPlace, firstSelection.GetComponent<Tile>(), this);
+        }
+        else if(IsOwnUnit(firstSelection)){
+            bool canceled=false;
+            InputSystem.actions.FindAction("Cancel").performed+=ctx=>canceled=true;
+
+            List<Tile> accessibles = firstSelection.GetComponent<Unit>().GetAccessibleTiles();
+            accessibles.ForEach(tile=>tile.SetOutline(true, GameManager.instance.MoveRangeLayerID));
+
+            GameObject secondObject = null;
+            while(secondObject==null && !canceled){
+                yield return SelectGameObject(
+                    go=>IsTile(go) || IsRivalElement(go),
+                    go=>secondObject=go
+                );
+                accessibles.ForEach(tile=>tile.SetOutline(false, GameManager.instance.MoveRangeLayerID));
+            }
+
+            if(secondObject==null) yield break;
+
+            if(IsTile(secondObject)){
+                yield return firstSelection.GetComponent<Unit>().Move(secondObject.GetComponent<Tile>());
+            }
+            else if(IsRivalElement(secondObject)){
+                Debug.Log("TODO : attack");
+                yield return null;
+            }
+            
+        }
+        
+
+        
+    }
+
+    bool IsTileRecruitable(GameObject go){
+        Tile tile = go?.GetComponent<Tile>();
+        if(tile==null) return false;
+        return tile.IsAccessible() && Tile.GetTilesInRange(general.position, general.orderRange).Contains(tile);
+    }
+
+    bool IsOwnUnit(GameObject go){
+        Unit unit = go?.GetComponent<Unit>();
+        if(unit==null) return false;
+        return units.Contains(unit);
+    }
+
+    bool IsOwnGeneral(GameObject go){
+        General general = go?.GetComponent<General>();
+        if(general==null) return false;
+        return general==this.general;
+    }
+
+    bool IsOwnOutpost(GameObject go){
+        Outpost officer = go?.GetComponent<Outpost>();
+        if(officer==null) return false;
+        return outposts.Contains(officer);
+    }
+
+    bool IsTile(GameObject go){
+        Tile tile = go?.GetComponent<Tile>();
+        return tile!=null;
+    }
+
+    bool IsRivalElement(GameObject go){
+        PlaceableObject placeableObject = go?.GetComponent<PlaceableObject>();
+        if(placeableObject==null) return false;
+        return !GetPlaceableObjects().Contains(placeableObject);
+    }
+
+    public void OnTurnEnded()
+    {
+        ressourceBalance.AddRessources(GameManager.instance.goldGainPerTurn);
+    }
 }
