@@ -3,7 +3,12 @@ guid: ec29298c9d7598940bca97d1e0a10903
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Granite - Blue Pearl
+    second: {fileID: 2100000, guid: 1843360ed378fcc4cb81f5a82ff4acf1, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

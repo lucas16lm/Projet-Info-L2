@@ -156,6 +156,7 @@ public class Tile : MonoBehaviour, IOutlinable
     }
 
     public void AssignBiome(Biome biome){
+        this.name = biome + " " + this.name;
         this.biome=biome;
     }
 

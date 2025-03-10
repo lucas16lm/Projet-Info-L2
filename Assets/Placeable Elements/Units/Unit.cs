@@ -12,6 +12,7 @@ public abstract class Unit : PlaceableObject, ITurnObserver
     public int damagePoints;
     public int movementPoints;
     public RessourceBalance cost;
+    public healthManager healthManager;
 
     public override void Initialize(PlaceableData placeableData, Tile position, Player player)
     {
