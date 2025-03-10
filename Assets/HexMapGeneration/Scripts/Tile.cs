@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using Unity.VisualScripting;
 
-public class Tile : MonoBehaviour
+public class Tile : MonoBehaviour, IOutlinable
 {
     #region static dictionary and getters
     private static Dictionary<Vector3Int,Tile> grid = new Dictionary<Vector3Int, Tile>();
@@ -47,7 +48,7 @@ public class Tile : MonoBehaviour
     #region static methods related to tiles
 
     public static float tileRadius;
-    public static float DistanceBetween(Tile tile1, Tile tile2){
+    public static int DistanceBetween(Tile tile1, Tile tile2){
         return (Mathf.Abs(tile1.cubicCoordinates.x-tile2.cubicCoordinates.x)+Mathf.Abs(tile1.cubicCoordinates.y-tile2.cubicCoordinates.y)+Mathf.Abs(tile1.cubicCoordinates.z-tile2.cubicCoordinates.z))/2;
     }
 
@@ -60,6 +61,10 @@ public class Tile : MonoBehaviour
             }
         }
         return nearest;
+    }
+
+    public static List<Tile> GetTilesBetween(int y1, int y2){
+        return Tile.GetTiles().Where(t => Coordinates.CubeToOffset(t.cubicCoordinates).y >= y1 && Coordinates.CubeToOffset(t.cubicCoordinates).y <= y2).ToList();
     }
 
     public static List<Tile> GetTilesInRange(Tile tile, int range){
@@ -79,11 +84,26 @@ public class Tile : MonoBehaviour
     #endregion
 
     #region tile related attributes and methods
+    public GameObject treePrefab;
     public Vector3Int cubicCoordinates;
     public Biome biome;
-
-    public GameObject treePrefab;
-
+    public PlaceableObject content;
+    public int moveCost {get{
+        switch(biome){
+            case Biome.plain:
+                return 1;
+            case Biome.forest:
+                return 2;
+            case Biome.hill:
+                return 3;
+            case Biome.mountain:
+                return -1;
+            case Biome.water:
+                return -1;
+            default:
+                return -1;
+        }
+    }}
 
     public Tile GetUpNeighbor(){
         return GetTile(cubicCoordinates.x, cubicCoordinates.y+1, cubicCoordinates.z-1);
@@ -110,16 +130,27 @@ public class Tile : MonoBehaviour
     }
 
     public List<Tile> GetNeighbors(){
-        List<Tile> neighbors = new List<Tile>
-        {
-            GetUpNeighbor(),
-            GetDownNeighbor(),
-            GetUpRightNeighbor(),
-            GetDownRightNeighbor(),
-            GetUpLeftNeighbor(),
-            GetDownLeftNeighbor()
-        };
+        List<Tile> neighbors = new List<Tile>();
+        
+        Tile up = GetUpNeighbor();
+        if(up!=null) neighbors.Add(up);
+        Tile down = GetDownNeighbor();
+        if(down!=null) neighbors.Add(down);
+        Tile upRight = GetUpRightNeighbor();
+        if(upRight!=null) neighbors.Add(upRight);
+        Tile downRight = GetDownRightNeighbor();
+        if(downRight!=null) neighbors.Add(downRight);
+        Tile upLeft = GetUpLeftNeighbor();
+        if(upLeft!=null) neighbors.Add(upLeft);
+        Tile downLeft = GetDownLeftNeighbor();
+        if(downLeft!=null) neighbors.Add(downLeft);
+        
         return neighbors;
+    }
+
+    public bool IsAccessible(){
+        if(biome==Biome.mountain || biome==Biome.water) return false;
+        return content==null;
     }
 
     public void AssignBiome(Biome biome){
@@ -144,19 +175,42 @@ public class Tile : MonoBehaviour
             case Biome.hill:
                 transform.GetComponent<Renderer>().materials[0].color = new Color(0.6f, 0.6f, 0);
                 transform.GetComponent<Renderer>().materials[1].color = new Color(0.6f, 0.6f, 0);
-                transform.localScale+=0.8f*Vector3.up;
+                transform.localScale+=4*Vector3.up;
                 break;
             case Biome.mountain:
                 transform.GetComponent<Renderer>().materials[0].color = new Color(0.25f, 0.25f, 0.25f);
                 transform.GetComponent<Renderer>().materials[1].color = new Color(0.25f, 0.25f, 0.25f);
-                transform.localScale+=1.5f*Vector3.up;
+                transform.localScale+=10f*Vector3.up;
                 break;
             case Biome.water:
                 transform.GetComponent<Renderer>().materials[0].color = new Color(0, 0, 0.8f);
                 transform.GetComponent<Renderer>().materials[1].color = new Color(0, 0, 0.8f);
-                transform.localScale+=Vector3.down/2;
+                transform.localScale+=2*Vector3.down;
                 break;
         }
+        
+    }
+
+    public void SetOutline(bool value, int renderingLayerMaskId)
+    {
+        Renderer renderer = GetComponentInChildren<Renderer>();
+        RenderingLayerMask renderingLayerMask = renderer.renderingLayerMask;
+        if(value){
+            renderingLayerMask |= 0x1 << renderingLayerMaskId;
+        }
+        else{
+            renderingLayerMask  &= ~(0x1 << renderingLayerMaskId);
+        }
+        renderer.renderingLayerMask = renderingLayerMask;
+    }
+
+    public void DisableOutlines()
+    {
+        Renderer renderer = GetComponentInChildren<Renderer>();
+        RenderingLayerMask renderingLayerMask = renderer.renderingLayerMask;
+        renderingLayerMask  &= ~(0x1 << GameManager.instance.TileZoneLayerID);
+        renderingLayerMask  &= ~(0x1 << GameManager.instance.TileSelectLayerID);
+        renderer.renderingLayerMask = renderingLayerMask;
     }
     #endregion
 }
