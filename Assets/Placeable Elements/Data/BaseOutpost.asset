@@ -17,5 +17,5 @@ MonoBehaviour:
   baseHealthPoints: 50
   cost:
     gold: 1
-  turnToBuild: 1
-  orderRange: 10
+  turnToBuild: 2
+  orderRange: 6

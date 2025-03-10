@@ -12,7 +12,7 @@ public abstract class Player : MonoBehaviour
     public General general;
     public List<Outpost> outposts;
     public List<Unit> units;
-    
+
     public abstract IEnumerator Deployment(Action onComplete);
     public abstract IEnumerator Wait(Action onComplete);
     public abstract IEnumerator PlayTurn(Action onComplete);

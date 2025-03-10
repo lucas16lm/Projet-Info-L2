@@ -16,7 +16,8 @@ public class TurnManager : MonoBehaviour
         observers.Add(observer);
     }
 
-    public void RemoveObserver(ITurnObserver observer){
+    public IEnumerator RemoveObserver(ITurnObserver observer){
+        yield return null;
         observers.Remove(observer);
     }
 
@@ -81,6 +82,7 @@ public class TurnManager : MonoBehaviour
                     
                 case GameState.FirstPlayerTurn:
                     GameManager.instance.playerManager.firstPlayer.general.SetPriority();
+
 
                     firstCoroutine = StartCoroutine(GameManager.instance.playerManager.firstPlayer.PlayTurn(()=>firstPlayerPlayed=true));
                     secondCoroutine = StartCoroutine(GameManager.instance.playerManager.secondPlayer.Wait(()=>secondPlayerPlayed=true));

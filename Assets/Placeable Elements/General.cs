@@ -32,4 +32,14 @@ public class General : PlaceableObject, ICamera
         GetComponentInChildren<CinemachineCamera>().Priority=0;
         Cursor.lockState=CursorLockMode.Confined;
     }
+
+    public Tile GetPosition()
+    {
+        return position;
+    }
+
+    public int GetOrderRadius()
+    {
+        return orderRange;
+    }
 }

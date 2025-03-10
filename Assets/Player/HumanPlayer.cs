@@ -9,7 +9,8 @@ using UnityEngine.UI;
 
 public class HumanPlayer : Player, ITurnObserver
 {
-    
+    public ICamera currentCam;
+
     #region Deployment
     public override IEnumerator Deployment(Action onComplete)
     {
@@ -87,6 +88,8 @@ public class HumanPlayer : Player, ITurnObserver
     #region Turn
     public override IEnumerator PlayTurn(Action onComplete)
     {
+        currentCam = general.GetComponent<ICamera>();
+        Tile.GetTilesInRange(currentCam.GetPosition(), currentCam.GetOrderRadius()).ForEach(tile=>tile.SetOutline(true, GameManager.instance.TileZoneLayerID));
         bool turnEnded = false;
 
         InputSystem.actions.FindAction("EndTurn").performed+=ctx=>turnEnded=true;
@@ -116,7 +119,7 @@ public class HumanPlayer : Player, ITurnObserver
             go=>{})
         );
 
-        Tile.GetTilesInRange(general.position, general.orderRange).ForEach(tile=>tile.SetOutline(true, GameManager.instance.TileZoneLayerID));
+        
         while(!turnEnded){
             yield return HandlePlayerSelection();
         }
@@ -200,22 +203,33 @@ public class HumanPlayer : Player, ITurnObserver
     }
 
     public IEnumerator HandlePlayerSelection(){
-        
         GameObject firstSelection=null;
         yield return SelectGameObject(
-            go=>IsTileRecruitable(go) || IsOwnUnit(go) || IsOwnGeneral(go) || IsOwnOutpost(go),
+            go=>IsInOrderRange(go) && (IsTileRecruitable(go) || IsOwnUnit(go) || IsOwnGeneral(go) || IsOwnOutpost(go)),
             go=>firstSelection=go
         );
 
         if(firstSelection==null) yield break;
 
-        if(IsOwnGeneral(firstSelection) || IsOwnOutpost(firstSelection)){
-            firstSelection.GetComponent<ICamera>().SetPriority();
-        }else if(IsTileRecruitable(firstSelection))
+        if(IsOwnGeneral(firstSelection) || (IsOwnOutpost(firstSelection) && firstSelection.GetComponent<Outpost>().IsConstructed())){
+            Tile.GetTilesInRange(currentCam.GetPosition(), currentCam.GetOrderRadius()).ForEach(tile=>tile.DisableOutlines());
+            ICamera camera = firstSelection.GetComponent<ICamera>();
+            camera.SetPriority();
+            currentCam=camera;
+            Tile.GetTilesInRange(currentCam.GetPosition(), currentCam.GetOrderRadius()).ForEach(tile=>tile.SetOutline(true, GameManager.instance.TileZoneLayerID));
+        }
+        else if(IsTileRecruitable(firstSelection))
         {
-            PlaceableData elementToPlace=null;
-            yield return GameManager.instance.uIManager.reinforcementPanel.OpenFor(this, data=>elementToPlace=data);
-            if(elementToPlace!=null) PlaceableObject.Instantiate(elementToPlace, firstSelection.GetComponent<Tile>(), this);
+            if(currentCam is General){
+                PlaceableData elementToPlace=null;
+                yield return GameManager.instance.uIManager.reinforcementPanel.OpenFor(this, data=>elementToPlace=data);
+                if(elementToPlace!=null) PlaceableObject.Instantiate(elementToPlace, firstSelection.GetComponent<Tile>(), this);
+            }else{
+                PlaceableData elementToPlace=null;
+                yield return GameManager.instance.uIManager.reinforcementPanel.OpenForBuildings(this, data=>elementToPlace=data);
+                if(elementToPlace!=null) PlaceableObject.Instantiate(elementToPlace, firstSelection.GetComponent<Tile>(), this);
+            }
+            
         }
         else if(IsOwnUnit(firstSelection)){
             bool canceled=false;
@@ -227,7 +241,7 @@ public class HumanPlayer : Player, ITurnObserver
             GameObject secondObject = null;
             while(secondObject==null && !canceled){
                 yield return SelectGameObject(
-                    go=>IsTile(go) || IsRivalElement(go),
+                    go=>IsInOrderRange(go) && (IsTile(go) || IsRivalElement(go)),
                     go=>secondObject=go
                 );
                 accessibles.ForEach(tile=>tile.SetOutline(false, GameManager.instance.MoveRangeLayerID));
@@ -244,15 +258,21 @@ public class HumanPlayer : Player, ITurnObserver
             }
             
         }
-        
+    }
 
-        
+    bool IsInOrderRange(GameObject go){
+        Tile tile = go?.GetComponent<Tile>();
+        if(tile!=null) return Tile.GetTilesInRange(currentCam.GetPosition(), currentCam.GetOrderRadius()).Contains(tile);
+
+        PlaceableObject placeableObject = go?.GetComponent<PlaceableObject>();
+        if(placeableObject==null) return false;
+        return Tile.GetTilesInRange(currentCam.GetPosition(), currentCam.GetOrderRadius()).Contains(placeableObject.position);
     }
 
     bool IsTileRecruitable(GameObject go){
         Tile tile = go?.GetComponent<Tile>();
         if(tile==null) return false;
-        return tile.IsAccessible() && Tile.GetTilesInRange(general.position, general.orderRange).Contains(tile);
+        return tile.IsAccessible() && Tile.GetTilesInRange(currentCam.GetPosition(), currentCam.GetOrderRadius()).Contains(tile);
     }
 
     bool IsOwnUnit(GameObject go){

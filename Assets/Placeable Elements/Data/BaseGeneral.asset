@@ -17,4 +17,4 @@ MonoBehaviour:
   baseHealthPoints: 100
   cost:
     gold: 0
-  orderRange: 10
+  orderRange: 6

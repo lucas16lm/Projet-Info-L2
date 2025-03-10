@@ -56,6 +56,8 @@ public class CameraManager : MonoBehaviour
 }
 
 public interface ICamera{
+    Tile GetPosition();
     void SetPriority();
     void RemovePriority();
+    int GetOrderRadius();
 }

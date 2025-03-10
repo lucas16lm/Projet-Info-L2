@@ -38,6 +38,30 @@ public class ReinforcementPanel : MonoBehaviour, ICardObserver
         Close();
     }
 
+    public IEnumerator OpenForBuildings(Player player, Action<PlaceableData> onComplete)
+    {
+        bool canceled = false;
+        if(closeButtonTransform!=null){
+            closeButtonTransform.GetComponent<Button>().onClick.AddListener(()=>canceled=true);
+        }
+        
+
+        Time.timeScale=0;
+        Cursor.lockState=CursorLockMode.Confined;
+        closeButtonTransform.gameObject.SetActive(true);
+        cardContainer.gameObject.SetActive(true);
+        Clear();
+        
+        UnitCard.Instantiate(player.factionData.outpostData, cardContainer).RegisterObserver(this);
+        
+        yield return new WaitUntil(()=>selected!=null || canceled);
+        if(selected!=null){
+            onComplete?.Invoke(selected);
+            selected=null;
+        };
+        Close();
+    }
+
     public void Close()
     {
         Time.timeScale=1;
