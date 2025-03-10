@@ -9,16 +9,18 @@ public abstract class Unit : PlaceableObject, ITurnObserver
 {
     public UnitData unitData;
     public UnitClass unitClass;
+    
     public int damagePoints;
     public int movementPoints;
     public RessourceBalance cost;
-    public healthManager healthManager;
+    public healthManager healthManager=null;
 
     public override void Initialize(PlaceableData placeableData, Tile position, Player player)
     {
         GameManager.instance.turnManager.AddObserver(this);
         unitData = (UnitData) placeableData;
         player.units.Add(this);
+        
         unitClass=unitData.unitClass;
         healthPoints=unitData.baseHealthPoints;
         movementPoints=unitData.baseMovementPoints;
@@ -30,7 +32,64 @@ public abstract class Unit : PlaceableObject, ITurnObserver
         foreach(Renderer renderer in transform.GetChild(0).GetComponentsInChildren<Renderer>()) renderer.material=player.factionData.bannerMaterial;
         for (int i = 1; i < transform.childCount; i++)
         {
+            if (healthManager == null)
+            {
+                try
+                {
+                    healthManager = transform.GetChild(i).GetComponentInChildren<healthManager>();
+                }
+                catch (Exception e)
+                {
+                    
+                }
+            }
+            
             foreach(Renderer renderer in transform.GetChild(i).GetComponentsInChildren<Renderer>()) renderer.material=player.factionData.unitsMaterial;
+        }
+        
+       
+    }
+
+    public void setHealthBar()
+    {
+        Debug.Log("childs: " + transform.childCount);
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            Debug.Log("childs: " +i+" " + transform.GetChild(i).childCount);
+            for (int j = 0; j < transform.GetChild(i).childCount; j++)
+            {
+                if (healthManager == null)
+                {
+                    try
+                    {
+                        healthManager = transform.GetChild(i).GetChild(j).GetComponentInChildren<healthManager>();
+                        break;
+                    }
+                    catch
+                    {
+
+                    }
+                }
+            }
+        }
+            if (healthManager != null)
+        {
+            healthManager.setMaxHealth(healthPoints);
+            healthManager.setCamera(Camera.main);
+        }
+    }
+    public void takeDammage(int dmg)
+    {
+        if (healthPoints - dmg > 0)
+        {
+            healthPoints-= dmg;
+            healthManager.sethealth(healthPoints);
+        }
+        else
+        {
+            healthPoints = 0;
+            healthManager.sethealth(0);
+            Debug.Log("Mort");
         }
     }
 

@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +9,9 @@ public class healthManager : MonoBehaviour
     public Gradient sliderGradient;
     [SerializeField]
     private Image fill;
+
+    [SerializeField]
+    private Camera camera;
 
     public void setMaxHealth(int health)
     {
@@ -21,4 +25,20 @@ public class healthManager : MonoBehaviour
         slider.value = health;
         fill.color=sliderGradient.Evaluate(slider.normalizedValue);
     }
+    
+
+    
+        public void setCamera(Camera newcamera)
+    {
+        camera=newcamera;
+    }
+    private void Update()
+    {
+        transform.LookAt(camera.transform);
+        transform.Rotate(0, 180, 0);
+        
+        
+    }
+    
+   
 }
