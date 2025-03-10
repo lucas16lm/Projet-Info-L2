@@ -3,23 +3,36 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-public class ShaderLibE :MonoBehaviour
+public class ShaderLibE : MonoBehaviour 
 {
+    public static ShaderLibE instance;
     
-    public static Dictionary<string, Material> MaterialLib = new Dictionary<string, Material>();
     public Dictionary<string, Material> Materials;
     public List<string> MaterialNames;
     public List<Material> MaterialLibs;
-    public void Awake()
-    {
-        if (MaterialLibs.Count != MaterialNames.Count)
-        {
-            Debug.Log("Shader Lib Erreur nombre , material et nom materiel");
+    
 
-        }
-        for (int i = 0; i < Math.Min(MaterialLibs.Count, MaterialNames.Count); i++)
+    public Material GetMaterial(int index)
+    {
+        return MaterialLibs[index];
+    }
+    public Material GetMaterial(string name)
+    {
+        if (MaterialNames.Contains(name))
         {
-            MaterialLib.Add(MaterialNames[i], MaterialLibs[i]);
+            return GetMaterial(MaterialNames.IndexOf(name));
+        }
+        else {
+            Debug.Log("Nom de Materiel pas dans la liste");
+            return null;
+        }
+
+    }
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
         }
     }
 

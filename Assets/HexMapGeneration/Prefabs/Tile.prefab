@@ -81,6 +81,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materials:
   - {fileID: 2100000, guid: d26a7cc62d44df543b572df3177a3914, type: 2}
+  - {fileID: 2100000, guid: 1843360ed378fcc4cb81f5a82ff4acf1, type: 2}
   treePrefab: {fileID: 387980774264358068, guid: 0369177291e98ac4fa680dea8ed3d7f2, type: 3}
   cubicCoordinates: {x: 0, y: 0, z: 0}
   biome: 0

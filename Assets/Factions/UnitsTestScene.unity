@@ -849,13 +849,13 @@ MonoBehaviour:
   tileRadius: 5
   width: 21
   heightRatio: 1.5
-  seed: 0
+  seed: 37
   nbBiomes: 80
-  plainPercentage: 36
+  plainPercentage: 28
   forestPercentage: 15
   hillPercentage: 15
-  mountainPercentage: 7
-  waterPercentage: 42
+  mountainPercentage: 55
+  waterPercentage: 7
   materials:
   - {fileID: 2100000, guid: d26a7cc62d44df543b572df3177a3914, type: 2}
 --- !u!4 &376526549
@@ -887,8 +887,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaterialNames:
   - water
+  - mountain
   MaterialLibs:
   - {fileID: -876546973899608171, guid: 4743578673d1b6741abaca7471497e79, type: 3}
+  - {fileID: 2100000, guid: 1843360ed378fcc4cb81f5a82ff4acf1, type: 2}
 --- !u!1 &516475378
 GameObject:
   m_ObjectHideFlags: 0

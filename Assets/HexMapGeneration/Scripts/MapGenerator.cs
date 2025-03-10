@@ -48,7 +48,7 @@ public class MapGenerator : MonoBehaviour
                 Vector3Int cubicCoordinate = Coordinates.OffsetToCubeCoordinates(x, y);
                 tileGameObject.name=""+cubicCoordinate;
                 Tile tileComponent = tileGameObject.GetComponent<Tile>();
-                tileComponent.materials=materials;
+                
                 tileComponent.cubicCoordinates = cubicCoordinate;
                 Tile.AddTile(Coordinates.OffsetToCubeCoordinates(x, y), tileComponent);
             }

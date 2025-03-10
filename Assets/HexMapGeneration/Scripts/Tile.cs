@@ -8,7 +8,7 @@ public class Tile : MonoBehaviour, IOutlinable
 {
     #region static dictionary and getters
     private static Dictionary<Vector3Int,Tile> grid = new Dictionary<Vector3Int, Tile>();
-    public List<Material> materials;
+    private ShaderLibE materials = ShaderLibE.instance;
 
     public static void AddTile(Vector3Int coordinates, Tile tile){
         grid.Add(coordinates, tile);
@@ -165,35 +165,39 @@ public class Tile : MonoBehaviour, IOutlinable
     }
 
     public void ApplyBiome(){
-        switch(biome){
+        switch (biome) {
             case Biome.plain:
                 transform.GetComponent<Renderer>().material.color = new Color(0, 1, 0);
                 break;
             case Biome.forest:
                 transform.GetComponent<Renderer>().material.color = new Color(0, 0.7f, 0);
-                for (int i = 0; i < 6; i++){
+                for (int i = 0; i < 6; i++) {
                     Vector3 pos = new Vector3(
-                        transform.position.x+0.7f*tileRadius*Mathf.Cos((2*Mathf.PI*i)/6),
+                        transform.position.x + 0.7f * tileRadius * Mathf.Cos((2 * Mathf.PI * i) / 6),
                         0,
-                        transform.position.z+0.7f*tileRadius*Mathf.Sin((2*Mathf.PI*i)/6));
-                    Instantiate(treePrefab, pos+transform.localScale.y*Vector3.up, Quaternion.identity, transform.GetChild(0));
+                        transform.position.z + 0.7f * tileRadius * Mathf.Sin((2 * Mathf.PI * i) / 6));
+                    Instantiate(treePrefab, pos + transform.localScale.y * Vector3.up, Quaternion.identity, transform.GetChild(0));
                 }
                 break;
             case Biome.hill:
                 transform.GetComponent<Renderer>().materials[0].color = new Color(0.6f, 0.6f, 0);
                 transform.GetComponent<Renderer>().materials[1].color = new Color(0.6f, 0.6f, 0);
-                transform.localScale+=4*Vector3.up;
+                transform.localScale += 4 * Vector3.up;
                 break;
             case Biome.mountain:
-                transform.GetComponent<Renderer>().materials[0].color = new Color(0.25f, 0.25f, 0.25f);
-                transform.GetComponent<Renderer>().materials[1].color = new Color(0.25f, 0.25f, 0.25f);
+
+                Material[] LocalMats = new Material[2];
+                LocalMats[0] = materials.GetMaterial("mountain");
+                LocalMats[1] = materials.GetMaterial("mountain");
+                transform.GetComponent<Renderer>().materials = LocalMats;
+                
                 transform.localScale+=10f*Vector3.up;
                 break;
             case Biome.water:
                 Renderer renderer = transform.GetComponent<Renderer>();
                 renderer.materials[1].color = new Color(0f, 0f, 0.8f);
                 Material[] mats = renderer.materials; // Copie du tableau de matériaux
-                mats[1] = materials[0]; // Changer le deuxième matériau
+                mats[1] = materials.GetMaterial("water"); // Changer le deuxième matériau
                 renderer.materials = mats; 
              
                 
