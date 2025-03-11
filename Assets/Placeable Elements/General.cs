@@ -42,4 +42,25 @@ public class General : PlaceableObject, ICamera
     {
         return orderRange;
     }
+
+    public override void DammagedBy(Unit unit, int bonusDamage)
+    {
+        healthPoints-=(unit.unitData.baseDamagePoints+bonusDamage);
+        if(healthPoints<=0){
+            Kill();
+        }
+    }
+
+    public override void Kill()
+    {
+        transform.parent.GetComponent<Player>().general=null;
+        position.content=null;
+        Destroy(gameObject);
+        if(transform.parent.GetComponent<Player>().playerRole==PlayerRole.FirstPlayer){
+            GameManager.instance.turnManager.PlayerWon(GameManager.instance.playerManager.secondPlayer);
+        }
+        else{
+            GameManager.instance.turnManager.PlayerWon(GameManager.instance.playerManager.firstPlayer);
+        }
+    }
 }

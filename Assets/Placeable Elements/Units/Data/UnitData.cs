@@ -4,15 +4,7 @@ using UnityEngine;
 public class UnitData : PlaceableData
 {
     public Sprite image;
-    public UnitClass unitClass;
     public int baseDamagePoints;
     public int baseMovementPoints;
-}
-
-public enum UnitClass{
-    Infantry,
-    Ranged,
-    MeleeCavalry,
-    RangedCavalry,
-    Engineer
+    public float timeToMove;
 }

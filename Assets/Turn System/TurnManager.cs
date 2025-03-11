@@ -8,8 +8,6 @@ public class TurnManager : MonoBehaviour
     public int nbTurn = 1;
     public GameState currentState;
     private List<ITurnObserver> observers;
-    public Player firstPlayer;
-    public Player secondPlayer;
     public bool gameEnded = false;
 
     public void AddObserver(ITurnObserver observer){
@@ -29,7 +27,11 @@ public class TurnManager : MonoBehaviour
         StartCoroutine(RunGameLoop());
     }
 
-
+    public void PlayerWon(Player player){
+        gameEnded=true;
+        currentState=GameState.GameOver;
+        GameManager.instance.uIManager.PrintMessage(player.factionData.factionName+" has won !");
+    }
 
     IEnumerator RunGameLoop()
     {
@@ -55,13 +57,13 @@ public class TurnManager : MonoBehaviour
                     firstCoroutine = StartCoroutine(GameManager.instance.playerManager.firstPlayer.Deployment(()=>firstPlayerPlayed=true));
                     secondCoroutine = StartCoroutine(GameManager.instance.playerManager.secondPlayer.Wait(()=>secondPlayerPlayed=true));
                     
-                    yield return new WaitUntil(()=>firstPlayerPlayed && secondPlayerPlayed);
+                    yield return new WaitUntil(()=>(firstPlayerPlayed && secondPlayerPlayed) || gameEnded);
                     
                     GameManager.instance.playerManager.firstPlayer.GetPlaceableObjects().ForEach(element=>element.DisableOutlines());
                     StopCoroutine(firstCoroutine);
                     StopCoroutine(secondCoroutine);
                     
-                    currentState = GameState.SecondPlayerDeployment;
+                    if(currentState!=GameState.GameOver)currentState = GameState.SecondPlayerDeployment;
  
                     break;
 
@@ -71,13 +73,13 @@ public class TurnManager : MonoBehaviour
                     firstCoroutine = StartCoroutine(GameManager.instance.playerManager.firstPlayer.Wait(()=>firstPlayerPlayed=true));
                     secondCoroutine = StartCoroutine(GameManager.instance.playerManager.secondPlayer.Deployment(()=>secondPlayerPlayed=true));
                     
-                    yield return new WaitUntil(()=>firstPlayerPlayed && secondPlayerPlayed);
+                    yield return new WaitUntil(()=>(firstPlayerPlayed && secondPlayerPlayed) || gameEnded);
                     
                     GameManager.instance.playerManager.secondPlayer.GetPlaceableObjects().ForEach(element=>element.DisableOutlines());
                     StopCoroutine(firstCoroutine);
                     StopCoroutine(secondCoroutine);
                     
-                    currentState = GameState.FirstPlayerTurn;
+                    if(currentState!=GameState.GameOver)currentState = GameState.FirstPlayerTurn;
                     break;
                     
                 case GameState.FirstPlayerTurn:
@@ -86,11 +88,13 @@ public class TurnManager : MonoBehaviour
 
                     firstCoroutine = StartCoroutine(GameManager.instance.playerManager.firstPlayer.PlayTurn(()=>firstPlayerPlayed=true));
                     secondCoroutine = StartCoroutine(GameManager.instance.playerManager.secondPlayer.Wait(()=>secondPlayerPlayed=true));
-                    yield return new WaitUntil(()=>firstPlayerPlayed && secondPlayerPlayed);
+                    
+                    yield return new WaitUntil(()=>(firstPlayerPlayed && secondPlayerPlayed) || gameEnded);
+                    
                     StopCoroutine(firstCoroutine);
                     StopCoroutine(secondCoroutine);
                     
-                    currentState=GameState.SecondPlayerTurn;
+                    if(currentState!=GameState.GameOver)currentState = GameState.SecondPlayerTurn;
                     break;
                 
                 case GameState.SecondPlayerTurn:
@@ -98,20 +102,24 @@ public class TurnManager : MonoBehaviour
 
                     firstCoroutine = StartCoroutine(GameManager.instance.playerManager.firstPlayer.Wait(()=>firstPlayerPlayed=true));
                     secondCoroutine = StartCoroutine(GameManager.instance.playerManager.secondPlayer.PlayTurn(()=>secondPlayerPlayed=true));
-                    yield return new WaitUntil(()=>firstPlayerPlayed && secondPlayerPlayed);
+                    
+                    yield return new WaitUntil(()=>(firstPlayerPlayed && secondPlayerPlayed) || gameEnded);
+                    
                     StopCoroutine(firstCoroutine);
                     StopCoroutine(secondCoroutine);
                     
-                    currentState=GameState.FirstPlayerTurn;
+                    if(currentState!=GameState.GameOver)currentState = GameState.FirstPlayerTurn;
+                    
                     nbTurn++;
                     observers?.ForEach(observer=>observer.OnTurnEnded());
                     break;
 
                 case GameState.GameOver:
+                    Debug.Log("TODO : back to main menu");
                     break;
                 
                 default:
-                    Debug.Log("TODO");
+                    Debug.Log("Not supposed to be here");
                     break;
             }
             

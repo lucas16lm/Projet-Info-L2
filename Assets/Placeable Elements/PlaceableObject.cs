@@ -17,22 +17,14 @@ public abstract class PlaceableObject : MonoBehaviour, IOutlinable
         placeableGameObject.GetComponent<PlaceableObject>().Initialize(placeableData, tile, player);
     }
 
-    public void ApplyDamage(int amount)
-    {
-        healthPoints-=amount;
-        if(healthPoints<=0) Kill();
-    }
+    public abstract void DammagedBy(Unit unit, int bonusDamage);
 
     public int GetCurrentHealth()
     {
         return healthPoints;
     }
 
-    public void Kill()
-    {
-        position.content=null;
-        Destroy(gameObject);
-    }
+    public abstract void Kill();
 
     public void SetOutline(bool value, int renderingLayerMaskId)
     {

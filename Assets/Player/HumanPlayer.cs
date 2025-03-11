@@ -250,11 +250,11 @@ public class HumanPlayer : Player, ITurnObserver
             if(secondObject==null) yield break;
 
             if(IsTile(secondObject)){
+                //idée potentielle : permettre de ne pas attendre les déplacements
                 yield return firstSelection.GetComponent<Unit>().Move(secondObject.GetComponent<Tile>());
             }
             else if(IsRivalElement(secondObject)){
-                Debug.Log("TODO : attack");
-                yield return null;
+                yield return firstSelection.GetComponent<Unit>().Attack(secondObject.GetComponent<PlaceableObject>());
             }
             
         }

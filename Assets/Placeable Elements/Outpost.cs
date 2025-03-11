@@ -84,4 +84,21 @@ public class Outpost : PlaceableObject, ICamera, ITurnObserver
                 break;
         }
     }
+
+    public override void DammagedBy(Unit unit, int bonusDamage)
+    {
+        healthPoints-=(unit.unitData.baseDamagePoints+bonusDamage);
+        if(healthPoints<=0){
+            GameManager.instance.cameraManager.UnregisterCamera(this);
+            //TODO gérer destruction pendant construction
+            Kill();
+        }
+    }
+
+    public override void Kill()
+    {
+        transform.parent.GetComponent<Player>().outposts.Remove(this);
+        position.content=null;
+        Destroy(gameObject);
+    }
 }

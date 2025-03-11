@@ -8,19 +8,20 @@ using UnityEngine;
 public abstract class Unit : PlaceableObject, ITurnObserver
 {
     public UnitData unitData;
-    public UnitClass unitClass;
-    public int damagePoints;
     public int movementPoints;
+    public bool canAttack = false;
     public RessourceBalance cost;
+    public float timeToMove;
 
     public override void Initialize(PlaceableData placeableData, Tile position, Player player)
     {
         GameManager.instance.turnManager.AddObserver(this);
         unitData = (UnitData) placeableData;
         player.units.Add(this);
-        unitClass=unitData.unitClass;
+        timeToMove=unitData.timeToMove;
         healthPoints=unitData.baseHealthPoints;
         movementPoints=unitData.baseMovementPoints;
+        canAttack=false;
         cost=unitData.cost;
         gameObject.name=unitData.elementName;
         this.position=position;
@@ -35,28 +36,26 @@ public abstract class Unit : PlaceableObject, ITurnObserver
 
     public IEnumerator Move(Tile destination)
     {
-        //AStar(position, destination).ForEach(t=>t.gameObject.GetComponent<Renderer>().material.color=Color.red);
-        List<Tile> path = AStar(position, destination);
-        int moveCost=GetMoveCost(path);
-        if(moveCost<=movementPoints){
-            yield return Move(path);
-            movementPoints-=moveCost;
-        }
-        
+        yield return Move(AStar(position, destination));
     }
 
-    public IEnumerator Move(List<Tile> path)
+    private IEnumerator Move(List<Tile> path)
     {
         if(path==null){
             yield break;
         }
 
+        int moveCost=GetMoveCost(path);
+        if(moveCost>movementPoints){
+            yield break;
+        }
+        movementPoints-=moveCost;
+
         for (int i = 0; i < path.Count; i++)
         {
             gameObject.transform.rotation=Quaternion.LookRotation(path[i].transform.position-position.transform.position);
             GetComponent<AnimationManager>().SetMovementAnimation(true);
-            float speed = unitClass==UnitClass.Infantry||unitClass==UnitClass.Ranged ? 2 : 1;
-            yield return Tween.Position(transform,  path[i].transform.position+(path[i].transform.localScale.y/2)*Vector3.up, speed, Ease.Linear).ToYieldInstruction();
+            yield return Tween.Position(transform,  path[i].transform.position+(path[i].transform.localScale.y/2)*Vector3.up, timeToMove, Ease.Linear).ToYieldInstruction();
             position.content=null;
             path[i].content=this;
             position=path[i];
@@ -64,7 +63,12 @@ public abstract class Unit : PlaceableObject, ITurnObserver
         }
     }
 
-    public abstract void Attack(PlaceableObject target);
+    public IEnumerator Move(PlaceableObject target)
+    {
+        yield return Move(GetPathToElement(target));
+    }
+
+    public abstract IEnumerator Attack(PlaceableObject target);
 
     public static List<Tile> AStar(Tile position, Tile destination){
         
@@ -138,7 +142,7 @@ public abstract class Unit : PlaceableObject, ITurnObserver
         return path;
     }
 
-    private int GetMoveCost(List<Tile> path){
+    protected int GetMoveCost(List<Tile> path){
         return path != null ? path.Sum(tile=>tile.moveCost) : 0;
     }
 
@@ -154,9 +158,35 @@ public abstract class Unit : PlaceableObject, ITurnObserver
         return accessibles;
     }
 
+    protected bool IsAdjacentTo(PlaceableObject target){
+        return target.position.GetNeighbors().Contains(position);
+    }
+
+    protected List<Tile> GetPathToElement(PlaceableObject target){
+        //Should be used if the unit is not adjacent to the target !
+
+        List<Tile> possibleDestinations = target.position.GetNeighbors().FindAll(tile=>GetAccessibleTiles().Contains(tile));
+        if(possibleDestinations.Count==0){
+            //There is no possible path
+            return possibleDestinations;
+        }
+        
+        Tile destination = possibleDestinations[0];
+
+        for (int i = 1; i < possibleDestinations.Count; i++)
+        {
+            if (GetMoveCost(AStar(position, possibleDestinations[i])) < GetMoveCost(AStar(position, destination)))
+            {
+                destination = possibleDestinations[i];
+            }
+        }
+        return AStar(position, destination);
+    }
+
     public void OnTurnEnded()
     {
         movementPoints=unitData.baseMovementPoints;
+        canAttack=true;
     }
 }
 

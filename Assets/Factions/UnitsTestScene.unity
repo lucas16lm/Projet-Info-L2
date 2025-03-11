@@ -241,8 +241,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nbTurn: 1
   currentState: 0
-  firstPlayer: {fileID: 0}
-  secondPlayer: {fileID: 0}
   gameEnded: 0
 --- !u!1001 &202393247
 PrefabInstance:
@@ -458,7 +456,7 @@ Transform:
   m_GameObject: {fileID: 235517548}
   serializedVersion: 2
   m_LocalRotation: {x: 0.42261827, y: 0, z: 0, w: 0.9063079}
-  m_LocalPosition: {x: 75, y: 30, z: -10}
+  m_LocalPosition: {x: 22.324373, y: 30, z: -16.3718}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -781,15 +779,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tilePrefab: {fileID: 8524151667754914690, guid: 99b09d3f1ac42bf449b632560f360521, type: 3}
   tileRadius: 5
-  width: 21
-  heightRatio: 1.5
+  width: 8
+  heightRatio: 1
   seed: 0
-  nbBiomes: 80
-  plainPercentage: 60
-  forestPercentage: 15
-  hillPercentage: 15
-  mountainPercentage: 5
-  waterPercentage: 5
+  nbBiomes: 1
+  plainPercentage: 100
+  forestPercentage: 0
+  hillPercentage: 0
+  mountainPercentage: 0
+  waterPercentage: 0
 --- !u!4 &376526549
 Transform:
   m_ObjectHideFlags: 0
@@ -831,7 +829,7 @@ Transform:
   m_GameObject: {fileID: 516475378}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 75, y: 30, z: 275}
+  m_LocalPosition: {x: 24.2, y: 30, z: 71.40026}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1275,7 +1273,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1146719524}
   m_LocalRotation: {x: 0.42261827, y: 0, z: 0, w: 0.9063079}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 0, y: 0, z: -16.3718}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1283,7 +1281,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 50, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 75, y: 30}
+  m_AnchoredPosition: {x: 22.324373, y: 30}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1146719527
@@ -1368,7 +1366,7 @@ Transform:
   m_GameObject: {fileID: 1164513185}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 75, y: 30, z: -10}
+  m_LocalPosition: {x: 22.324373, y: 30, z: -16.3718}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1948,7 +1946,7 @@ Transform:
   m_GameObject: {fileID: 1883255915}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.9063079, z: -0.42261827, w: 0}
-  m_LocalPosition: {x: 75, y: 30, z: 275}
+  m_LocalPosition: {x: 24.2, y: 30, z: 71.40026}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
