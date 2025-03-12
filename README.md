@@ -10,7 +10,7 @@ Systèmes à implémenter :
 Carte procédurale : OK
 Structure des factions : OK
 Structure des éléments placeables : OK
-Intégration des unités et des batiments sur la carte (déplacement, attaque, placement, etc) : En cours
+Intégration des unités et des batiments sur la carte (déplacement, attaque, placement, etc) : OK
 Création du système de tours et de gestion des parties : OK
 Création du menu principal : TODO
 
