@@ -241,8 +241,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nbTurn: 1
   currentState: 0
-  firstPlayer: {fileID: 0}
-  secondPlayer: {fileID: 0}
   gameEnded: 0
 --- !u!1001 &202393247
 PrefabInstance:
@@ -2182,6 +2180,7 @@ MonoBehaviour:
   MoveRangeLayerID: 13
   AllyLayerId: 10
   EnnemyLayerId: 11
+  RangedRangeLayerId: 14
 --- !u!4 &1980342098
 Transform:
   m_ObjectHideFlags: 0

@@ -8918,11 +8918,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthPoints: 0
   position: {fileID: 0}
-  unitClass: 0
-  damagePoints: 0
+  data: {fileID: 0}
   movementPoints: 0
+  canAttack: 0
   cost:
     gold: 0
+  timeToMove: 0
 --- !u!114 &1033558897301640737
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9014,7 +9015,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 0.9
       inSlope: 0
       outSlope: 0
       tangentMode: 0

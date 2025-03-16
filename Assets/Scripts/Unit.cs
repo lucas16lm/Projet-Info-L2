@@ -7,7 +7,7 @@ using UnityEngine;
 
 public abstract class Unit : PlaceableObject, ITurnObserver
 {
-    public UnitData unitData;
+    public UnitData data;
     public int movementPoints;
     public bool canAttack = false;
     public RessourceBalance cost;
@@ -16,14 +16,14 @@ public abstract class Unit : PlaceableObject, ITurnObserver
     public override void Initialize(PlaceableData placeableData, Tile position, Player player)
     {
         GameManager.instance.turnManager.AddObserver(this);
-        unitData = (UnitData) placeableData;
+        data = (UnitData) placeableData;
         player.units.Add(this);
-        timeToMove=unitData.timeToMove;
-        healthPoints=unitData.baseHealthPoints;
-        movementPoints=unitData.baseMovementPoints;
+        timeToMove=data.timeToMove;
+        healthPoints=data.baseHealthPoints;
+        movementPoints=data.baseMovementPoints;
         canAttack=false;
-        cost=unitData.cost;
-        gameObject.name=unitData.elementName;
+        cost=data.cost;
+        gameObject.name=data.elementName;
         this.position=position;
         position.content=this;
 
@@ -32,6 +32,11 @@ public abstract class Unit : PlaceableObject, ITurnObserver
         {
             foreach(Renderer renderer in transform.GetChild(i).GetComponentsInChildren<Renderer>()) renderer.material=player.factionData.unitsMaterial;
         }
+    }
+
+    public void InitializeAudioSource(){
+        AudioSource audioSource = GetComponent<AudioSource>();
+        audioSource.spatialBlend=0.9f;
     }
 
     public IEnumerator Move(Tile destination)
@@ -51,6 +56,10 @@ public abstract class Unit : PlaceableObject, ITurnObserver
         }
         movementPoints-=moveCost;
 
+        AudioSource audioSource = GetComponent<AudioSource>();
+        audioSource.loop=true;
+        audioSource.clip=data.movementSound;
+        audioSource.Play();
         for (int i = 0; i < path.Count; i++)
         {
             gameObject.transform.rotation=Quaternion.LookRotation(path[i].transform.position-position.transform.position);
@@ -61,6 +70,8 @@ public abstract class Unit : PlaceableObject, ITurnObserver
             position=path[i];
             GetComponent<AnimationManager>().SetMovementAnimation(false);
         }
+        audioSource.loop=false;
+        audioSource.Stop();
     }
 
     public IEnumerator Move(PlaceableObject target)
@@ -185,7 +196,7 @@ public abstract class Unit : PlaceableObject, ITurnObserver
 
     public void OnTurnEnded()
     {
-        movementPoints=unitData.baseMovementPoints;
+        movementPoints=data.baseMovementPoints;
         canAttack=true;
     }
 }

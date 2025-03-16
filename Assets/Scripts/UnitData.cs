@@ -6,4 +6,8 @@ public abstract class UnitData : PlaceableData
     public int baseDamagePoints;
     public int baseMovementPoints;
     public float timeToMove;
+    public AudioClip movementSound;
+    public AudioClip attackSound;
+    public AudioClip damageSound;
+    public AudioClip deathSound;
 }

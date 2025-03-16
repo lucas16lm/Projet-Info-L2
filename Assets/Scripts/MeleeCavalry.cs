@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class MeleeCavalry : Unit
 {
+    public MeleeCavalryData MeleeCavalryData{get{return data as MeleeCavalryData;}}
+
     public override IEnumerator Attack(PlaceableObject target)
     {
         int chargeDamage=0;
@@ -14,7 +16,8 @@ public class MeleeCavalry : Unit
         }
         
         if(!IsAdjacentTo(target)){
-            chargeDamage = (int)(unitData.baseDamagePoints*0.25*GetPathToElement(target).Count);
+            GameManager.instance.soundManager.PlaySound("UnitAttack");
+            chargeDamage = (int)(data.baseDamagePoints*MeleeCavalryData.chargeBonus*GetPathToElement(target).Count);
             yield return Move(target);            
         }
 
@@ -22,6 +25,7 @@ public class MeleeCavalry : Unit
             canAttack=false;
             transform.rotation=Quaternion.LookRotation(target.transform.position-transform.position);
             GetComponent<AnimationManager>().TriggerAnimation("Attack");
+            GetComponent<AudioSource>().PlayOneShot(data.attackSound);
             target.DammagedBy(this, (target is Unit) ? chargeDamage : 0);
         }
     }
@@ -29,13 +33,18 @@ public class MeleeCavalry : Unit
     public override void DammagedBy(Unit unit, int bonusDamage)
     {
         transform.rotation=Quaternion.LookRotation(unit.transform.position-transform.position);
-        GetComponent<AnimationManager>().TriggerAnimation("Damage");
-        healthPoints-=(unit.unitData.baseDamagePoints+bonusDamage);
-        if(healthPoints<=0) Kill();
+        healthPoints-=(unit.data.baseDamagePoints+bonusDamage);
+        GetComponent<AudioSource>().PlayOneShot(data.damageSound);
+        if(healthPoints<=0){
+            Kill();
+        }else{
+            GetComponent<AnimationManager>().TriggerAnimation("Damage");
+        }
     }
 
     public override void Kill()
     {
+        GetComponent<AudioSource>().PlayOneShot(data.deathSound);
         GetComponent<AnimationManager>().TriggerAnimation("Death");
         position.content=null;
         transform.parent.GetComponent<Player>().units.Remove(this);

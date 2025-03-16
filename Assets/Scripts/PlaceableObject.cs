@@ -11,6 +11,8 @@ public abstract class PlaceableObject : MonoBehaviour, IOutlinable
     public static void Instantiate(PlaceableData placeableData, Tile tile, Player player){
         if(!tile.IsAccessible()) return;
         if(!player.ressourceBalance.RemoveRessources(placeableData.cost)) return;
+
+        GameManager.instance.soundManager.PlaySound("UnitPlacement");
         GameManager.instance.uIManager.UpdateRessourcePanel(player);
         
         GameObject placeableGameObject = Instantiate(placeableData.gameObjectPrefab, tile.gameObject.transform.position+(tile.transform.localScale.y/2)*Vector3.up, Quaternion.LookRotation(new Vector3(Camera.main.transform.forward.x, 0, Camera.main.transform.forward.z)), player.transform);

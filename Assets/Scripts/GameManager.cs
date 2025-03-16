@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     public PlayerManager playerManager;
     public CameraManager cameraManager;
     public TurnManager turnManager;
+    public SoundManager soundManager;
     public UIManager uIManager;
     [Header("Rendering layer masks")]
     public int TileZoneLayerID;
@@ -21,6 +22,7 @@ public class GameManager : MonoBehaviour
     public int MoveRangeLayerID;
     public int AllyLayerId;
     public int EnnemyLayerId;
+    public int RangedAttackLayerId;
 
     
     

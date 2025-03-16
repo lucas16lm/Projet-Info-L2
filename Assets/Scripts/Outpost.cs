@@ -87,7 +87,7 @@ public class Outpost : PlaceableObject, ICamera, ITurnObserver
 
     public override void DammagedBy(Unit unit, int bonusDamage)
     {
-        healthPoints-=(unit.unitData.baseDamagePoints+bonusDamage);
+        healthPoints-=(unit.data.baseDamagePoints+bonusDamage);
         if(healthPoints<=0){
             GameManager.instance.cameraManager.UnregisterCamera(this);
             //TODO gérer destruction pendant construction
