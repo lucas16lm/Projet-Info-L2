@@ -7,21 +7,7 @@ public class Infantry : Unit
     {
         throw new System.NotImplementedException();
     }
-    private void Start()
-    {
-        setHealthBar();
-
-
-    }
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-            takeDammage(10);
-
-        }
-
-    }
+   
    
    
 }

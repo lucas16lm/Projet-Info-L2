@@ -15,6 +15,7 @@ public class Outpost : PlaceableObject, ICamera
         healthPoints=data.baseHealthPoints;
         this.position=position;
         position.content=this;
+        InitializeHealthBar();
 
         foreach(Renderer renderer in transform.GetChild(0).GetComponentsInChildren<Renderer>()) renderer.material=player.factionData.bannerMaterial;
     }

@@ -101,6 +101,7 @@ public class HumanPlayer : Player, ITurnObserver
                     PlaceableObject placeableObject = go.GetComponent<PlaceableObject>();
                     if(GetPlaceableObjects().Contains(placeableObject)) placeableObject.SetOutline(true, GameManager.instance.AllyLayerId);
                     else placeableObject.SetOutline(true, GameManager.instance.EnnemyLayerId);
+                    placeableObject.showHealthBar();
                 }
                 
             },
@@ -110,7 +111,9 @@ public class HumanPlayer : Player, ITurnObserver
                 }
                 else{
                     go.GetComponent<IOutlinable>().DisableOutlines();
-                }
+                    PlaceableObject placeableObject = go.GetComponent<PlaceableObject>();
+                    placeableObject.HideHealthBar();
+                }   
                 
             },
             go=>{})

@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class healthManager : MonoBehaviour
 {
     [SerializeField]
@@ -11,7 +12,7 @@ public class healthManager : MonoBehaviour
     private Image fill;
 
     [SerializeField]
-    private Camera camera;
+    private Camera cameras;
 
     public void setMaxHealth(int health)
     {
@@ -30,11 +31,15 @@ public class healthManager : MonoBehaviour
     
         public void setCamera(Camera newcamera)
     {
-        camera=newcamera;
+        cameras=newcamera;
+    }
+    private void Awake()
+    {
+        setCamera(Camera.main);
     }
     private void Update()
     {
-        transform.LookAt(camera.transform);
+        transform.LookAt(cameras.transform);
         transform.Rotate(0, 180, 0);
         
         

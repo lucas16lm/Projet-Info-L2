@@ -5,6 +5,9 @@ public abstract class PlaceableObject : MonoBehaviour, IOutlinable
 {
     public int healthPoints;
     public Tile position;
+    public healthManager healthManager;
+
+    
 
     public abstract void Initialize(PlaceableData placeableData, Tile position, Player player);
 
@@ -17,10 +20,26 @@ public abstract class PlaceableObject : MonoBehaviour, IOutlinable
         placeableGameObject.GetComponent<PlaceableObject>().Initialize(placeableData, tile, player);
     }
 
+    public void InitializeHealthBar()
+    {
+        if (healthManager != null)
+        {
+            healthManager.setMaxHealth(healthPoints);
+            healthManager.setCamera(Camera.main);
+        }
+    }
+    public void SetHealthManager(healthManager manager)
+    {
+        healthManager = manager;
+        InitializeHealthBar();
+    }
+    
     public void ApplyDamage(int amount)
     {
         healthPoints-=amount;
+        healthManager.sethealth(healthPoints);
         if(healthPoints<=0) Kill();
+
     }
 
     public int GetCurrentHealth()
@@ -32,6 +51,25 @@ public abstract class PlaceableObject : MonoBehaviour, IOutlinable
     {
         position.content=null;
         Destroy(gameObject);
+    }
+    public void showHealthBar()
+    {
+        Canvas canvas = healthManager.transform.parent.GetComponent<Canvas>();
+        Debug.Log(canvas.name);
+        if (canvas != null)
+        {
+            canvas.enabled = true;
+        }
+
+    }
+    public void HideHealthBar()
+    {
+        Canvas canvas = healthManager.transform.parent.GetComponent<Canvas>();
+        if (canvas != null)
+        {
+            canvas.enabled = false;
+        }
+
     }
 
     public void SetOutline(bool value, int renderingLayerMaskId)
