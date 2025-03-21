@@ -43,9 +43,9 @@ public class General : PlaceableObject, ICamera
         return orderRange;
     }
 
-    public override void DammagedBy(Unit unit, int bonusDamage)
+    public override void DammagedBy(Unit unit, int damagePoints)
     {
-        healthPoints-=(unit.data.baseDamagePoints+bonusDamage);
+        healthPoints-=damagePoints;
         if(healthPoints<=0){
             Kill();
         }

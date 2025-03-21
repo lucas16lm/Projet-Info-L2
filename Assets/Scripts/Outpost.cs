@@ -53,6 +53,7 @@ public class Outpost : PlaceableObject, ICamera, ITurnObserver
 
     public void OnTurnEnded()
     {
+        if(healthPoints<=0) return;
         AddBuildingProgress();
         if(turnToBuild<=0){
             Debug.Log(name+"finished");
@@ -85,11 +86,11 @@ public class Outpost : PlaceableObject, ICamera, ITurnObserver
         }
     }
 
-    public override void DammagedBy(Unit unit, int bonusDamage)
+    public override void DammagedBy(Unit unit, int damagePoints)
     {
-        healthPoints-=(unit.data.baseDamagePoints+bonusDamage);
+        healthPoints-=damagePoints;
         if(healthPoints<=0){
-            GameManager.instance.cameraManager.UnregisterCamera(this);
+            
             //TODO gérer destruction pendant construction
             Kill();
         }
@@ -98,6 +99,8 @@ public class Outpost : PlaceableObject, ICamera, ITurnObserver
     public override void Kill()
     {
         transform.parent.GetComponent<Player>().outposts.Remove(this);
+        StartCoroutine(GameManager.instance.turnManager.RemoveObserver(this));
+        GameManager.instance.cameraManager.UnregisterCamera(this);
         position.content=null;
         Destroy(gameObject);
     }

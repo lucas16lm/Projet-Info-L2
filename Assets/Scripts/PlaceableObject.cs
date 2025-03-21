@@ -7,6 +7,8 @@ public abstract class PlaceableObject : MonoBehaviour, IOutlinable
     public Tile position;
 
     public abstract void Initialize(PlaceableData placeableData, Tile position, Player player);
+    public abstract void DammagedBy(Unit unit, int damagePoints);
+    public abstract void Kill();
 
     public static void Instantiate(PlaceableData placeableData, Tile tile, Player player){
         if(!tile.IsAccessible()) return;
@@ -19,14 +21,10 @@ public abstract class PlaceableObject : MonoBehaviour, IOutlinable
         placeableGameObject.GetComponent<PlaceableObject>().Initialize(placeableData, tile, player);
     }
 
-    public abstract void DammagedBy(Unit unit, int bonusDamage);
-
     public int GetCurrentHealth()
     {
         return healthPoints;
     }
-
-    public abstract void Kill();
 
     public void SetOutline(bool value, int renderingLayerMaskId)
     {

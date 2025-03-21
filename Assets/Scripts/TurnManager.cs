@@ -16,7 +16,7 @@ public class TurnManager : MonoBehaviour
 
     public IEnumerator RemoveObserver(ITurnObserver observer){
         yield return null;
-        observers.Remove(observer);
+        if(observers.Contains(observer)) observers.Remove(observer);
     }
 
     public void InitTurns()

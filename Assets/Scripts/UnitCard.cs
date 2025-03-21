@@ -8,7 +8,6 @@ using UnityEngine.UI;
 
 public class UnitCard : MonoBehaviour
 {
-    public TMP_Text unitName;
     public Image image;
     public PlaceableData data;
 
@@ -19,9 +18,43 @@ public class UnitCard : MonoBehaviour
 
     private void ApplyData(PlaceableData data){
         this.data=data;
-        unitName.text=data.elementName;
         if(data is UnitData) image.sprite=(data as UnitData).image;
         goldAmount.text=""+data.cost.gold;
+        
+        foreach(Transform transform in transform.GetChild(0).GetChild(2)){
+            transform.gameObject.SetActive(false);
+        }
+
+        switch(data){
+            case InfantryData:
+                InfantryData infantryData = data as InfantryData;
+                if(infantryData.gameObjectPrefab?.GetComponent<ShieldInfantry>()!=null){
+                    transform.GetChild(0).GetChild(2).GetChild(0).gameObject.SetActive(true);
+                }
+                else if(infantryData.gameObjectPrefab?.GetComponent<PikeInfantry>()!=null){
+                    transform.GetChild(0).GetChild(2).GetChild(1).gameObject.SetActive(true);
+                }
+                else{
+                    transform.GetChild(0).GetChild(2).GetChild(2).gameObject.SetActive(true);
+                }
+                
+                break;
+            case MeleeCavalryData:
+                transform.GetChild(0).GetChild(2).GetChild(3).gameObject.SetActive(true);
+                break;
+            case RangedData:
+                RangedData rangedData = data as RangedData;
+                if(rangedData.gameObjectPrefab?.GetComponent<Archer>()!=null){
+                    transform.GetChild(0).GetChild(2).GetChild(4).gameObject.SetActive(true);
+                }
+                else{
+                    transform.GetChild(0).GetChild(2).GetChild(5).gameObject.SetActive(true);
+                }
+                break;
+            case OutpostData:
+                transform.GetChild(0).GetChild(2).GetChild(6).gameObject.SetActive(true);
+                break;
+        }
     }
 
     public static UnitCard Instantiate(PlaceableData data, Transform transform){

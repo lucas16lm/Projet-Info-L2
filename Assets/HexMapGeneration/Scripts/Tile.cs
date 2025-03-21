@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using System;
+using Unity.Mathematics;
 
 public class Tile : MonoBehaviour, IOutlinable
 {
@@ -122,7 +123,9 @@ public class Tile : MonoBehaviour, IOutlinable
     #endregion
 
     #region tile related attributes and methods
-    public GameObject treePrefab;
+    public GameObject forestPrefab;
+    public List<GameObject> mountainTops;
+    public Material waterMaterial;
     public Vector3Int cubicCoordinates;
     public Biome biome;
     public PlaceableObject content;
@@ -214,18 +217,11 @@ public class Tile : MonoBehaviour, IOutlinable
         switch (biome)
         {
             case Biome.plain:
-                transform.GetComponent<Renderer>().material.color = new Color(0, 1, 0);
+                transform.GetComponent<Renderer>().material.color = new Color(0, 0.7f, 0);
                 break;
             case Biome.forest:
-                transform.GetComponent<Renderer>().material.color = new Color(0, 0.7f, 0);
-                for (int i = 0; i < 6; i++)
-                {
-                    Vector3 pos = new Vector3(
-                        transform.position.x + 0.7f * tileRadius * Mathf.Cos((2 * Mathf.PI * i) / 6),
-                        0,
-                        transform.position.z + 0.7f * tileRadius * Mathf.Sin((2 * Mathf.PI * i) / 6));
-                    Instantiate(treePrefab, pos + transform.localScale.y * Vector3.up, Quaternion.identity, transform.GetChild(0));
-                }
+                transform.GetComponent<Renderer>().material.color = new Color(0, 0.5f, 0);
+                Instantiate(forestPrefab, transform.GetChild(0).position, Quaternion.identity, transform.GetChild(0));
                 break;
             case Biome.hill:
                 transform.GetComponent<Renderer>().materials[0].color = new Color(0.6f, 0.6f, 0);
@@ -235,11 +231,10 @@ public class Tile : MonoBehaviour, IOutlinable
             case Biome.mountain:
                 transform.GetComponent<Renderer>().materials[0].color = new Color(0.25f, 0.25f, 0.25f);
                 transform.GetComponent<Renderer>().materials[1].color = new Color(0.25f, 0.25f, 0.25f);
-                transform.localScale += 10f * Vector3.up;
+                Instantiate(mountainTops[new System.Random().Next(0,mountainTops.Count-1)], transform.GetChild(0).position, Quaternion.identity, transform.GetChild(0));
                 break;
             case Biome.water:
-                transform.GetComponent<Renderer>().materials[0].color = new Color(0, 0, 0.8f);
-                transform.GetComponent<Renderer>().materials[1].color = new Color(0, 0, 0.8f);
+                transform.GetComponent<Renderer>().material=waterMaterial;
                 transform.localScale += 2 * Vector3.down;
                 break;
         }

@@ -300,7 +300,7 @@ public class HumanPlayer : Player, ITurnObserver
             {
                 //idée potentielle : permettre de ne pas attendre les déplacements
                 GameManager.instance.soundManager.PlaySound("UnitMovement");
-                yield return firstSelection.GetComponent<Unit>().Move(secondObject.GetComponent<Tile>());
+                StartCoroutine(firstSelection.GetComponent<Unit>().Move(secondObject.GetComponent<Tile>()));
             }
             else if (IsRivalElement(secondObject))
             {
