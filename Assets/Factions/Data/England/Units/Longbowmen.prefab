@@ -2082,6 +2082,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6892278061644490923}
   - component: {fileID: 6753549896328195597}
+  - component: {fileID: 1693128513111784431}
   m_Layer: 0
   m_Name: Longbowmen (1)
   m_TagString: Untagged
@@ -2188,6 +2189,25 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1693128513111784431
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 180521343271552900}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd8528f6b54055041a59e78707623c5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  proj: {fileID: 0}
+  Fireproj: {fileID: 0}
+  target: {fileID: 0}
+  SpawnPoint: {fileID: 0}
+  gravity: 0
+  angletir: 0
+  precision: 0
 --- !u!1 &186947542257058469
 GameObject:
   m_ObjectHideFlags: 0
@@ -2414,6 +2434,37 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &205150550535371458
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4769110548496356241}
+  m_Layer: 0
+  m_Name: ArrowSpawn (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 7422848464349959988, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4769110548496356241
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 205150550535371458}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.97, y: 0.97, z: 0.58}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7816894423251919934}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &208148684263541684
 GameObject:
   m_ObjectHideFlags: 0
@@ -7589,6 +7640,37 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &886385752248106048
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4350943692213131698}
+  m_Layer: 0
+  m_Name: ArrowSpawn (3)
+  m_TagString: Untagged
+  m_Icon: {fileID: 7422848464349959988, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4350943692213131698
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 886385752248106048}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.35, y: 0.97, z: 0.58}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7816894423251919934}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &895245589698043550
 GameObject:
   m_ObjectHideFlags: 0
@@ -8447,6 +8529,37 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.090198934, y: 0.019462734, z: 0.00000008940697}
     m_Extent: {x: 0.5395712, y: 0.28795576, z: 0.7707151}
   m_DirtyAABB: 0
+--- !u!1 &998820242207244080
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6230114430621845172}
+  m_Layer: 0
+  m_Name: ArrowSpawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 7422848464349959988, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6230114430621845172
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 998820242207244080}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.05, y: 0.97, z: 0.58}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7816894423251919934}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1004850527264559195
 GameObject:
   m_ObjectHideFlags: 0
@@ -9685,6 +9798,7 @@ GameObject:
   - component: {fileID: 1033558897301640737}
   - component: {fileID: 3550637919555225688}
   - component: {fileID: 3155432431991553770}
+  - component: {fileID: 2901529836269240744}
   m_Layer: 0
   m_Name: Longbowmen
   m_TagString: Untagged
@@ -9710,6 +9824,7 @@ Transform:
   - {fileID: 6892278061644490923}
   - {fileID: 1980065106956569572}
   - {fileID: 7207541196572375751}
+  - {fileID: 7816894423251919934}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8469302624112961211
@@ -9744,7 +9859,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9ecddde959ce514182a62a8bf6288d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animators: []
+  animators:
+  - {fileID: 6753549896328195597}
+  - {fileID: 6753549896328195597}
+  - {fileID: 6753549896328195597}
+  - {fileID: 6753549896328195597}
 --- !u!65 &3550637919555225688
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9863,6 +9982,29 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &2901529836269240744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1182913934825737468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c4a0a2a91629e44ab66c5c562c4d273, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  proj: {fileID: 8750730826385975019, guid: 032ca5aae45b5f94f957dc248164b916, type: 3}
+  Fireproj: {fileID: 8750730826385975019, guid: b19ab8306885ca943af0ad501831e91f, type: 3}
+  target: {fileID: 0}
+  SpawnPoint:
+  - {fileID: 6230114430621845172}
+  - {fileID: 4769110548496356241}
+  - {fileID: 8691834767137022002}
+  - {fileID: 4350943692213131698}
+  gravity: 40
+  angletir: 45
+  precision: 3
 --- !u!1 &1183745211179656800
 GameObject:
   m_ObjectHideFlags: 0
@@ -10906,7 +11048,7 @@ Transform:
   m_Children:
   - {fileID: 7109150187104708335}
   m_Father: {fileID: 9183177274922699563}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -0.0020235898, y: 2.3056886, z: 172.64151}
 --- !u!1 &1361842603615124480
 GameObject:
   m_ObjectHideFlags: 0
@@ -16208,6 +16350,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7402985544323438049}
   - component: {fileID: 7643563365658255831}
+  - component: {fileID: 618347853001081476}
   m_Layer: 0
   m_Name: Longbowmen
   m_TagString: Untagged
@@ -16314,6 +16457,25 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &618347853001081476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2019086629923397612}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd8528f6b54055041a59e78707623c5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  proj: {fileID: 8750730826385975019, guid: 032ca5aae45b5f94f957dc248164b916, type: 3}
+  Fireproj: {fileID: 0}
+  target: {fileID: 0}
+  SpawnPoint: {fileID: 6230114430621845172}
+  gravity: 25
+  angletir: 45
+  precision: 0
 --- !u!1 &2019575658763876535
 GameObject:
   m_ObjectHideFlags: 0
@@ -24673,6 +24835,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7207541196572375751}
   - component: {fileID: 4085187323465403216}
+  - component: {fileID: 2949517011219488617}
   m_Layer: 0
   m_Name: Longbowmen (3)
   m_TagString: Untagged
@@ -24779,6 +24942,25 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &2949517011219488617
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2741962235975876743}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd8528f6b54055041a59e78707623c5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  proj: {fileID: 0}
+  Fireproj: {fileID: 0}
+  target: {fileID: 0}
+  SpawnPoint: {fileID: 0}
+  gravity: 0
+  angletir: 0
+  precision: 0
 --- !u!1 &2752495525243976364
 GameObject:
   m_ObjectHideFlags: 0
@@ -35010,6 +35192,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1980065106956569572}
   - component: {fileID: 7720675658237924403}
+  - component: {fileID: 5883653864366038486}
   m_Layer: 0
   m_Name: Longbowmen (2)
   m_TagString: Untagged
@@ -35116,6 +35299,25 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &5883653864366038486
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3949991398251875254}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd8528f6b54055041a59e78707623c5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  proj: {fileID: 0}
+  Fireproj: {fileID: 0}
+  target: {fileID: 0}
+  SpawnPoint: {fileID: 0}
+  gravity: 0
+  angletir: 0
+  precision: 0
 --- !u!1 &3951546131689001295
 GameObject:
   m_ObjectHideFlags: 0
@@ -54563,6 +54765,41 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &6230008442755191390
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7816894423251919934}
+  m_Layer: 0
+  m_Name: Arrows_Spawns
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7816894423251919934
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6230008442755191390}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6230114430621845172}
+  - {fileID: 4769110548496356241}
+  - {fileID: 8691834767137022002}
+  - {fileID: 4350943692213131698}
+  m_Father: {fileID: 8233792795362549645}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6233324242184953386
 GameObject:
   m_ObjectHideFlags: 0
@@ -70060,6 +70297,37 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &7896925152973062156
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8691834767137022002}
+  m_Layer: 0
+  m_Name: ArrowSpawn (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 7422848464349959988, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8691834767137022002
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7896925152973062156}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.54, y: 0.97, z: 0.58}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7816894423251919934}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7902504945540503964
 GameObject:
   m_ObjectHideFlags: 0
@@ -80321,7 +80589,7 @@ Transform:
   m_Children:
   - {fileID: 1159258125489914244}
   m_Father: {fileID: 8972974635746165403}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 11.506557, y: -5.391297, z: 160.79976}
 --- !u!1 &9189829104154515138
 GameObject:
   m_ObjectHideFlags: 0
