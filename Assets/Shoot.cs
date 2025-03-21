@@ -32,9 +32,10 @@ public class Shoot : MonoBehaviour
         Instantiate(Fireproj, SpawnPoint.position, Quaternion.Euler(90, 0, 0));
 
     }
-    public void setShoot(GameObject proj, Transform target,Transform spawnPoint,float gravity, float angletir,float precision)
+    public void setShoot(GameObject proj,GameObject fireProj, Transform target,Transform spawnPoint,float gravity, float angletir,float precision)
     {
         this.proj = proj;
+        this.Fireproj = fireProj;
         this.target = target;
         this.SpawnPoint = spawnPoint;
         this.gravity = gravity;

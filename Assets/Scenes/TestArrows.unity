@@ -640,12 +640,24 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1033558897301640737, guid: 4584fac5f6fb92f48a6c5e4b19c9a536, type: 3}
       propertyPath: animators.Array.size
-      value: 1
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1033558897301640737, guid: 4584fac5f6fb92f48a6c5e4b19c9a536, type: 3}
       propertyPath: 'animators.Array.data[0]'
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1605155660}
+    - target: {fileID: 1033558897301640737, guid: 4584fac5f6fb92f48a6c5e4b19c9a536, type: 3}
+      propertyPath: 'animators.Array.data[1]'
+      value: 
+      objectReference: {fileID: 1605155660}
+    - target: {fileID: 1033558897301640737, guid: 4584fac5f6fb92f48a6c5e4b19c9a536, type: 3}
+      propertyPath: 'animators.Array.data[2]'
+      value: 
+      objectReference: {fileID: 1605155660}
+    - target: {fileID: 1033558897301640737, guid: 4584fac5f6fb92f48a6c5e4b19c9a536, type: 3}
+      propertyPath: 'animators.Array.data[3]'
+      value: 
+      objectReference: {fileID: 1605155660}
     - target: {fileID: 1182913934825737468, guid: 4584fac5f6fb92f48a6c5e4b19c9a536, type: 3}
       propertyPath: m_Name
       value: Longbowmen
@@ -766,7 +778,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c4a0a2a91629e44ab66c5c562c4d273, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  proj: {fileID: 8750730826385975019, guid: b19ab8306885ca943af0ad501831e91f, type: 3}
+  proj: {fileID: 8750730826385975019, guid: 032ca5aae45b5f94f957dc248164b916, type: 3}
+  Fireproj: {fileID: 8750730826385975019, guid: b19ab8306885ca943af0ad501831e91f, type: 3}
   target: {fileID: 1437912409}
   SpawnPoint:
   - {fileID: 1869962682}
@@ -805,6 +818,11 @@ MonoBehaviour:
   gravity: 0
   angletir: 0
   precision: 0
+--- !u!95 &1605155660 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 6753549896328195597, guid: 4584fac5f6fb92f48a6c5e4b19c9a536, type: 3}
+  m_PrefabInstance: {fileID: 1213551164}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1656244770
 GameObject:
   m_ObjectHideFlags: 0

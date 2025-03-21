@@ -63,9 +63,11 @@ public class Projectile : MonoBehaviour
             transform.position = CalculatePosition(time);
 
             // Orienter le projectile dans la direction du mouvement
-            transform.LookAt(Quaternion.Euler(90, 0, 0) * CalculatePosition(time + 0.1f));
+            transform.LookAt( CalculatePosition(time + 0.1f));
+            transform.Rotate(-90,0,0);
+            
 
-            if (Vector3.Distance(transform.position, targetPos) < 2f || transform.position.y<-10f)
+            if (Vector3.Distance(transform.position, targetPos) < 2f || transform.position.y<-1f)
             {
                 Destroy(transform.gameObject);
             }
