@@ -1,0 +1,29 @@
+fileFormatVersion: 2
+guid: d5cb0b05979f8bc4db79f9db12627dd0
+AudioImporter:
+  externalObjects: {}
+  serializedVersion: 6
+  defaultSettings:
+    loadType: 0
+    sampleRateSetting: 0
+    sampleRateOverride: 44100
+    compressionFormat: 1
+    quality: 1
+    conversionMode: 0
+  platformSettingOverrides: {}
+  forceToMono: 0
+  normalize: 1
+  preloadAudioData: 1
+  loadInBackground: 0
+  ambisonic: 0
+  3D: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 188470
+  packageName: Empire Game
+  packageVersion: 1.0
+  assetPath: Assets/Empire Game/Chests Doors/Empire_Game_Chest_Unlock_Latch_Click_Unhinge_3.wav
+  uploadId: 415347

@@ -1,0 +1,29 @@
+fileFormatVersion: 2
+guid: f08b5d9c1e4f11d40a9f1cf58b75f854
+AudioImporter:
+  externalObjects: {}
+  serializedVersion: 6
+  defaultSettings:
+    loadType: 0
+    sampleRateSetting: 0
+    sampleRateOverride: 44100
+    compressionFormat: 1
+    quality: 1
+    conversionMode: 0
+  platformSettingOverrides: {}
+  forceToMono: 0
+  normalize: 1
+  preloadAudioData: 1
+  loadInBackground: 0
+  ambisonic: 0
+  3D: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 188470
+  packageName: Empire Game
+  packageVersion: 1.0
+  assetPath: Assets/Empire Game/Settlement Alerts/Empire_Game_Settlement_Alert_Large_Tolling_Bell_Church_Tower_Impact.wav
+  uploadId: 415347

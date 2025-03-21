@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d68825d1d7efeb46a3337dbb5ff23f5, type: 3}
+  m_Name: Eastern Rome
+  m_EditorClassIdentifier: 
+  factionName: Eastern Rome
+  description: 
+  bannerMaterial: {fileID: 2100000, guid: f1054a5fd2635164daa56e73c083ce16, type: 2}
+  unitsMaterial: {fileID: 2100000, guid: 59d2976a0c42ccf419fed4875b7af5ac, type: 2}
+  factionColor: {r: 0.778893, g: 0, b: 1, a: 0}
+  baseBalance:
+    gold: 10
+  generalData: {fileID: 11400000, guid: 4e41a187b8286a9438adffeb56bc1e78, type: 2}
+  outpostData: {fileID: 11400000, guid: e3f17f2f748a2a94ca4b81346707df9e, type: 2}
+  factionUnitsData:
+  - {fileID: 11400000, guid: bd44d5330648406459af3e385e558193, type: 2}
+  - {fileID: 11400000, guid: a111023649af4c649a7ddbc63f31444f, type: 2}
+  - {fileID: 11400000, guid: 18c51b4fcb934494ea74f90752ad127b, type: 2}
+  - {fileID: 11400000, guid: b98c3ef2306e5ed4d858e3ecc6cfa8f8, type: 2}
+  - {fileID: 11400000, guid: 1b7dd806f63fa7a4981fae4825031ce0, type: 2}
