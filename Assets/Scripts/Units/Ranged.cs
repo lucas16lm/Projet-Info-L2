@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using PrimeTween;
+using Unity.Mathematics;
 using UnityEngine;
 
 public abstract class Ranged : Unit
@@ -21,10 +22,18 @@ public abstract class Ranged : Unit
             yield break;
         }
 
+        
+        transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position);
+        for (int i = 1; i <= 4; i++)
+        {
+            GameObject projectile = Instantiate(RangedData.projectile, transform.GetChild(i).position, quaternion.identity);
+            projectile.GetComponent<Projectile>().SetProjectile(target.transform, RangedData.projectileSpeed, RangedData.shootAngle, RangedData.projectilePrecision);
+        }
+
         GameManager.instance.soundManager.PlaySound("UnitAttack");
         GetComponent<AudioSource>().PlayOneShot(data.attackSound);
         canAttack = false;
-        transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position);
+        
         GetComponent<AnimationManager>().TriggerAnimation("Attack");
         target.DammagedBy(this, CalculateDamage(target));
     }

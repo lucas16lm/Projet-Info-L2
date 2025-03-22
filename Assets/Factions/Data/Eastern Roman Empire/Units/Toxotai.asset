@@ -26,3 +26,7 @@ MonoBehaviour:
   damageSound: {fileID: 8300000, guid: f26b9f4eeec306e41baafd812569c323, type: 3}
   deathSound: {fileID: 8300000, guid: 820c8f8e9e54ad0428828e421dcf14ee, type: 3}
   attackRange: 5
+  projectile: {fileID: 8750730826385975019, guid: 032ca5aae45b5f94f957dc248164b916, type: 3}
+  shootAngle: 40
+  projectileSpeed: 25
+  projectilePrecision: 1.5
