@@ -1027,7 +1027,7 @@ GameObject:
   - component: {fileID: 3394749838852203271}
   - component: {fileID: 2976084018342905298}
   m_Layer: 5
-  m_Name: ToolTip
+  m_Name: CardTooltip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
