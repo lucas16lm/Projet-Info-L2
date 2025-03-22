@@ -21,6 +21,7 @@ public class Outpost : PlaceableObject, ICamera, ITurnObserver
         position.content=this;
 
         foreach(Renderer renderer in transform.GetChild(0).GetComponentsInChildren<Renderer>()) renderer.material=player.factionData.bannerMaterial;
+        foreach(Renderer renderer in transform.GetChild(1).GetChild(0).GetComponentsInChildren<Renderer>()) renderer.material=player.factionData.unitsMaterial;
     }
 
     public bool IsConstructed(){

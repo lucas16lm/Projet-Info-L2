@@ -17,6 +17,8 @@ public class General : PlaceableObject, ICamera
         position.content=this;
 
         foreach(Renderer renderer in transform.GetChild(0).GetComponentsInChildren<Renderer>()) renderer.material=player.factionData.bannerMaterial;
+        foreach(Renderer renderer in transform.GetChild(3).GetComponentsInChildren<Renderer>()) renderer.material=player.factionData.unitsMaterial;
+
     }
 
     public void SetPriority()
