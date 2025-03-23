@@ -13,7 +13,7 @@ public class LocalCanvas : MonoBehaviour
 
     public static void CreateLocalCanvas(GameObject canvaGameObject, Transform transform)
     {
-        GameObject canvas = Instantiate(canvaGameObject, transform.position+5*Vector3.up, quaternion.identity, transform);
+        GameObject canvas = Instantiate(canvaGameObject, transform.position+(transform.GetComponent<PlaceableObject>() is Unit ? 6*Vector3.up : 12*Vector3.up), quaternion.identity, transform);
         canvas.GetComponent<Canvas>().enabled = false;
 
         if(transform?.GetComponent<General>() != null || transform?.GetComponent<Outpost>() != null){

@@ -15,7 +15,7 @@ public class CardTooltip : MonoBehaviour
     [SerializeField]
     private TMP_Text unitMovementText;
 
-    public void ShowCardTooltip(UnitData unitData){
+    public void ShowCardTooltip(UnitData unitData, RectTransform rectTransform){
         gameObject.SetActive(true);
         
         unitNameText.text=unitData.elementName;
@@ -43,7 +43,8 @@ public class CardTooltip : MonoBehaviour
         unitAttackText.text=""+unitData.baseDamagePoints;
         unitMovementText.text=""+unitData.baseMovementPoints;
 
-        GetComponent<RectTransform>().position = Mouse.current.position.ReadValue()+Vector2.up*5;
+        RectTransform tooltipRectTransform = GetComponent<RectTransform>();
+        tooltipRectTransform.position = rectTransform.position+tooltipRectTransform.rect.height*tooltipRectTransform.lossyScale.y*Vector3.up;
     }
 
     public void HideCardTooltip(){

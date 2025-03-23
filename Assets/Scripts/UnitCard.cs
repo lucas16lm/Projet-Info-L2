@@ -73,7 +73,7 @@ public class UnitCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public void OnPointerEnter(PointerEventData eventData)
     {
         if(data is UnitData){
-            GameManager.instance.uIManager.cardTooltip.ShowCardTooltip(data as UnitData);
+            GameManager.instance.uIManager.cardTooltip.ShowCardTooltip(data as UnitData, GetComponent<RectTransform>());
         }
     }
 
