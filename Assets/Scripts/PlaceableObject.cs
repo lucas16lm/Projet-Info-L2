@@ -1,8 +1,12 @@
+using System.Data.Common;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(AnimationManager), typeof(AudioSource))]
 public abstract class PlaceableObject : MonoBehaviour, IOutlinable
 {
+    public GameObject localCanvaGameObject;
+    public PlaceableData data;
     public int healthPoints;
     public Tile position;
 
@@ -19,6 +23,7 @@ public abstract class PlaceableObject : MonoBehaviour, IOutlinable
         
         GameObject placeableGameObject = Instantiate(placeableData.gameObjectPrefab, tile.gameObject.transform.position+(tile.transform.localScale.y/2)*Vector3.up, Quaternion.LookRotation(new Vector3(Camera.main.transform.forward.x, 0, Camera.main.transform.forward.z)), player.transform);
         placeableGameObject.GetComponent<PlaceableObject>().Initialize(placeableData, tile, player);
+        LocalCanvas.CreateLocalCanvas(placeableGameObject.GetComponent<PlaceableObject>().localCanvaGameObject, placeableGameObject.transform);
     }
 
     public int GetCurrentHealth()
@@ -48,4 +53,6 @@ public abstract class PlaceableObject : MonoBehaviour, IOutlinable
         
         foreach(Renderer renderer in renderers) renderer.renderingLayerMask = renderingLayerMask;
     }
+
+    
 }

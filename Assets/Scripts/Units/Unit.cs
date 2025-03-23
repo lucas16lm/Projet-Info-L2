@@ -7,7 +7,8 @@ using UnityEngine;
 
 public abstract class Unit : PlaceableObject, ITurnObserver
 {
-    public UnitData data;
+    public UnitData UnitData{get{return data as UnitData;}}
+
     public int movementPoints;
     public bool canAttack = false;
     public RessourceBalance cost;
@@ -19,11 +20,11 @@ public abstract class Unit : PlaceableObject, ITurnObserver
     public override void Initialize(PlaceableData placeableData, Tile position, Player player)
     {
         GameManager.instance.turnManager.AddObserver(this);
-        data = (UnitData) placeableData;
+        data = placeableData;
         player.units.Add(this);
-        timeToMove=data.timeToMove;
+        timeToMove=UnitData.timeToMove;
         healthPoints=data.baseHealthPoints;
-        movementPoints=data.baseMovementPoints;
+        movementPoints=UnitData.baseMovementPoints;
         canAttack=false;
         cost=data.cost;
         gameObject.name=data.elementName;
@@ -64,7 +65,7 @@ public abstract class Unit : PlaceableObject, ITurnObserver
 
         AudioSource audioSource = GetComponent<AudioSource>();
         audioSource.loop=true;
-        audioSource.clip=data.movementSound;
+        audioSource.clip=UnitData.movementSound;
         audioSource.Play();
         for (int i = 0; i < path.Count; i++)
         {
@@ -198,7 +199,7 @@ public abstract class Unit : PlaceableObject, ITurnObserver
 
     public void OnTurnEnded()
     {
-        movementPoints=data.baseMovementPoints;
+        movementPoints=UnitData.baseMovementPoints;
         canAttack=true;
     }
 }

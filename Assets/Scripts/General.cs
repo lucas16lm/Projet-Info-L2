@@ -3,14 +3,16 @@ using UnityEngine;
 
 public class General : PlaceableObject, ICamera
 {
+    public GeneralData GeneralData { get { return data as GeneralData; } }
     public int orderRange;
+    
     public override void Initialize(PlaceableData placeableData, Tile position, Player player)
     {
-        GeneralData data = placeableData as GeneralData;
+        data = placeableData;
         
         GameManager.instance.cameraManager.RegisterCamera(this);
 
-        orderRange=data.orderRange;
+        orderRange=GeneralData.orderRange;
         player.general=this;
         healthPoints=data.baseHealthPoints;
         this.position=position;

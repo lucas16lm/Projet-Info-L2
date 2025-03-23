@@ -3,18 +3,20 @@ using UnityEngine;
 
 public class Outpost : PlaceableObject, ICamera, ITurnObserver
 {
+    public OutpostData OutpostData { get { return data as OutpostData; } }
     public int orderRange;
     private int turnToBuild = 0;
+    
     public override void Initialize(PlaceableData placeableData, Tile position, Player player)
-    {
-        OutpostData data = placeableData as OutpostData;
-        
+    {     
+        data = placeableData;
+
         GameManager.instance.cameraManager.RegisterCamera(this);
         GameManager.instance.turnManager.AddObserver(this);
 
-        turnToBuild=data.turnToBuild;
+        turnToBuild=OutpostData.turnToBuild;
         
-        orderRange=data.orderRange;
+        orderRange=OutpostData.orderRange;
         player.outposts.Add(this);
         healthPoints=data.baseHealthPoints;
         this.position=position;

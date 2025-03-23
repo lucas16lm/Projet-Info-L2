@@ -119,6 +119,7 @@ public class HumanPlayer : Player, ITurnObserver
                     GameManager.instance.soundManager.PlaySound("Hover");
                     if (GetPlaceableObjects().Contains(placeableObject)) placeableObject.SetOutline(true, GameManager.instance.AllyLayerId);
                     else placeableObject.SetOutline(true, GameManager.instance.EnnemyLayerId);
+                    placeableObject.GetComponentInChildren<LocalCanvas>().ShowCanvas();
                 }
 
             },
@@ -131,6 +132,7 @@ public class HumanPlayer : Player, ITurnObserver
                 else
                 {
                     go.GetComponent<IOutlinable>().DisableOutlines();
+                    go.GetComponentInChildren<LocalCanvas>().HideCanvas();
                 }
 
             },

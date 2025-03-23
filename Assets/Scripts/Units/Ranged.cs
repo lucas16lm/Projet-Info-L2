@@ -31,7 +31,7 @@ public abstract class Ranged : Unit
         }
 
         GameManager.instance.soundManager.PlaySound("UnitAttack");
-        GetComponent<AudioSource>().PlayOneShot(data.attackSound);
+        GetComponent<AudioSource>().PlayOneShot(UnitData.attackSound);
         canAttack = false;
         
         GetComponent<AnimationManager>().TriggerAnimation("Attack");
@@ -42,7 +42,7 @@ public abstract class Ranged : Unit
     {
         transform.rotation=Quaternion.LookRotation(unit.transform.position-transform.position);
         healthPoints-=damagePoints;
-        GetComponent<AudioSource>().PlayOneShot(data.damageSound);
+        GetComponent<AudioSource>().PlayOneShot(UnitData.damageSound);
         if(healthPoints<=0){
             unit.transform.parent.GetComponent<Player>().ressourceBalance.AddRessources(cost);
             GameManager.instance.uIManager.UpdateRessourcePanel(unit.transform.parent.GetComponent<Player>());
@@ -55,7 +55,7 @@ public abstract class Ranged : Unit
 
     public override void Kill()
     {
-        GetComponent<AudioSource>().PlayOneShot(data.deathSound);
+        GetComponent<AudioSource>().PlayOneShot(UnitData.deathSound);
         GetComponent<AnimationManager>().TriggerAnimation("Death");
         position.content = null;
         transform.parent.GetComponent<Player>().units.Remove(this);

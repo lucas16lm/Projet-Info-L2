@@ -10833,9 +10833,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e421a269848b81c4ab0dfcf8a2879577, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  localCanvaGameObject: {fileID: 5113149249190233106, guid: 251caf7ee7bc79047a8c84570770fb0c, type: 3}
+  data: {fileID: 0}
   healthPoints: 0
   position: {fileID: 0}
-  data: {fileID: 0}
   movementPoints: 0
   canAttack: 0
   cost:

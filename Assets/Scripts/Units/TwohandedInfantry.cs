@@ -4,7 +4,7 @@ public class TwoHandedInfantry : Infantry
 {
     public override int CalculateDamage(PlaceableObject target)
     {
-        int damage = data.baseDamagePoints;
+        int damage = UnitData.baseDamagePoints;
         Biome biome = target.position.biome;
         
         switch(biome){
@@ -30,7 +30,7 @@ public class TwoHandedInfantry : Infantry
                 damage=Mathf.RoundToInt(damage*(target as Infantry).InfantryData.adjacenceBonus);
             }
         }
-        Debug.Log("Base dammage :"+data.baseDamagePoints+", After bonus : "+ damage);
+        Debug.Log("Base dammage :"+UnitData.baseDamagePoints+", After bonus : "+ damage);
         return damage;
     }
 }
