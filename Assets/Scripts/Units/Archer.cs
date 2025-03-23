@@ -4,7 +4,7 @@ public class Archer : Ranged
 {
     public override int CalculateDamage(PlaceableObject target)
     {
-        int damage = data.baseDamagePoints;
+        int damage = UnitData.baseDamagePoints;
 
         if(position.biome==Biome.hill){
             damage=Mathf.RoundToInt(damage*1.5f);
@@ -32,7 +32,7 @@ public class Archer : Ranged
                 damage=Mathf.RoundToInt(damage*(target as Infantry).InfantryData.adjacenceBonus);
             }
         }
-        Debug.Log("Base dammage :"+data.baseDamagePoints+", After bonus : "+ damage);
+        Debug.Log("Base dammage :"+UnitData.baseDamagePoints+", After bonus : "+ damage);
         return damage;
     }
 }

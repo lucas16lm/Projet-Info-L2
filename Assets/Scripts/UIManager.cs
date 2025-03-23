@@ -16,6 +16,7 @@ public class UIManager : MonoBehaviour
     public GameObject messagePanel;
     public GameObject crossHair;
     public ReinforcementPanel reinforcementPanel;
+    public CardTooltip cardTooltip;
 
 
     public void UpdateUI(GameState gameState){

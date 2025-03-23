@@ -4,9 +4,10 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class UnitCard : MonoBehaviour
+public class UnitCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public Image image;
     public PlaceableData data;
@@ -67,6 +68,23 @@ public class UnitCard : MonoBehaviour
         if(observer!=null){
             observer.OnCardSelected(data);
         }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if(data is UnitData){
+            GameManager.instance.uIManager.cardTooltip.ShowCardTooltip(data as UnitData, GetComponent<RectTransform>());
+        }
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        GameManager.instance.uIManager.cardTooltip.HideCardTooltip();
+    }
+
+
+    void OnMouseExit(){
+        GameManager.instance.uIManager.cardTooltip.HideCardTooltip();
     }
 
     public void RegisterObserver(ICardObserver observer)

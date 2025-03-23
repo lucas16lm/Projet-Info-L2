@@ -23,7 +23,7 @@ public abstract class Infantry : Unit
             canAttack=false;
             transform.rotation=Quaternion.LookRotation(target.transform.position-transform.position);
             GetComponent<AnimationManager>().TriggerAnimation("Attack");
-            GetComponent<AudioSource>().PlayOneShot(data.attackSound);
+            GetComponent<AudioSource>().PlayOneShot(UnitData.attackSound);
             target.DammagedBy(this, CalculateDamage(target));
         }
         
@@ -33,7 +33,7 @@ public abstract class Infantry : Unit
     {
         transform.rotation=Quaternion.LookRotation(unit.transform.position-transform.position);
         healthPoints-=damagePoints;
-        GetComponent<AudioSource>().PlayOneShot(data.damageSound);
+        GetComponent<AudioSource>().PlayOneShot(UnitData.damageSound);
         if(healthPoints<=0){
             unit.transform.parent.GetComponent<Player>().ressourceBalance.AddRessources(cost);
             GameManager.instance.uIManager.UpdateRessourcePanel(unit.transform.parent.GetComponent<Player>());
@@ -46,7 +46,7 @@ public abstract class Infantry : Unit
 
     public override void Kill()
     {
-        GetComponent<AudioSource>().PlayOneShot(data.deathSound);
+        GetComponent<AudioSource>().PlayOneShot(UnitData.deathSound);
         GetComponent<AnimationManager>().TriggerAnimation("Death");
         position.content=null;
         transform.parent.GetComponent<Player>().units.Remove(this);

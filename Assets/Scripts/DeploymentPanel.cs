@@ -24,6 +24,7 @@ public class DeploymentPanel : MonoBehaviour, ICardObserver
         selectedUnit=null;
         Clear();
         cardContainer.gameObject.SetActive(false);
+        GameManager.instance.uIManager.cardTooltip.HideCardTooltip();
     }
 
     private void Clear(){

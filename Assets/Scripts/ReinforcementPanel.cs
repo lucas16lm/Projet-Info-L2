@@ -69,6 +69,7 @@ public class ReinforcementPanel : MonoBehaviour, ICardObserver
         Clear();
         closeButtonTransform.gameObject.SetActive(false);
         cardContainer.gameObject.SetActive(false);
+        GameManager.instance.uIManager.cardTooltip.HideCardTooltip();
     }
 
     private void Clear(){

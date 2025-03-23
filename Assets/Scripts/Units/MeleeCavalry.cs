@@ -16,7 +16,7 @@ public class MeleeCavalry : Unit
         
         if(!IsAdjacentTo(target)){
             GameManager.instance.soundManager.PlaySound("UnitAttack");
-            chargeDamage = (int)(data.baseDamagePoints*MeleeCavalryData.chargeBonus*GetPathToElement(target).Count);
+            chargeDamage = (int)(UnitData.baseDamagePoints*MeleeCavalryData.chargeBonus*GetPathToElement(target).Count);
             yield return Move(target);            
         }
 
@@ -24,14 +24,14 @@ public class MeleeCavalry : Unit
             canAttack=false;
             transform.rotation=Quaternion.LookRotation(target.transform.position-transform.position);
             GetComponent<AnimationManager>().TriggerAnimation("Attack");
-            GetComponent<AudioSource>().PlayOneShot(data.attackSound);
+            GetComponent<AudioSource>().PlayOneShot(UnitData.attackSound);
             target.DammagedBy(this, CalculateDamage(target, chargeDamage));
         }
     }
 
     public override int CalculateDamage(PlaceableObject target)
     {
-        int damage = data.baseDamagePoints;
+        int damage = UnitData.baseDamagePoints;
         Biome biome = target.position.biome;
         
         switch(biome){
@@ -63,9 +63,9 @@ public class MeleeCavalry : Unit
     public int CalculateDamage(PlaceableObject target, int chargeDamage)
     {
         int damage = CalculateDamage(target);
-        chargeDamage = damage/data.baseDamagePoints*chargeDamage;
+        chargeDamage = damage/UnitData.baseDamagePoints*chargeDamage;
 
-        Debug.Log("Base dammage :"+data.baseDamagePoints+", After bonus : "+ (damage+chargeDamage));
+        Debug.Log("Base dammage :"+UnitData.baseDamagePoints+", After bonus : "+ (damage+chargeDamage));
         return damage+chargeDamage;
     }
 
@@ -73,7 +73,7 @@ public class MeleeCavalry : Unit
     {
         transform.rotation=Quaternion.LookRotation(unit.transform.position-transform.position);
         healthPoints-=damagePoints;
-        GetComponent<AudioSource>().PlayOneShot(data.damageSound);
+        GetComponent<AudioSource>().PlayOneShot(UnitData.damageSound);
         if(healthPoints<=0){
             unit.transform.parent.GetComponent<Player>().ressourceBalance.AddRessources(cost);
             GameManager.instance.uIManager.UpdateRessourcePanel(unit.transform.parent.GetComponent<Player>());
@@ -87,7 +87,7 @@ public class MeleeCavalry : Unit
 
     public override void Kill()
     {
-        GetComponent<AudioSource>().PlayOneShot(data.deathSound);
+        GetComponent<AudioSource>().PlayOneShot(UnitData.deathSound);
         GetComponent<AnimationManager>().TriggerAnimation("Death");
         position.content=null;
         transform.parent.GetComponent<Player>().units.Remove(this);

@@ -3,20 +3,24 @@ using UnityEngine;
 
 public class General : PlaceableObject, ICamera
 {
+    public GeneralData GeneralData { get { return data as GeneralData; } }
     public int orderRange;
+    
     public override void Initialize(PlaceableData placeableData, Tile position, Player player)
     {
-        GeneralData data = placeableData as GeneralData;
+        data = placeableData;
         
         GameManager.instance.cameraManager.RegisterCamera(this);
 
-        orderRange=data.orderRange;
+        orderRange=GeneralData.orderRange;
         player.general=this;
         healthPoints=data.baseHealthPoints;
         this.position=position;
         position.content=this;
 
         foreach(Renderer renderer in transform.GetChild(0).GetComponentsInChildren<Renderer>()) renderer.material=player.factionData.bannerMaterial;
+        foreach(Renderer renderer in transform.GetChild(3).GetComponentsInChildren<Renderer>()) renderer.material=player.factionData.unitsMaterial;
+
     }
 
     public void SetPriority()
