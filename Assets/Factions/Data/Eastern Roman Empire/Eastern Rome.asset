@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d68825d1d7efeb46a3337dbb5ff23f5, type: 3}
   m_Name: Eastern Rome
   m_EditorClassIdentifier: 
-  factionName: Eastern Rome
+  factionName: Eastern Roman Empire
   description: 
   bannerMaterial: {fileID: 2100000, guid: f1054a5fd2635164daa56e73c083ce16, type: 2}
   unitsMaterial: {fileID: 2100000, guid: 59d2976a0c42ccf419fed4875b7af5ac, type: 2}
   factionColor: {r: 0.778893, g: 0, b: 1, a: 0}
   baseBalance:
-    gold: 10
+    gold: 25
   generalData: {fileID: 11400000, guid: 4e41a187b8286a9438adffeb56bc1e78, type: 2}
   outpostData: {fileID: 11400000, guid: e3f17f2f748a2a94ca4b81346707df9e, type: 2}
   factionUnitsData:
