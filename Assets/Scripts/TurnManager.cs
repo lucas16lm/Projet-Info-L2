@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using PrimeTween;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TurnManager : MonoBehaviour
 {   
@@ -115,7 +117,6 @@ public class TurnManager : MonoBehaviour
                     break;
 
                 case GameState.GameOver:
-                    Debug.Log("TODO : back to main menu");
                     break;
                 
                 default:
@@ -127,6 +128,9 @@ public class TurnManager : MonoBehaviour
             yield return new WaitForSeconds(1);
         }
 
+        yield return new WaitForSeconds(3);
+        Cursor.lockState = CursorLockMode.None;
+        SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
         Debug.Log("Fin du jeu !");
     }
 

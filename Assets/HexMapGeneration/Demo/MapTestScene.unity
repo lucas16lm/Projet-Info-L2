@@ -148,17 +148,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a969d7b78e1c5b48bdcca391e413c16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tilePrefab: {fileID: 8524151667754914690, guid: 99b09d3f1ac42bf449b632560f360521, type: 3}
-  tileRadius: 1
-  width: 21
-  heightRatio: 1.5
-  seed: 0
-  nbBiomes: 80
-  plainPercentage: 60
-  forestPercentage: 22
+  tilePrefab: {fileID: 6204585474532014047, guid: 7b669446d03411a4da76fc798fdb63d1, type: 3}
+  tileRadius: 5
+  width: 15
+  heightRatio: 1
+  seed: 384
+  nbBiomes: 75
+  plainPercentage: 70
+  forestPercentage: 13
   hillPercentage: 7
   mountainPercentage: 5
-  waterPercentage: 6
+  waterPercentage: 5
 --- !u!4 &29020918
 Transform:
   m_ObjectHideFlags: 0
@@ -1798,13 +1798,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1113452258}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.2611784, y: 0, z: 0, w: 0.9652906}
-  m_LocalPosition: {x: 16.5, y: 3.66, z: -0.141}
+  m_LocalRotation: {x: 0.33709523, y: 0, z: 0, w: 0.9414706}
+  m_LocalPosition: {x: 41.7, y: 56.7, z: -34.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 39.4, y: 0, z: 0}
 --- !u!114 &1113452262
 MonoBehaviour:
   m_ObjectHideFlags: 0
