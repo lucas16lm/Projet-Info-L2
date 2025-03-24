@@ -799,13 +799,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tilePrefab: {fileID: 6204585474532014047, guid: 7b669446d03411a4da76fc798fdb63d1, type: 3}
   tileRadius: 5
-  width: 21
+  width: 15
   heightRatio: 1
-  seed: 0
-  nbBiomes: 80
-  plainPercentage: 60
-  forestPercentage: 15
-  hillPercentage: 15
+  seed: 384
+  nbBiomes: 75
+  plainPercentage: 70
+  forestPercentage: 13
+  hillPercentage: 7
   mountainPercentage: 5
   waterPercentage: 5
 --- !u!4 &376526549
@@ -849,7 +849,7 @@ Transform:
   m_GameObject: {fileID: 516475378}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 75, y: 30, z: 184.6517}
+  m_LocalPosition: {x: 50, y: 30, z: 140}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2302,7 +2302,7 @@ Transform:
   m_GameObject: {fileID: 1883255915}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.9063079, z: -0.42261827, w: 0}
-  m_LocalPosition: {x: 75, y: 30, z: 184.6517}
+  m_LocalPosition: {x: 50, y: 30, z: 140}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2653,8 +2653,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   goldGainPerTurn: 1
-  firstPlayerFaction: {fileID: 11400000, guid: 1a4de64f879c0134f9598c9c76384be9, type: 2}
-  secondPlayerFaction: {fileID: 11400000, guid: bf2156f817687134a9b85d1ba1d47e72, type: 2}
   mapGenerator: {fileID: 376526548}
   playerManager: {fileID: 905359390}
   cameraManager: {fileID: 1931077976}
