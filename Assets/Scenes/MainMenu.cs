@@ -26,13 +26,14 @@ public class MainMenu : MonoBehaviour
             firstFactionDropDown.options.Add(new TMP_Dropdown.OptionData(factionData.factionName));
             secondFactionDropDown.options.Add(new TMP_Dropdown.OptionData(factionData.factionName));
         }
+
+        firstPlayerFaction = null;
+        secondPlayerFaction = null;
     }
 
     public void OpenSelectionPanel(){
         mainPanel.SetActive(false);
         selectionPanel.SetActive(true);
-        firstPlayerFaction = null;
-        secondPlayerFaction = null;
     }
 
     public void LaunchGame(){

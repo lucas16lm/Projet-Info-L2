@@ -29,4 +29,4 @@ MonoBehaviour:
   projectile: {fileID: 8750730826385975019, guid: 032ca5aae45b5f94f957dc248164b916, type: 3}
   shootAngle: 40
   projectileSpeed: 25
-  projectilePrecision: 1.5
+  projectilePrecision: 0.5
