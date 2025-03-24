@@ -211,9 +211,51 @@ public class Tile : MonoBehaviour, IOutlinable
     {
         this.biome = biome;
     }
+    public void SetForestTransparent()
+    {
+        foreach (MeshRenderer mesh in GetComponentsInChildren<MeshRenderer>())
+        {
+
+            if (mesh != null)
+            {
+                try
+                {
+                    Material[] mats = mesh.materials;
+                    mats[0].SetFloat("_Active", 1);
+                    mats[1].SetFloat("_Active", 1);
+                }
+                catch
+                {
+                }
+            }
+        }
+
+    }
+    public void SetForestOpaque()
+    {
+        foreach (MeshRenderer mesh in GetComponentsInChildren<MeshRenderer>())
+        {
+
+            if (mesh != null)
+            {
+                try
+                {
+                    Material[] mats = mesh.materials;
+                    mats[0].SetFloat("_Active", 0);
+                    mats[1].SetFloat("_Active", 0);
+                }
+                catch
+                {
+                }
+                
+            }
+        }
+
+    }
 
     public void ApplyBiome()
     {
+        this.name += " " + biome.ToString();
         switch (biome)
         {
             case Biome.plain:

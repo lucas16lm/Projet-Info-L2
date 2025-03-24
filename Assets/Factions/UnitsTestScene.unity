@@ -799,11 +799,11 @@ MonoBehaviour:
   heightRatio: 1
   seed: 0
   nbBiomes: 17
-  plainPercentage: 90
-  forestPercentage: 0
-  hillPercentage: 5
-  mountainPercentage: 5
-  waterPercentage: 0
+  plainPercentage: 16
+  forestPercentage: 50
+  hillPercentage: 16
+  mountainPercentage: 14
+  waterPercentage: 4
 --- !u!4 &376526549
 Transform:
   m_ObjectHideFlags: 0

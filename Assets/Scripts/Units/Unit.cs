@@ -51,7 +51,8 @@ public abstract class Unit : PlaceableObject, ITurnObserver
 
     private IEnumerator Move(List<Tile> path)
     {
-        if(path==null || path.Count==0){
+        position.SetForestOpaque();
+        if (path==null || path.Count==0){
             yield break;
         }
 
@@ -72,7 +73,9 @@ public abstract class Unit : PlaceableObject, ITurnObserver
             gameObject.transform.rotation=Quaternion.LookRotation(path[i].transform.position-position.transform.position);
             GetComponent<AnimationManager>().SetMovementAnimation(true);
             yield return Tween.Position(transform,  path[i].transform.position+(path[i].transform.localScale.y/2)*Vector3.up, timeToMove, Ease.Linear).ToYieldInstruction();
-            position=path[i];
+            position.SetForestOpaque();
+            position =path[i];
+            position.SetForestTransparent();
             GetComponent<AnimationManager>().SetMovementAnimation(false);
         }
         audioSource.loop=false;
@@ -201,6 +204,7 @@ public abstract class Unit : PlaceableObject, ITurnObserver
     {
         movementPoints=UnitData.baseMovementPoints;
         canAttack=true;
+        
     }
 }
 
