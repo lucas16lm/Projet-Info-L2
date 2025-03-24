@@ -48,8 +48,6 @@ public class MainMenu : MonoBehaviour
     public void BackButton(){
         mainPanel.SetActive(true);
         selectionPanel.SetActive(false);
-        firstPlayerFaction = null;
-        secondPlayerFaction = null;
     }
 
     public void OnFirstFactionChanged(){
