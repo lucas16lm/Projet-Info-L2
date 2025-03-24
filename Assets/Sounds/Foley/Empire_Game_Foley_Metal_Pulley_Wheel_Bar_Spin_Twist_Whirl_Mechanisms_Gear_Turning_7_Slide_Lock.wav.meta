@@ -1,0 +1,29 @@
+fileFormatVersion: 2
+guid: 446fc4eebda26964da980abcde283f3d
+AudioImporter:
+  externalObjects: {}
+  serializedVersion: 6
+  defaultSettings:
+    loadType: 0
+    sampleRateSetting: 0
+    sampleRateOverride: 44100
+    compressionFormat: 1
+    quality: 1
+    conversionMode: 0
+  platformSettingOverrides: {}
+  forceToMono: 0
+  normalize: 1
+  preloadAudioData: 1
+  loadInBackground: 0
+  ambisonic: 0
+  3D: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 188470
+  packageName: Empire Game
+  packageVersion: 1.0
+  assetPath: Assets/Empire Game/Foley/Empire_Game_Foley_Metal_Pulley_Wheel_Bar_Spin_Twist_Whirl_Mechanisms_Gear_Turning_7_Slide_Lock.wav
+  uploadId: 415347

@@ -68,20 +68,49 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5eff1c8ed1641c38476a8e6907dca3e, type: 3}
   m_Name: Soft Outline Sttings
   m_EditorClassIdentifier: 
-  injectionPoint: 600
+  injectionPoint: 450
   showInSceneView: 1
   outlines:
   - {fileID: -3331759595652098094}
   - {fileID: -6430084236354724548}
+  - {fileID: 2184822673501439782}
   type: 0
   hardness: 1
   sharedColor: {r: 0, g: 1, b: 0, a: 1}
-  intensity: 4.7
+  intensity: 4.5
   blendMode: 0
-  dilationMethod: 3
-  kernelSize: 20
+  dilationMethod: 0
+  kernelSize: 12
   blurSpread: 1.35
   blurPasses: 1
   scaleWithResolution: 1
   referenceResolution: 2
   customResolution: 0
+--- !u!114 &2184822673501439782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61913a156ea0417aa894f46ab63dad06, type: 3}
+  m_Name: Outline
+  m_EditorClassIdentifier: 
+  material: {fileID: 0}
+  materialInstanced: {fileID: 0}
+  isActive: 1
+  disableColor: 0
+  RenderingLayer:
+    serializedVersion: 0
+    m_Bits: 16384
+  occlusion: 2
+  cullingMode: 0
+  closedLoop: 1
+  alphaCutout: 0
+  alphaCutoutTexture: {fileID: 0}
+  alphaCutoutThreshold: 0.5
+  gpuInstancing: 0
+  vertexAnimation: 0
+  color: {r: 1, g: 0.06809366, b: 0, a: 1}

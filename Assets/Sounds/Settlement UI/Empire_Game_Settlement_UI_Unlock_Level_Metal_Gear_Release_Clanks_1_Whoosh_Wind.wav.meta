@@ -1,0 +1,29 @@
+fileFormatVersion: 2
+guid: ce1f29d6615ef0e4d8632c85a9d064cd
+AudioImporter:
+  externalObjects: {}
+  serializedVersion: 6
+  defaultSettings:
+    loadType: 0
+    sampleRateSetting: 0
+    sampleRateOverride: 44100
+    compressionFormat: 1
+    quality: 1
+    conversionMode: 0
+  platformSettingOverrides: {}
+  forceToMono: 0
+  normalize: 1
+  preloadAudioData: 1
+  loadInBackground: 0
+  ambisonic: 0
+  3D: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 188470
+  packageName: Empire Game
+  packageVersion: 1.0
+  assetPath: Assets/Empire Game/Settlement UI/Empire_Game_Settlement_UI_Unlock_Level_Metal_Gear_Release_Clanks_1_Whoosh_Wind.wav
+  uploadId: 415347

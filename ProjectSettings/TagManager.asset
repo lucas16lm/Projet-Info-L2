@@ -12,7 +12,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - Post processing
   - 
   - 
   - 
@@ -57,3 +57,4 @@ TagManager:
   - HostileOutline
   - TileSelect
   - MoveRange
+  - RangedRange

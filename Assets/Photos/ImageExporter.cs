@@ -14,7 +14,7 @@ public class ImageExporter : MonoBehaviour
         byte[] bytes = ToTexture2D(renderTexture).EncodeToPNG();
 
         // Définir le chemin de sauvegarde
-        var dirPath = Application.persistentDataPath + "/ExportPhoto";
+        var dirPath = Application.dataPath + "/Photos";
 
         // Vérifier si le dossier existe, sinon le créer
         if (!Directory.Exists(dirPath))
