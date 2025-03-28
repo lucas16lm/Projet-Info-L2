@@ -6,4 +6,5 @@ public abstract class PlaceableData : ScriptableObject
     public string elementName;
     public int baseHealthPoints;
     public RessourceBalance cost;
+    public AudioClip deathSound;
 }

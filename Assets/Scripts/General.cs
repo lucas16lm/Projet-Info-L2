@@ -1,3 +1,4 @@
+using PrimeTween;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -57,14 +58,18 @@ public class General : PlaceableObject, ICamera
 
     public override void Kill()
     {
+        transform.GetChild(0).gameObject.SetActive(false);
+        transform.GetChild(3).gameObject.SetActive(false);
+        GetComponent<Animator>().SetTrigger("Destroy");
+        GetComponent<AudioSource>().PlayOneShot(data.deathSound);
         transform.parent.GetComponent<Player>().general=null;
         position.content=null;
-        Destroy(gameObject);
         if(transform.parent.GetComponent<Player>().playerRole==PlayerRole.FirstPlayer){
             GameManager.instance.turnManager.PlayerWon(GameManager.instance.playerManager.secondPlayer);
         }
         else{
             GameManager.instance.turnManager.PlayerWon(GameManager.instance.playerManager.firstPlayer);
         }
+        Tween.Delay(4, ()=>Destroy(gameObject));
     }
 }

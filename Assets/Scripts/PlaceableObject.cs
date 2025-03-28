@@ -24,6 +24,9 @@ public abstract class PlaceableObject : MonoBehaviour, IOutlinable
         GameObject placeableGameObject = Instantiate(placeableData.gameObjectPrefab, tile.gameObject.transform.position+(tile.transform.localScale.y/2)*Vector3.up, Quaternion.LookRotation(new Vector3(Camera.main.transform.forward.x, 0, Camera.main.transform.forward.z)), player.transform);
         placeableGameObject.GetComponent<PlaceableObject>().Initialize(placeableData, tile, player);
         LocalCanvas.CreateLocalCanvas(placeableGameObject.GetComponent<PlaceableObject>().localCanvaGameObject, placeableGameObject.transform);
+
+        AudioSource audioSource = placeableGameObject.GetComponent<AudioSource>();
+        audioSource.spatialBlend = 0.9f;
     }
 
     public int GetCurrentHealth()

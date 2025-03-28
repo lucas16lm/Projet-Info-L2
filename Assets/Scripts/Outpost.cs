@@ -1,3 +1,4 @@
+using PrimeTween;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -24,6 +25,7 @@ public class Outpost : PlaceableObject, ICamera, ITurnObserver
 
         foreach(Renderer renderer in transform.GetChild(0).GetComponentsInChildren<Renderer>()) renderer.material=player.factionData.bannerMaterial;
         foreach(Renderer renderer in transform.GetChild(1).GetChild(0).GetComponentsInChildren<Renderer>()) renderer.material=player.factionData.unitsMaterial;
+        foreach(Renderer renderer in transform.GetChild(4).GetComponentsInChildren<Renderer>()) renderer.material=player.factionData.unitsMaterial;
     }
 
     public bool IsConstructed(){
@@ -60,6 +62,7 @@ public class Outpost : PlaceableObject, ICamera, ITurnObserver
         AddBuildingProgress();
         if(turnToBuild<=0){
             Debug.Log(name+"finished");
+            transform.GetChild(4).gameObject.SetActive(false);
             StartCoroutine(GameManager.instance.turnManager.RemoveObserver(this));
         }
     }
@@ -101,10 +104,14 @@ public class Outpost : PlaceableObject, ICamera, ITurnObserver
 
     public override void Kill()
     {
+        transform.GetChild(0).gameObject.SetActive(false);
+        transform.GetChild(1).GetChild(0).gameObject.SetActive(false);
+        GetComponent<Animator>().SetTrigger("Destroy");
+        GetComponent<AudioSource>().PlayOneShot(data.deathSound);
         transform.parent.GetComponent<Player>().outposts.Remove(this);
         StartCoroutine(GameManager.instance.turnManager.RemoveObserver(this));
         GameManager.instance.cameraManager.UnregisterCamera(this);
         position.content=null;
-        Destroy(gameObject);
+        Tween.Delay(4, ()=>Destroy(gameObject));
     }
 }

@@ -17,4 +17,5 @@ MonoBehaviour:
   baseHealthPoints: 100
   cost:
     gold: 0
+  deathSound: {fileID: 8300000, guid: ad1a91e34deddd249ab6846ec93b88fc, type: 3}
   orderRange: 6
