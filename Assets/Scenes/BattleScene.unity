@@ -1022,6 +1022,8 @@ MonoBehaviour:
   unitAttackSound: {fileID: 8300000, guid: ed48b9254e241e546aec33771019e5ae, type: 3}
   unitPlacementSound: {fileID: 8300000, guid: d28901e6433cce94c9ee59f3197373be, type: 3}
   GoldSound: {fileID: 8300000, guid: b19fdc1ee0306bb429a06351fa224c1a, type: 3}
+  buttonHover: {fileID: 8300000, guid: fd1633bd1783bcb48b82fc7d62785260, type: 3}
+  buttonClick: {fileID: 8300000, guid: 86359fbd222369547866cb189985d53a, type: 3}
 --- !u!4 &650385374
 Transform:
   m_ObjectHideFlags: 0

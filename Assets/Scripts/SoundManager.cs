@@ -13,6 +13,8 @@ public class SoundManager : MonoBehaviour
     public AudioClip unitAttackSound;
     public AudioClip unitPlacementSound;
     public AudioClip GoldSound;
+    public AudioClip buttonHover;
+    public AudioClip buttonClick;
 
     public void PlaySound(string sound)
     {
@@ -38,6 +40,12 @@ public class SoundManager : MonoBehaviour
                 break;
             case "Gold":
                 globalAudioSource.PlayOneShot(GoldSound);
+                break;
+            case "ButtonHover":
+                globalAudioSource.PlayOneShot(buttonHover);
+                break;
+            case "ButtonClick":
+                globalAudioSource.PlayOneShot(buttonClick);
                 break;
         }
     }

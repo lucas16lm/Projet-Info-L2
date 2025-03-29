@@ -86,7 +86,8 @@ MonoBehaviour:
   - {fileID: 8814507312610053669, guid: 5b4eda51aa2b1a44cb3d71023507c1c0, type: 3}
   - {fileID: 6297673454912247625, guid: 405d55333198916428a3d1a0c7c97d8b, type: 3}
   waterMaterial: {fileID: 2100000, guid: 406ed623b6f1e244696a7aec47156818, type: 2}
-  plainMaterial: {fileID: 2100000, guid: 8138a2d8f8182cb4eaeca2b859bf0af6, type: 2}
+  plainMaterial: {fileID: 2100000, guid: 5265da32697a04743820fa5cb127ceea, type: 2}
+  hillMaterial: {fileID: 2100000, guid: c376e5bd4ec82dd43a0f50ccd2cb737f, type: 2}
   cubicCoordinates: {x: 0, y: 0, z: 0}
   biome: 0
   content: {fileID: 0}

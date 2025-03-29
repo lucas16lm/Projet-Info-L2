@@ -66,12 +66,14 @@ public class UnitCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     public void OnClick(){
         if(observer!=null){
+            GameManager.instance.soundManager.PlaySound("ButtonClick");
             observer.OnCardSelected(data);
         }
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        GameManager.instance.soundManager.PlaySound("ButtonHover");
         if(data is UnitData){
             GameManager.instance.uIManager.cardTooltip.ShowCardTooltip(data as UnitData, GetComponent<RectTransform>());
         }
