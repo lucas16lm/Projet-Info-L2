@@ -10,5 +10,4 @@ public abstract class UnitData : PlaceableData
     public AudioClip movementSound;
     public AudioClip attackSound;
     public AudioClip damageSound;
-    public AudioClip deathSound;
 }

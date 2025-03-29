@@ -36,12 +36,6 @@ public abstract class Unit : PlaceableObject, ITurnObserver
         {
             foreach(Renderer renderer in transform.GetChild(i).GetComponentsInChildren<Renderer>()) renderer.material=player.factionData.unitsMaterial;
         }
-        InitializeAudioSource();
-    }
-
-    public void InitializeAudioSource(){
-        AudioSource audioSource = GetComponent<AudioSource>();
-        audioSource.spatialBlend=0.9f;
     }
 
     public IEnumerator Move(Tile destination)

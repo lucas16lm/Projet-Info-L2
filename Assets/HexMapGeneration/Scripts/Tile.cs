@@ -126,6 +126,9 @@ public class Tile : MonoBehaviour, IOutlinable
     public GameObject forestPrefab;
     public List<GameObject> mountainTops;
     public Material waterMaterial;
+    public Material plainMaterial;
+    public Material hillMaterial;
+
     public Vector3Int cubicCoordinates;
     public Biome biome;
     public PlaceableObject content;
@@ -217,16 +220,15 @@ public class Tile : MonoBehaviour, IOutlinable
         switch (biome)
         {
             case Biome.plain:
-                transform.GetComponent<Renderer>().material.color = new Color(0, 0.7f, 0);
+                transform.GetComponent<Renderer>().material = plainMaterial;
                 break;
             case Biome.forest:
-                transform.GetComponent<Renderer>().material.color = new Color(0, 0.5f, 0);
+                transform.GetComponent<Renderer>().material = plainMaterial;
                 Instantiate(forestPrefab, transform.GetChild(0).position, Quaternion.identity, transform.GetChild(0));
                 break;
             case Biome.hill:
-                transform.GetComponent<Renderer>().materials[0].color = new Color(0.6f, 0.6f, 0);
-                transform.GetComponent<Renderer>().materials[1].color = new Color(0.6f, 0.6f, 0);
-                transform.localScale += 4 * Vector3.up;
+                transform.GetComponent<Renderer>().material = hillMaterial;
+                transform.localScale += 2 * Vector3.up;
                 break;
             case Biome.mountain:
                 transform.GetComponent<Renderer>().materials[0].color = new Color(0.25f, 0.25f, 0.25f);
