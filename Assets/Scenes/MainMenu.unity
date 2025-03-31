@@ -2766,6 +2766,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1a4de64f879c0134f9598c9c76384be9, type: 2}
   - {fileID: 11400000, guid: bf2156f817687134a9b85d1ba1d47e72, type: 2}
   - {fileID: 11400000, guid: a6e1c3844e40e5e4eb1a8d05032b80b8, type: 2}
+  - {fileID: 11400000, guid: dbdf5c720ff14354aaa0d4582567e463, type: 2}
   mainPanel: {fileID: 402606251}
   selectionPanel: {fileID: 1982726405}
   firstFactionUnitParent: {fileID: 1560356010}
