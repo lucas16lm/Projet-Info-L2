@@ -125,6 +125,7 @@ public class Tile : MonoBehaviour, IOutlinable
     #region tile related attributes and methods
     public GameObject forestPrefab;
     public List<GameObject> mountainTops;
+    public GameObject plainTop;
     public Material waterMaterial;
     public Material plainMaterial;
     public Material hillMaterial;
@@ -221,6 +222,7 @@ public class Tile : MonoBehaviour, IOutlinable
         {
             case Biome.plain:
                 transform.GetComponent<Renderer>().material = plainMaterial;
+                Instantiate(plainTop, transform.GetChild(0).position, Quaternion.Euler(0, UnityEngine.Random.Range(0,360), 0), transform.GetChild(0));
                 break;
             case Biome.forest:
                 transform.GetComponent<Renderer>().material = plainMaterial;
