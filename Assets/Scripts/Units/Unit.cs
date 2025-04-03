@@ -29,7 +29,7 @@ public abstract class Unit : PlaceableObject, ITurnObserver
         cost=data.cost;
         gameObject.name=data.elementName;
         this.position=position;
-        position.content=this;
+        position.Content=this;
 
         foreach(Renderer renderer in transform.GetChild(0).GetComponentsInChildren<Renderer>()) renderer.material=player.factionData.bannerMaterial;
         for (int i = 1; i < transform.childCount; i++)
@@ -53,8 +53,8 @@ public abstract class Unit : PlaceableObject, ITurnObserver
         if(moveCost>movementPoints){
             yield break;
         }
-        position.content=null;
-        path[path.Count-1].content=this;
+        position.Content=null;
+        path[path.Count-1].Content=this;
         movementPoints-=moveCost;
 
         AudioSource audioSource = GetComponent<AudioSource>();

@@ -60,5 +60,5 @@ AssetOrigin:
   productId: 135258
   packageName: Toony Tiny RTS Set
   packageVersion: 1.4
-  assetPath: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/models/materials/color/Buildings/textures/TT_RTS_Buildings_green.tga
+  assetPath: Assets/Models/UnitModels/TT_RTS/TT_RTS_Standard/models/materials/color/Buildings/textures/TT_RTS_Buildings_green.tga
   uploadId: 578651

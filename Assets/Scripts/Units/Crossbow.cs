@@ -26,7 +26,7 @@ public class Crossbow : Ranged
         }
 
         if(target is Infantry){
-            if(target.position.GetNeighbors().FindAll(neighbor=>neighbor.content is Infantry && target.transform.parent.GetComponent<Player>().units.Contains(neighbor.content as Infantry)).Count>=2){
+            if(target.position.GetNeighbors().FindAll(neighbor=>neighbor.Content is Infantry && target.transform.parent.GetComponent<Player>().units.Contains(neighbor.Content as Infantry)).Count>=2){
                 damage=Mathf.RoundToInt(damage*(target as Infantry).InfantryData.adjacenceBonus);
             }
         }
