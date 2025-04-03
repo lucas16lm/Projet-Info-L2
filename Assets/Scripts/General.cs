@@ -17,7 +17,7 @@ public class General : PlaceableObject, ICamera
         player.general=this;
         healthPoints=data.baseHealthPoints;
         this.position=position;
-        position.content=this;
+        position.Content=this;
 
         foreach(Renderer renderer in transform.GetChild(0).GetComponentsInChildren<Renderer>()) renderer.material=player.factionData.bannerMaterial;
         foreach(Renderer renderer in transform.GetChild(3).GetComponentsInChildren<Renderer>()) renderer.material=player.factionData.unitsMaterial;
@@ -63,7 +63,7 @@ public class General : PlaceableObject, ICamera
         GetComponent<Animator>().SetTrigger("Destroy");
         GetComponent<AudioSource>().PlayOneShot(data.deathSound);
         transform.parent.GetComponent<Player>().general=null;
-        position.content=null;
+        position.Content=null;
         if(transform.parent.GetComponent<Player>().playerRole==PlayerRole.FirstPlayer){
             GameManager.instance.turnManager.PlayerWon(GameManager.instance.playerManager.secondPlayer);
         }

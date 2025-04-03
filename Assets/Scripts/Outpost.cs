@@ -21,7 +21,7 @@ public class Outpost : PlaceableObject, ICamera, ITurnObserver
         player.outposts.Add(this);
         healthPoints=data.baseHealthPoints;
         this.position=position;
-        position.content=this;
+        position.Content=this;
 
         foreach(Renderer renderer in transform.GetChild(0).GetComponentsInChildren<Renderer>()) renderer.material=player.factionData.bannerMaterial;
         foreach(Renderer renderer in transform.GetChild(1).GetChild(0).GetComponentsInChildren<Renderer>()) renderer.material=player.factionData.unitsMaterial;
@@ -111,7 +111,7 @@ public class Outpost : PlaceableObject, ICamera, ITurnObserver
         transform.parent.GetComponent<Player>().outposts.Remove(this);
         StartCoroutine(GameManager.instance.turnManager.RemoveObserver(this));
         GameManager.instance.cameraManager.UnregisterCamera(this);
-        position.content=null;
+        position.Content=null;
         Tween.Delay(4, ()=>Destroy(gameObject));
     }
 }

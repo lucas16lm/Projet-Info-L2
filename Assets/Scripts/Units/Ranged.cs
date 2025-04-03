@@ -57,7 +57,7 @@ public abstract class Ranged : Unit
     {
         GetComponent<AudioSource>().PlayOneShot(UnitData.deathSound);
         GetComponent<AnimationManager>().TriggerAnimation("Death");
-        position.content = null;
+        position.Content = null;
         transform.parent.GetComponent<Player>().units.Remove(this);
         Tween.Delay(4, () => Destroy(gameObject));
     }

@@ -53,7 +53,7 @@ public class MeleeCavalry : Unit
         }
 
         if(target is Infantry){
-            if(target.position.GetNeighbors().FindAll(neighbor=>neighbor.content is Infantry && target.transform.parent.GetComponent<Player>().units.Contains(neighbor.content as Infantry)).Count>=2){
+            if(target.position.GetNeighbors().FindAll(neighbor=>neighbor.Content is Infantry && target.transform.parent.GetComponent<Player>().units.Contains(neighbor.Content as Infantry)).Count>=2){
                 damage=Mathf.RoundToInt(damage*(target as Infantry).InfantryData.adjacenceBonus);
             }
         }
@@ -89,7 +89,7 @@ public class MeleeCavalry : Unit
     {
         GetComponent<AudioSource>().PlayOneShot(UnitData.deathSound);
         GetComponent<AnimationManager>().TriggerAnimation("Death");
-        position.content=null;
+        position.Content=null;
         transform.parent.GetComponent<Player>().units.Remove(this);
         Tween.Delay(4, ()=>Destroy(gameObject));
     }

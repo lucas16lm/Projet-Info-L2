@@ -97,15 +97,16 @@ public class Tile : MonoBehaviour, IOutlinable
 
     public static List<Tile> GetLineBetween(Tile start, Tile end)
     {
-        List<Tile> line = new List<Tile>(){};
+        List<Tile> line = new List<Tile>() { };
         int distance = DistanceBetween(start, end);
         for (int i = 0; i <= distance; i++)
         {
-            Tile tile = GetTile(TileLerp(start, end, (float)i/distance));
-            if(tile!=null){
+            Tile tile = GetTile(TileLerp(start, end, (float)i / distance));
+            if (tile != null)
+            {
                 line.Add(tile);
             }
-            
+
         }
         return line;
     }
@@ -115,10 +116,10 @@ public class Tile : MonoBehaviour, IOutlinable
         float x = Mathf.Lerp(start.cubicCoordinates.x, end.cubicCoordinates.x, t);
         float y = Mathf.Lerp(start.cubicCoordinates.y, end.cubicCoordinates.y, t);
         float z = Mathf.Lerp(start.cubicCoordinates.z, end.cubicCoordinates.z, t);
-        return new Vector3Int(Mathf.RoundToInt(x),Mathf.RoundToInt(y),Mathf.RoundToInt(z));
+        return new Vector3Int(Mathf.RoundToInt(x), Mathf.RoundToInt(y), Mathf.RoundToInt(z));
     }
 
-    
+
 
     #endregion
 
@@ -132,7 +133,21 @@ public class Tile : MonoBehaviour, IOutlinable
 
     public Vector3Int cubicCoordinates;
     public Biome biome;
-    public PlaceableObject content;
+    private PlaceableObject _content;
+    public PlaceableObject Content{
+        get { return _content; }
+        set{
+            if (_content != value)
+        {
+            _content = value;
+            if(value != null){
+                SetForestTransparent(true);
+            }else{
+                SetForestTransparent(false);
+            }
+        }
+        }
+    }
     public int moveCost
     {
         get
@@ -208,7 +223,7 @@ public class Tile : MonoBehaviour, IOutlinable
     public bool IsAccessible()
     {
         if (biome == Biome.mountain || biome == Biome.water) return false;
-        return content == null;
+        return _content == null;
     }
 
     public void AssignBiome(Biome biome)
@@ -222,7 +237,7 @@ public class Tile : MonoBehaviour, IOutlinable
         {
             case Biome.plain:
                 transform.GetComponent<Renderer>().material = plainMaterial;
-                Instantiate(plainTop, transform.GetChild(0).position, Quaternion.Euler(0, UnityEngine.Random.Range(0,360), 0), transform.GetChild(0));
+                Instantiate(plainTop, transform.GetChild(0).position, Quaternion.Euler(0, UnityEngine.Random.Range(0, 360), 0), transform.GetChild(0));
                 break;
             case Biome.forest:
                 transform.GetComponent<Renderer>().material = plainMaterial;
@@ -235,12 +250,25 @@ public class Tile : MonoBehaviour, IOutlinable
             case Biome.mountain:
                 transform.GetComponent<Renderer>().materials[0].color = new Color(0.25f, 0.25f, 0.25f);
                 transform.GetComponent<Renderer>().materials[1].color = new Color(0.25f, 0.25f, 0.25f);
-                Instantiate(mountainTops[new System.Random().Next(0,mountainTops.Count-1)], transform.GetChild(0).position, Quaternion.identity, transform.GetChild(0));
+                Instantiate(mountainTops[new System.Random().Next(0, mountainTops.Count - 1)], transform.GetChild(0).position, Quaternion.identity, transform.GetChild(0));
                 break;
             case Biome.water:
-                transform.GetComponent<Renderer>().material=waterMaterial;
+                transform.GetComponent<Renderer>().material = waterMaterial;
                 transform.localScale += 2 * Vector3.down;
                 break;
+        }
+
+
+
+    }
+
+    public void SetForestTransparent(bool state)
+    {
+        foreach (MeshRenderer renderer in GetComponentsInChildren<MeshRenderer>())
+        {
+            foreach(Material material in renderer.materials){
+                material.SetFloat("_Active", state ? 1 : 0);
+            }
         }
 
     }

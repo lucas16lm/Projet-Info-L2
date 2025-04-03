@@ -94,5 +94,5 @@ AssetOrigin:
   productId: 135258
   packageName: Toony Tiny RTS Set
   packageVersion: 1.4
-  assetPath: Assets/ToonyTinyPeople/TT_RTS/TT_RTS_Standard/models/materials/TT_RTS_Units_texture.tga
+  assetPath: Assets/Models/UnitModels/TT_RTS/TT_RTS_Standard/models/materials/TT_RTS_Units_texture.tga
   uploadId: 578651

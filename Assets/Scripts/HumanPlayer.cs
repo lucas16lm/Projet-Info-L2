@@ -83,7 +83,7 @@ public class HumanPlayer : Player, ITurnObserver
                     GameManager.instance.soundManager.PlaySound("Gold");
                     ressourceBalance.AddRessources(unit.cost);
                     GameManager.instance.uIManager.UpdateRessourcePanel(this);
-                    unit.position.content = null;
+                    unit.position.Content = null;
                     units.Remove(unit);
                     Destroy(go);
                 }
