@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 455bfde12810c7440a228656aca0bd54, type: 3}
+  m_Name: TemplarKnight
+  m_EditorClassIdentifier: 
+  gameObjectPrefab: {fileID: 1182913934825737468, guid: 48736cae2d39a6f498ff0bfa9e907f57, type: 3}
+  elementName: Templar knight
+  baseHealthPoints: 50
+  cost:
+    gold: 2
+  deathSound: {fileID: 8300000, guid: 820c8f8e9e54ad0428828e421dcf14ee, type: 3}
+  image: {fileID: 21300000, guid: 91235e4d6d869cd4fa52494af7057f0e, type: 3}
+  baseDamagePoints: 30
+  baseMovementPoints: 3
+  timeToMove: 2
+  movementSound: {fileID: 8300000, guid: bf7c188bc4efc7b4f8dff563d97036fe, type: 3}
+  attackSound: {fileID: 8300000, guid: b493630aea8da3c4d8957dc64b117a83, type: 3}
+  damageSound: {fileID: 8300000, guid: f26b9f4eeec306e41baafd812569c323, type: 3}
+  adjacenceBonus: 0.5
