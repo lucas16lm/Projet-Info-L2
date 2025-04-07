@@ -42,11 +42,9 @@ public abstract class Ranged : Unit
     {
         transform.rotation=Quaternion.LookRotation(unit.transform.position-transform.position);
         healthPoints-=damagePoints;
+        GetComponentInChildren<LocalCanvas>().UpdateCanvas();
         GetComponent<AudioSource>().PlayOneShot(UnitData.damageSound);
         if(healthPoints<=0){
-            unit.transform.parent.GetComponent<Player>().ressourceBalance.AddRessources(cost);
-            GameManager.instance.uIManager.UpdateRessourcePanel(unit.transform.parent.GetComponent<Player>());
-            GameManager.instance.soundManager.PlaySound("Gold");
             Kill();
         }else{
             GetComponent<AnimationManager>().TriggerAnimation("Damage");

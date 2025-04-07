@@ -3,6 +3,7 @@ using UnityEngine;
 
 public abstract class UnitData : PlaceableData
 {
+    public RessourceBalance cost;
     public Sprite image;
     public int baseDamagePoints;
     public int baseMovementPoints;

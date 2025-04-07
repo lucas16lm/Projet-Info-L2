@@ -10,7 +10,7 @@ public abstract class Player : MonoBehaviour
     public PlayerRole playerRole;
 
     public General general;
-    public List<Outpost> outposts;
+    public List<Building> buildings;
     public List<Unit> units;
 
     public abstract IEnumerator Deployment(Action onComplete);
@@ -19,12 +19,12 @@ public abstract class Player : MonoBehaviour
 
     protected List<Tile> GetDeploymentZone(){
         int maxY = (int)(GameManager.instance.mapGenerator.width*GameManager.instance.mapGenerator.heightRatio);
-        return playerRole==PlayerRole.FirstPlayer ? Tile.GetTilesBetween(0, 3) : Tile.GetTilesBetween(maxY-4, maxY);
+        return playerRole==PlayerRole.FirstPlayer ? Tile.GetTilesBetween(1, 4) : Tile.GetTilesBetween(maxY-6, maxY);
     }
 
     public List<PlaceableObject> GetPlaceableObjects(){
         List<PlaceableObject> list = new List<PlaceableObject>(){general};
-        list.AddRange(outposts);
+        list.AddRange(buildings);
         list.AddRange(units);
         return list;
     }

@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4aaa9b5d9634154782d5d6c867a5e86, type: 3}
   m_Name: Longbowmen
   m_EditorClassIdentifier: 
-  gameObjectPrefab: {fileID: 1182913934825737468, guid: 4584fac5f6fb92f48a6c5e4b19c9a536, type: 3}
+  gameObjectPrefab: {fileID: 1182913934825737468, guid: ff97ddda5df7b0d4baaa845506967405, type: 3}
   elementName: Longbowmen
   baseHealthPoints: 30
+  deathSound: {fileID: 8300000, guid: 820c8f8e9e54ad0428828e421dcf14ee, type: 3}
   cost:
     gold: 2
-  deathSound: {fileID: 8300000, guid: 820c8f8e9e54ad0428828e421dcf14ee, type: 3}
   image: {fileID: 21300000, guid: f2d6aac4128bf424993a57ec4c8eecd5, type: 3}
   baseDamagePoints: 30
   baseMovementPoints: 6

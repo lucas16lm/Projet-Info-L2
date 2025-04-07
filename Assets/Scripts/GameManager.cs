@@ -4,7 +4,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [Header("Settings")]
-    public int goldGainPerTurn=1;
+    public int buildingConstructionLimit=1;
     [Header("Player factions")]
     public static GameManager instance;
     [Header("System references")]

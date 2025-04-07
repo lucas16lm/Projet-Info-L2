@@ -23,14 +23,12 @@ public class UIManager : MonoBehaviour
         switch(gameState){
             case GameState.Initialization:
                 
-                ressourcePanel.SetActive(false);
                 crossHair.SetActive(false);
                 
                 break;
 
             case GameState.FirstPlayerDeployment:
 
-                ressourcePanel.SetActive(true);
                 crossHair.SetActive(false);
 
                 UpdateRessourcePanel(GameManager.instance.playerManager.firstPlayer);
@@ -39,7 +37,6 @@ public class UIManager : MonoBehaviour
 
             case GameState.SecondPlayerDeployment:
                 
-                ressourcePanel.SetActive(true);
                 crossHair.SetActive(false);
 
                 UpdateRessourcePanel(GameManager.instance.playerManager.secondPlayer);
@@ -48,7 +45,6 @@ public class UIManager : MonoBehaviour
 
             case GameState.FirstPlayerTurn:
                 
-                ressourcePanel.SetActive(true);
                 crossHair.SetActive(true);
             
                 UpdateRessourcePanel(GameManager.instance.playerManager.firstPlayer);
@@ -57,7 +53,6 @@ public class UIManager : MonoBehaviour
 
             case GameState.SecondPlayerTurn:
                 
-                ressourcePanel.SetActive(true);
                 crossHair.SetActive(true);
 
                 UpdateRessourcePanel(GameManager.instance.playerManager.secondPlayer);
@@ -66,7 +61,6 @@ public class UIManager : MonoBehaviour
 
             case GameState.GameOver:
                 
-                ressourcePanel.SetActive(false);
                 crossHair.SetActive(false);
                 
                 break;
@@ -83,6 +77,6 @@ public class UIManager : MonoBehaviour
     public void PrintMessage(string message){
         messagePanel.SetActive(true);
         messagePanel.GetComponentInChildren<TMP_Text>().text=message;
-        Tween.Delay(3, ()=>{messagePanel.SetActive(false);});
+        Tween.Delay(1.5f, ()=>{messagePanel.SetActive(false);});
     }     
 }

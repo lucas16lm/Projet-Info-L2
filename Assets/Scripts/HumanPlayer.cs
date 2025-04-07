@@ -1,18 +1,18 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
-public class HumanPlayer : Player, ITurnObserver
+public class HumanPlayer : Player
 {
     public ICamera currentCam;
 
     #region Deployment
     public override IEnumerator Deployment(Action onComplete)
     {
-        GameManager.instance.turnManager.AddObserver(this);
         List<Tile> deploymentZone = GetDeploymentZone();
         deploymentZone.ForEach(tile => tile.SetOutline(true, GameManager.instance.TileZoneLayerID));
 
@@ -81,7 +81,7 @@ public class HumanPlayer : Player, ITurnObserver
                 if (unit != null)
                 {
                     GameManager.instance.soundManager.PlaySound("Gold");
-                    ressourceBalance.AddRessources(unit.cost);
+                    ressourceBalance.AddRessources(unit.UnitData.cost);
                     GameManager.instance.uIManager.UpdateRessourcePanel(this);
                     unit.position.Content = null;
                     units.Remove(unit);
@@ -248,21 +248,13 @@ public class HumanPlayer : Player, ITurnObserver
         }
         else if (IsTileRecruitable(firstSelection))
         {
-            if (currentCam is General)
-            {
-                PlaceableData elementToPlace = null;
-                yield return GameManager.instance.uIManager.reinforcementPanel.OpenFor(this, data => elementToPlace = data);
-                if (elementToPlace != null){
-                    PlaceableObject.Instantiate(elementToPlace, firstSelection.GetComponent<Tile>(), this);
-                } 
-            }
-            else
+            int buildingUnfinishedCount = buildings.Where(building => !building.IsConstructed()).Count();
+            if (buildingUnfinishedCount < GameManager.instance.buildingConstructionLimit)
             {
                 PlaceableData elementToPlace = null;
                 yield return GameManager.instance.uIManager.reinforcementPanel.OpenForBuildings(this, data => elementToPlace = data);
                 if (elementToPlace != null) PlaceableObject.Instantiate(elementToPlace, firstSelection.GetComponent<Tile>(), this);
             }
-
         }
         else if (IsOwnUnit(firstSelection))
         {
@@ -347,7 +339,7 @@ public class HumanPlayer : Player, ITurnObserver
     {
         Outpost officer = go?.GetComponent<Outpost>();
         if (officer == null) return false;
-        return outposts.Contains(officer);
+        return buildings.Contains(officer);
     }
 
     bool IsTile(GameObject go)
@@ -361,10 +353,5 @@ public class HumanPlayer : Player, ITurnObserver
         PlaceableObject placeableObject = go?.GetComponent<PlaceableObject>();
         if (placeableObject == null) return false;
         return !GetPlaceableObjects().Contains(placeableObject);
-    }
-
-    public void OnTurnEnded()
-    {
-        ressourceBalance.AddRessources(GameManager.instance.goldGainPerTurn);
     }
 }

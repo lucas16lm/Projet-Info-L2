@@ -11,7 +11,6 @@ public abstract class Unit : PlaceableObject, ITurnObserver
 
     public int movementPoints;
     public bool canAttack = false;
-    public RessourceBalance cost;
     public float timeToMove;
 
     public abstract IEnumerator Attack(PlaceableObject target);
@@ -26,7 +25,6 @@ public abstract class Unit : PlaceableObject, ITurnObserver
         healthPoints=data.baseHealthPoints;
         movementPoints=UnitData.baseMovementPoints;
         canAttack=false;
-        cost=data.cost;
         gameObject.name=data.elementName;
         this.position=position;
         position.Content=this;
