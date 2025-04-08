@@ -19,8 +19,14 @@ public class UnitCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     private void ApplyData(PlaceableData data){
         this.data=data;
-        if(data is UnitData) image.sprite=(data as UnitData).image;
-        goldAmount.text=""+data.cost.gold;
+        if(data is UnitData){
+            image.sprite=(data as UnitData).image;
+            goldAmount.text=""+(data as UnitData).cost.gold;
+        } 
+        else{
+            goldAmount.text=""+(data as BuildingData).timeToBuild;
+        }
+        
         
         foreach(Transform transform in transform.GetChild(0).GetChild(2)){
             transform.gameObject.SetActive(false);

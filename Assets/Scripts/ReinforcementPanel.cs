@@ -74,7 +74,7 @@ public class ReinforcementPanel : MonoBehaviour, ICardObserver
 
     private void Clear(){
         foreach(Transform child in cardContainer.transform){
-            Destroy(child.gameObject);
+            if(child.name != "Clock") Destroy(child.gameObject);
         }
     }
 

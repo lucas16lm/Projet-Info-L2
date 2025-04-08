@@ -29,6 +29,7 @@ public class MapGenerator : MonoBehaviour
         CreateGrid();
         CreateBiomes();
         ApplyBiomeSettings();
+        CreateBorder();
     }
 
     private void CreateGrid()
@@ -100,6 +101,19 @@ public class MapGenerator : MonoBehaviour
     private void ApplyBiomeSettings(){
         foreach(Tile tile in Tile.GetTiles()){
             tile.ApplyBiome();
+        }
+    }
+
+    private void CreateBorder(){
+        foreach(Tile tile in Tile.GetTiles()){
+            if(tile.GetNeighbors().Count != 6){
+                foreach(Transform child in tile.transform.GetChild(0)){
+                    Destroy(child.gameObject);
+                }
+                tile.AssignBiome(Biome.border);
+                tile.ApplyBiome();
+            }
+            
         }
     }
 

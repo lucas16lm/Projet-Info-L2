@@ -9,24 +9,16 @@ public class PikeInfantry : Infantry
         
         switch(biome){
             case Biome.hill:
-                damage=Mathf.RoundToInt(damage*0.3f);
-                break;
-            case Biome.forest:
-                damage=Mathf.RoundToInt(damage*0.8f);
+                damage=Mathf.RoundToInt(damage*0.75f);
                 break;
         }
 
         switch(target){
             case MeleeCavalry:
-                damage=Mathf.RoundToInt(damage*2f);
+                damage=Mathf.RoundToInt(damage*3f);
                 break;
         }
 
-        if(target is Infantry){
-            if(target.position.GetNeighbors().FindAll(neighbor=>neighbor.Content is Infantry && target.transform.parent.GetComponent<Player>().units.Contains(neighbor.Content as Infantry)).Count>=2){
-                damage=Mathf.RoundToInt(damage*(target as Infantry).InfantryData.adjacenceBonus);
-            }
-        }
         Debug.Log("Base dammage :"+UnitData.baseDamagePoints+", After bonus : "+ damage);
         return damage;
     }

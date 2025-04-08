@@ -2,7 +2,7 @@ using PrimeTween;
 using Unity.Cinemachine;
 using UnityEngine;
 
-public class General : PlaceableObject, ICamera
+public class General : Building, ICamera
 {
     public GeneralData GeneralData { get { return data as GeneralData; } }
     public int orderRange;
@@ -28,6 +28,10 @@ public class General : PlaceableObject, ICamera
     {
         GameManager.instance.cameraManager.DesactivateRTS();
         GameManager.instance.cameraManager.GetPOVCameras().ForEach(cam=>cam.RemovePriority());
+
+        GetComponentInChildren<CinemachinePanTilt>().PanAxis.Value=0;
+        GetComponentInChildren<CinemachinePanTilt>().TiltAxis.Value=0;
+        
         GetComponentInChildren<CinemachineCamera>().Priority=1;
         Cursor.lockState=CursorLockMode.Locked;
     }
@@ -51,6 +55,7 @@ public class General : PlaceableObject, ICamera
     public override void DammagedBy(Unit unit, int damagePoints)
     {
         healthPoints-=damagePoints;
+        GetComponentInChildren<LocalCanvas>().UpdateCanvas();
         if(healthPoints<=0){
             Kill();
         }
@@ -71,5 +76,10 @@ public class General : PlaceableObject, ICamera
             GameManager.instance.turnManager.PlayerWon(GameManager.instance.playerManager.firstPlayer);
         }
         Tween.Delay(4, ()=>Destroy(gameObject));
+    }
+
+    public override bool IsConstructed()
+    {
+        return true;
     }
 }

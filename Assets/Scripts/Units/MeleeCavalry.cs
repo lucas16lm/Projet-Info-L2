@@ -35,27 +35,15 @@ public class MeleeCavalry : Unit
         Biome biome = target.position.biome;
         
         switch(biome){
-            case Biome.forest:
-                damage=Mathf.RoundToInt(damage*0.5f);
-                break;
             case Biome.hill:
-                damage=Mathf.RoundToInt(damage*0.1f);
+                damage=Mathf.RoundToInt(damage*0.50f);
                 break;
         }
 
         switch(target){
             case PikeInfantry:
-                damage=Mathf.RoundToInt(damage*0.2f);
+                damage=Mathf.RoundToInt(damage*0.5f);
                 break;
-            case Ranged:
-                damage=Mathf.RoundToInt(damage*1.5f);
-                break;
-        }
-
-        if(target is Infantry){
-            if(target.position.GetNeighbors().FindAll(neighbor=>neighbor.Content is Infantry && target.transform.parent.GetComponent<Player>().units.Contains(neighbor.Content as Infantry)).Count>=2){
-                damage=Mathf.RoundToInt(damage*(target as Infantry).InfantryData.adjacenceBonus);
-            }
         }
 
         return damage;
@@ -73,11 +61,9 @@ public class MeleeCavalry : Unit
     {
         transform.rotation=Quaternion.LookRotation(unit.transform.position-transform.position);
         healthPoints-=damagePoints;
+        GetComponentInChildren<LocalCanvas>().UpdateCanvas();
         GetComponent<AudioSource>().PlayOneShot(UnitData.damageSound);
         if(healthPoints<=0){
-            unit.transform.parent.GetComponent<Player>().ressourceBalance.AddRessources(cost);
-            GameManager.instance.uIManager.UpdateRessourcePanel(unit.transform.parent.GetComponent<Player>());
-            GameManager.instance.soundManager.PlaySound("Gold");
             Kill();
         }else{
             GetComponent<AnimationManager>().TriggerAnimation("Damage");

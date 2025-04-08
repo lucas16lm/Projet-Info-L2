@@ -13,6 +13,7 @@ public class DeploymentPanel : MonoBehaviour, ICardObserver
     public void OpenFor(Player player)
     {
         cardContainer.gameObject.SetActive(true);
+        GameManager.instance.uIManager.ressourcePanel.SetActive(true);
         Clear();
         foreach(UnitData unitData in player.factionData.factionUnitsData){
             UnitCard.Instantiate(unitData, cardContainer).RegisterObserver(this);
@@ -24,12 +25,13 @@ public class DeploymentPanel : MonoBehaviour, ICardObserver
         selectedUnit=null;
         Clear();
         cardContainer.gameObject.SetActive(false);
+        GameManager.instance.uIManager.ressourcePanel.SetActive(false);
         GameManager.instance.uIManager.cardTooltip.HideCardTooltip();
     }
 
     private void Clear(){
         foreach(Transform child in cardContainer.transform){
-            Destroy(child.gameObject);
+            if(child.name != "Ressouce UI") Destroy(child.gameObject);
         }
     }
 

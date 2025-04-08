@@ -13,7 +13,7 @@ public class LocalCanvas : MonoBehaviour
 
     public static void CreateLocalCanvas(GameObject canvaGameObject, Transform transform)
     {
-        GameObject canvas = Instantiate(canvaGameObject, transform.position+(transform.GetComponent<PlaceableObject>() is Unit ? 6*Vector3.up : 12*Vector3.up), quaternion.identity, transform);
+        GameObject canvas = Instantiate(canvaGameObject, transform.position+(transform.GetComponent<PlaceableObject>() is Unit ? 6*Vector3.up : transform.GetComponent<PlaceableObject>() is General ? 11*Vector3.up : 8*Vector3.up), quaternion.identity, transform);
         canvas.GetComponent<Canvas>().enabled = false;
 
         if(transform?.GetComponent<General>() != null || transform?.GetComponent<Outpost>() != null){
@@ -49,6 +49,13 @@ public class LocalCanvas : MonoBehaviour
             else{
                 canvas.GetComponent<LocalCanvas>().canAttack.color = Color.black;
             }
+        }
+    }
+
+    public void UpdateCanvas(){
+        Canvas canvas = GetComponentInChildren<Canvas>();
+        if(canvas.enabled){
+            filledHealthBar.fillAmount= (float) GetComponentInParent<PlaceableObject>().healthPoints/GetComponentInParent<PlaceableObject>().data.baseHealthPoints;
         }
     }
 

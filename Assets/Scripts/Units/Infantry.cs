@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using PrimeTween;
 using UnityEngine;
 
@@ -31,13 +33,17 @@ public abstract class Infantry : Unit
 
     public override void DammagedBy(Unit unit, int damagePoints)
     {
+        List<Infantry> allies = position.GetNeighbors().Where(tile=>tile.Content!=null && tile.Content is Infantry && transform.parent.GetComponent<Player>().units.Contains(tile.Content)).Select(tile=>tile.Content as Infantry).ToList();
+        if(allies.Count>=2){
+            Debug.Log(allies.Count+" adjacent allies : -25% damage");
+            damagePoints=Mathf.RoundToInt(damagePoints*0.75f);
+        }
+
         transform.rotation=Quaternion.LookRotation(unit.transform.position-transform.position);
         healthPoints-=damagePoints;
+        GetComponentInChildren<LocalCanvas>().UpdateCanvas();
         GetComponent<AudioSource>().PlayOneShot(UnitData.damageSound);
         if(healthPoints<=0){
-            unit.transform.parent.GetComponent<Player>().ressourceBalance.AddRessources(cost);
-            GameManager.instance.uIManager.UpdateRessourcePanel(unit.transform.parent.GetComponent<Player>());
-            GameManager.instance.soundManager.PlaySound("Gold");
             Kill();
         }else{
             GetComponent<AnimationManager>().TriggerAnimation("Damage");

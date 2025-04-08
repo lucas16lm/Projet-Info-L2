@@ -127,6 +127,8 @@ public class Tile : MonoBehaviour, IOutlinable
     public GameObject forestPrefab;
     public List<GameObject> mountainTops;
     public GameObject plainTop;
+    public GameObject hillTop;
+    public GameObject border;
     public Material waterMaterial;
     public Material plainMaterial;
     public Material hillMaterial;
@@ -222,7 +224,7 @@ public class Tile : MonoBehaviour, IOutlinable
 
     public bool IsAccessible()
     {
-        if (biome == Biome.mountain || biome == Biome.water) return false;
+        if (biome == Biome.mountain || biome == Biome.water || biome == Biome.border) return false;
         return _content == null;
     }
 
@@ -241,11 +243,12 @@ public class Tile : MonoBehaviour, IOutlinable
                 break;
             case Biome.forest:
                 transform.GetComponent<Renderer>().material = plainMaterial;
-                Instantiate(forestPrefab, transform.GetChild(0).position, Quaternion.identity, transform.GetChild(0));
+                Instantiate(forestPrefab, transform.GetChild(0).position, Quaternion.Euler(0, UnityEngine.Random.Range(0, 360), 0), transform.GetChild(0));
                 break;
             case Biome.hill:
                 transform.GetComponent<Renderer>().material = hillMaterial;
                 transform.localScale += 2 * Vector3.up;
+                Instantiate(hillTop, transform.GetChild(0).position, Quaternion.Euler(0, UnityEngine.Random.Range(0, 360), 0), transform.GetChild(0));
                 break;
             case Biome.mountain:
                 transform.GetComponent<Renderer>().materials[0].color = new Color(0.25f, 0.25f, 0.25f);
@@ -255,6 +258,11 @@ public class Tile : MonoBehaviour, IOutlinable
             case Biome.water:
                 transform.GetComponent<Renderer>().material = waterMaterial;
                 transform.localScale += 2 * Vector3.down;
+                break;
+            case Biome.border:
+                transform.localScale = Tile.tileRadius*Vector3.one;
+                transform.GetComponent<Renderer>().material = plainMaterial;
+                Instantiate(border, transform.GetChild(0).position, Quaternion.identity, transform.GetChild(0));
                 break;
         }
 
@@ -267,7 +275,7 @@ public class Tile : MonoBehaviour, IOutlinable
         foreach (MeshRenderer renderer in GetComponentsInChildren<MeshRenderer>())
         {
             foreach(Material material in renderer.materials){
-                material.SetFloat("_Active", state ? 1 : 0);
+                material.SetFloat("_UseTransparency", state ? 1 : 0);
             }
         }
 
@@ -307,5 +315,6 @@ public enum Biome
     forest,
     hill,
     mountain,
-    water
+    water,
+    border
 }
