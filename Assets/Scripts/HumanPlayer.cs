@@ -99,12 +99,24 @@ public class HumanPlayer : Player
     #region Turn
     public override IEnumerator PlayTurn(Action onComplete)
     {
+        GameManager.instance.playerManager.firstPlayer.units.ForEach(unit=>{foreach(Renderer renderer in unit.GetComponentsInChildren<Renderer>()) renderer.material.color = Color.white;});
+        GameManager.instance.playerManager.secondPlayer.units.ForEach(unit=>{foreach(Renderer renderer in unit.GetComponentsInChildren<Renderer>()) renderer.material.color = Color.white;});
+
         currentCam = general.GetComponent<ICamera>();
         Tile.GetTilesInRange(currentCam.GetPosition(), currentCam.GetOrderRadius()).ForEach(tile => tile.SetOutline(true, GameManager.instance.TileZoneLayerID));
         bool turnEnded = false;
 
-        InputSystem.actions.FindAction("EndTurn").performed += ctx => turnEnded = true;
-        //TODO : améliorer la coroutine pour adpater et mettre en évidence si une action est possible seulement
+        InputSystem.actions.FindAction("EndTurn").performed += ctx =>{
+            if(units.All(unit=>!unit.isMoving)){
+                turnEnded = true;
+                GameManager.instance.soundManager.PlaySound("TurnEnded");
+            }
+            else{
+                GameManager.instance.soundManager.PlaySound("Cancel");
+            }
+
+        };
+
         Coroutine hoverCoroutine = StartCoroutine(MouseListener(
             go => go?.GetComponent<PlaceableObject>() != null || IsTile(go),
             go =>
@@ -232,7 +244,7 @@ public class HumanPlayer : Player
     {
         GameObject firstSelection = null;
         yield return SelectGameObject(
-            go => IsInOrderRange(go) && (IsTileRecruitable(go) || IsOwnUnit(go) || IsOwnGeneral(go) || IsOwnOutpost(go)),
+            go => IsInOrderRange(go) && (IsTileRecruitable(go) || (IsOwnUnit(go) && go.GetComponent<Unit>().CanPlay) || IsOwnGeneral(go) || IsOwnOutpost(go)),
             go => firstSelection = go
         );
 
@@ -288,7 +300,11 @@ public class HumanPlayer : Player
                 }
             }
 
-            if (secondObject == null) yield break;
+            if (secondObject == null)
+            {
+                GameManager.instance.soundManager.PlaySound("Cancel");
+                yield break;
+            }
 
             if (IsTile(secondObject))
             {

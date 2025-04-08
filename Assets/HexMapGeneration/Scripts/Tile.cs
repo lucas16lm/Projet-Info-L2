@@ -124,14 +124,20 @@ public class Tile : MonoBehaviour, IOutlinable
     #endregion
 
     #region tile related attributes and methods
+    [Header("Props")]
     public GameObject forestPrefab;
     public List<GameObject> mountainTops;
     public GameObject plainTop;
     public GameObject hillTop;
     public GameObject border;
+    [Header("Materials")]
     public Material waterMaterial;
     public Material plainMaterial;
     public Material hillMaterial;
+    [Header("Particles")]
+    public GameObject targetParticle;
+    public GameObject smallBloodParticle;
+    public GameObject bigBloodParticle;
 
     public Vector3Int cubicCoordinates;
     public Biome biome;

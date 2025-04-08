@@ -91,6 +91,9 @@ MonoBehaviour:
   waterMaterial: {fileID: 2100000, guid: 406ed623b6f1e244696a7aec47156818, type: 2}
   plainMaterial: {fileID: 2100000, guid: 5265da32697a04743820fa5cb127ceea, type: 2}
   hillMaterial: {fileID: 2100000, guid: c376e5bd4ec82dd43a0f50ccd2cb737f, type: 2}
+  targetParticle: {fileID: 1103892459537272, guid: a5bc136c5e87fb14888b1af7d82802f5, type: 3}
+  smallBloodParticle: {fileID: 1489431029902184, guid: 4430919f14c50f84085d287cbcb2c30e, type: 3}
+  bigBloodParticle: {fileID: 1277154925287174, guid: 3b517eddec185dd4a830743a742ad00b, type: 3}
   cubicCoordinates: {x: 0, y: 0, z: 0}
   biome: 0
 --- !u!64 &5139637992689490159

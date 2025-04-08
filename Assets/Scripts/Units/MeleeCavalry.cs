@@ -26,6 +26,7 @@ public class MeleeCavalry : Unit
             GetComponent<AnimationManager>().TriggerAnimation("Attack");
             GetComponent<AudioSource>().PlayOneShot(UnitData.attackSound);
             target.DammagedBy(this, CalculateDamage(target, chargeDamage));
+            Tween.Delay(0.75f, ()=>UpdateMaterial());
         }
     }
 
@@ -67,12 +68,15 @@ public class MeleeCavalry : Unit
             Kill();
         }else{
             GetComponent<AnimationManager>().TriggerAnimation("Damage");
+            GameObject blood = Instantiate(position.smallBloodParticle, transform.position, Quaternion.identity, transform);
+            Tween.Delay(1, ()=>Destroy(blood));
         }
     }
 
 
     public override void Kill()
     {
+        Instantiate(position.bigBloodParticle, transform.position, Quaternion.identity, transform);
         GetComponent<AudioSource>().PlayOneShot(UnitData.deathSound);
         GetComponent<AnimationManager>().TriggerAnimation("Death");
         position.Content=null;
