@@ -15,6 +15,7 @@ public class SoundManager : MonoBehaviour
     public AudioClip GoldSound;
     public AudioClip buttonHover;
     public AudioClip buttonClick;
+    public AudioClip cancelSound;
 
     public void PlaySound(string sound)
     {
@@ -46,6 +47,9 @@ public class SoundManager : MonoBehaviour
                 break;
             case "ButtonClick":
                 globalAudioSource.PlayOneShot(buttonClick);
+                break;
+            case "Cancel":
+                globalAudioSource.PlayOneShot(cancelSound);
                 break;
         }
     }

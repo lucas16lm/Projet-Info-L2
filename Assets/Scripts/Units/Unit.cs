@@ -9,6 +9,12 @@ public abstract class Unit : PlaceableObject, ITurnObserver
 {
     public UnitData UnitData{get{return data as UnitData;}}
 
+    public bool CanPlay{get{
+        return movementPoints>0 || (canAttack && position.GetNeighbors().Where(tile=>tile.Content!=null && !transform.parent.GetComponent<Player>().GetPlaceableObjects().Contains(tile.Content)).Count()!=0);
+    }}
+
+    public bool isMoving=false;
+
     public int movementPoints;
     public bool canAttack = false;
     public float timeToMove;
@@ -36,6 +42,13 @@ public abstract class Unit : PlaceableObject, ITurnObserver
         }
     }
 
+    protected void UpdateMaterial(){
+        foreach(Renderer renderer in GetComponentsInChildren<Renderer>()){
+            renderer.material.color = CanPlay ? Color.white : Color.gray;
+        }
+    }
+
+
     public IEnumerator Move(Tile destination)
     {
         yield return Move(AStar(position, destination));
@@ -51,8 +64,11 @@ public abstract class Unit : PlaceableObject, ITurnObserver
         if(moveCost>movementPoints){
             yield break;
         }
+
+        isMoving=true;
         position.Content=null;
         path[path.Count-1].Content=this;
+        GameObject particle = Instantiate(path[path.Count-1].targetParticle, path[path.Count-1].transform.position+(path[path.Count-1].transform.localScale.y/2)*Vector3.up*1.5f, Quaternion.identity);
         movementPoints-=moveCost;
 
         AudioSource audioSource = GetComponent<AudioSource>();
@@ -67,8 +83,11 @@ public abstract class Unit : PlaceableObject, ITurnObserver
             position=path[i];
             GetComponent<AnimationManager>().SetMovementAnimation(false);
         }
+        Destroy(particle);
         audioSource.loop=false;
         audioSource.Stop();
+        UpdateMaterial();
+        isMoving=false;
     }
 
     public IEnumerator Move(PlaceableObject target)

@@ -1026,6 +1026,7 @@ MonoBehaviour:
   GoldSound: {fileID: 8300000, guid: b19fdc1ee0306bb429a06351fa224c1a, type: 3}
   buttonHover: {fileID: 8300000, guid: fd1633bd1783bcb48b82fc7d62785260, type: 3}
   buttonClick: {fileID: 8300000, guid: 86359fbd222369547866cb189985d53a, type: 3}
+  cancelSound: {fileID: 8300000, guid: f14fe61fe9bba7c40ad9cc50c85b3a65, type: 3}
 --- !u!4 &650385374
 Transform:
   m_ObjectHideFlags: 0

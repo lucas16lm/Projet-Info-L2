@@ -1456,7 +1456,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 34.3
+  m_fontSize: 33.7
   m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1686,6 +1686,7 @@ MonoBehaviour:
   GoldSound: {fileID: 8300000, guid: b19fdc1ee0306bb429a06351fa224c1a, type: 3}
   buttonHover: {fileID: 8300000, guid: fd1633bd1783bcb48b82fc7d62785260, type: 3}
   buttonClick: {fileID: 8300000, guid: 86359fbd222369547866cb189985d53a, type: 3}
+  cancelSound: {fileID: 8300000, guid: f14fe61fe9bba7c40ad9cc50c85b3a65, type: 3}
 --- !u!4 &1086440092
 Transform:
   m_ObjectHideFlags: 0
@@ -1730,8 +1731,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 99284c03ba3568f4287d6411698bffe9, type: 3}
-  m_Resource: {fileID: 8300000, guid: 99284c03ba3568f4287d6411698bffe9, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 41dfffce55247cc4a89c2a4dcdddd573, type: 3}
+  m_Resource: {fileID: 8300000, guid: 41dfffce55247cc4a89c2a4dcdddd573, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.6
   m_Pitch: 1
@@ -3321,7 +3322,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 30f8afa6ecda0c14297c645e2492a7cf, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 5f4695879d8a0d646ba35ff5c6f5fef8, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3817,7 +3818,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 34.3
+  m_fontSize: 33.7
   m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 1

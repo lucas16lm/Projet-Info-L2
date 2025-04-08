@@ -15,8 +15,10 @@ public abstract class PlaceableObject : MonoBehaviour, IOutlinable
     public abstract void Kill();
 
     public static void Instantiate(PlaceableData placeableData, Tile tile, Player player){
-        if(!tile.IsAccessible()) return;
-        if(placeableData is UnitData && !player.ressourceBalance.RemoveRessources((placeableData as UnitData).cost)) return;
+        if(!tile.IsAccessible() || (placeableData is UnitData && !player.ressourceBalance.RemoveRessources((placeableData as UnitData).cost))){
+            GameManager.instance.soundManager.PlaySound("Cancel");
+            return;
+        }
 
         GameManager.instance.soundManager.PlaySound("UnitPlacement");
         GameManager.instance.uIManager.UpdateRessourcePanel(player);

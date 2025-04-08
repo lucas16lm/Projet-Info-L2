@@ -36,6 +36,7 @@ public abstract class Ranged : Unit
         
         GetComponent<AnimationManager>().TriggerAnimation("Attack");
         target.DammagedBy(this, CalculateDamage(target));
+        Tween.Delay(0.75f, ()=>UpdateMaterial());
     }
 
     public override void DammagedBy(Unit unit, int damagePoints)
@@ -48,11 +49,14 @@ public abstract class Ranged : Unit
             Kill();
         }else{
             GetComponent<AnimationManager>().TriggerAnimation("Damage");
+            GameObject blood = Instantiate(position.smallBloodParticle, transform.position, Quaternion.identity, transform);
+            Tween.Delay(1, ()=>Destroy(blood));
         }
     }
 
     public override void Kill()
     {
+        Instantiate(position.bigBloodParticle, transform.position, Quaternion.identity, transform);
         GetComponent<AudioSource>().PlayOneShot(UnitData.deathSound);
         GetComponent<AnimationManager>().TriggerAnimation("Death");
         position.Content = null;
