@@ -7,31 +7,13 @@ public class Archer : Ranged
         int damage = UnitData.baseDamagePoints;
 
         if(position.biome==Biome.hill){
-            damage=Mathf.RoundToInt(damage*1.5f);
+            damage=Mathf.RoundToInt(damage*1.25f);
         }
 
-        Biome biome = target.position.biome;
-        
-        switch(biome){
-            case Biome.forest:
-                damage=Mathf.RoundToInt(damage*0.25f);
-                break;
+        if(target.position.biome == Biome.forest){
+            damage=Mathf.RoundToInt(damage*0.75f);
         }
 
-        switch(target){
-            case TwoHandedInfantry:
-                damage=Mathf.RoundToInt(damage*2f);
-                break;
-            case PikeInfantry:
-                damage=Mathf.RoundToInt(damage*1.25f);
-                break;
-        }
-
-        if(target is Infantry){
-            if(target.position.GetNeighbors().FindAll(neighbor=>neighbor.Content is Infantry && target.transform.parent.GetComponent<Player>().units.Contains(neighbor.Content as Infantry)).Count>=2){
-                damage=Mathf.RoundToInt(damage*(target as Infantry).InfantryData.adjacenceBonus);
-            }
-        }
         Debug.Log("Base dammage :"+UnitData.baseDamagePoints+", After bonus : "+ damage);
         return damage;
     }

@@ -22,4 +22,8 @@ MonoBehaviour:
   generalData: {fileID: 11400000, guid: 4e41a187b8286a9438adffeb56bc1e78, type: 2}
   outpostData: {fileID: 11400000, guid: e3f17f2f748a2a94ca4b81346707df9e, type: 2}
   factionUnitsData:
-  - {fileID: 11400000, guid: d8d3edf2ca1d9404780f59e9a166f642, type: 2}
+  - {fileID: 11400000, guid: f3f3ec2d046f1264387c283317d311e2, type: 2}
+  - {fileID: 11400000, guid: 704b1a0b165cac94aa276f7ae7a62161, type: 2}
+  - {fileID: 11400000, guid: d3fa66c1d176aaa41af297b26cf1bda1, type: 2}
+  - {fileID: 11400000, guid: 32fb6700aed92fe45929d7659db08165, type: 2}
+  - {fileID: 11400000, guid: 4d34c423ee3d0b447848d3dee21242b8, type: 2}
