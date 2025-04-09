@@ -10,7 +10,7 @@ public abstract class Unit : PlaceableObject, ITurnObserver
     public UnitData UnitData{get{return data as UnitData;}}
 
     public bool CanPlay{get{
-        return movementPoints>0 || (canAttack && position.GetNeighbors().Where(tile=>tile.Content!=null && !transform.parent.GetComponent<Player>().GetPlaceableObjects().Contains(tile.Content)).Count()!=0);
+        return movementPoints>0 || (canAttack && position.GetNeighbors().Where(tile=>tile.Content!=null && !transform.parent.GetComponent<Player>().GetPlaceableObjects().Contains(tile.Content)).Count()!=0) || (canAttack && this is Ranged);
     }}
 
     public bool isMoving=false;
