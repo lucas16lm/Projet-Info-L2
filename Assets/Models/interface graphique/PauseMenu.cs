@@ -36,7 +36,9 @@ public class PauseMenu : MonoBehaviour
 
     public void Resume()
     {
-        Cursor.lockState = CursorLockMode.Locked;
+        if (GameManager.instance.turnManager.currentState == GameState.FirstPlayerTurn || GameManager.instance.turnManager.currentState == GameState.SecondPlayerTurn){
+            Cursor.lockState = CursorLockMode.Locked;
+        }
         pauseMenuUI.SetActive(false);
         Time.timeScale = 1;
         gameIsPaused = false;
@@ -54,6 +56,11 @@ public class PauseMenu : MonoBehaviour
         Resume();
         Cursor.lockState = CursorLockMode.None;
         SceneManager.LoadScene("BattleScene",LoadSceneMode.Single);
+    }
+
+    public void Exit()
+    {
+        Application.Quit();
     }
 
 
