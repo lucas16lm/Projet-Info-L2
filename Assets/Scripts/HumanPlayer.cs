@@ -99,6 +99,7 @@ public class HumanPlayer : Player
     #region Turn
     public override IEnumerator PlayTurn(Action onComplete)
     {
+        GameManager.instance.uIManager.PrintMessage(factionData.factionName + ", it's your turn !");
         GameManager.instance.playerManager.firstPlayer.units.ForEach(unit=>{foreach(Renderer renderer in unit.GetComponentsInChildren<Renderer>()) renderer.material.color = Color.white;});
         GameManager.instance.playerManager.secondPlayer.units.ForEach(unit=>{foreach(Renderer renderer in unit.GetComponentsInChildren<Renderer>()) renderer.material.color = Color.white;});
 
