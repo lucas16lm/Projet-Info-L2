@@ -8,15 +8,15 @@ public class MeleeCavalry : Unit
 
     public override IEnumerator Attack(PlaceableObject target)
     {
-        int chargeDamage=0;
         if(!canAttack){
             Debug.Log("Attaque déjà effectuée");
             yield break;
         }
+
+        int damage = CalculateDamage(target);
         
         if(!IsAdjacentTo(target)){
             GameManager.instance.soundManager.PlaySound("UnitAttack");
-            chargeDamage = (int)(UnitData.baseDamagePoints*MeleeCavalryData.chargeBonus*GetPathToElement(target).Count);
             yield return Move(target);            
         }
 
@@ -25,7 +25,7 @@ public class MeleeCavalry : Unit
             transform.rotation=Quaternion.LookRotation(target.transform.position-transform.position);
             GetComponent<AnimationManager>().TriggerAnimation("Attack");
             GetComponent<AudioSource>().PlayOneShot(UnitData.attackSound);
-            target.DammagedBy(this, CalculateDamage(target, chargeDamage));
+            target.DammagedBy(this, damage);
             Tween.Delay(0.75f, ()=>UpdateMaterial());
         }
     }
@@ -33,6 +33,12 @@ public class MeleeCavalry : Unit
     public override int CalculateDamage(PlaceableObject target)
     {
         int damage = UnitData.baseDamagePoints;
+        
+        if(GetPathToElement(target).Count>=3){
+            damage=damage*2;    //Simplification de la charge : si on parcourt 3 cases pour attaquer -> degats x2
+            Debug.Log("Charge :"+ damage);
+        }
+
         Biome biome = target.position.biome;
         
         switch(biome){
@@ -48,14 +54,6 @@ public class MeleeCavalry : Unit
         }
 
         return damage;
-    }
-    public int CalculateDamage(PlaceableObject target, int chargeDamage)
-    {
-        int damage = CalculateDamage(target);
-        chargeDamage = damage/UnitData.baseDamagePoints*chargeDamage;
-
-        Debug.Log("Base dammage :"+UnitData.baseDamagePoints+", After bonus : "+ (damage+chargeDamage));
-        return damage+chargeDamage;
     }
 
     public override void DammagedBy(Unit unit, int damagePoints)

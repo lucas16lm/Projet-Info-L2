@@ -20,7 +20,7 @@ MonoBehaviour:
     gold: 2
   image: {fileID: 21300000, guid: 8abb75f0f46602145873c675f51281e9, type: 3}
   baseDamagePoints: 25
-  baseMovementPoints: 4
+  baseMovementPoints: 3
   timeToMove: 2
   movementSound: {fileID: 8300000, guid: bf7c188bc4efc7b4f8dff563d97036fe, type: 3}
   attackSound: {fileID: 8300000, guid: b493630aea8da3c4d8957dc64b117a83, type: 3}
