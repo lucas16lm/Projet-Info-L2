@@ -4680,6 +4680,7 @@ MonoBehaviour:
   data: {fileID: 0}
   healthPoints: 50
   position: {fileID: 0}
+  isMoving: 0
   movementPoints: 0
   canAttack: 1
   timeToMove: 0
@@ -36904,6 +36905,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7366846699573388070}
+  - component: {fileID: 5903137048569699448}
   m_Layer: 0
   m_Name: TT_RTS_Banner
   m_TagString: Untagged
@@ -36934,6 +36936,28 @@ Transform:
   - {fileID: 7366846699573388068}
   m_Father: {fileID: 8233792795362549645}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &5903137048569699448
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7366846699573296902}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: d40f4dc5b4fae4c46a3cc5d4da0f6cf6, type: 3}
+  m_Controller: {fileID: 9100000, guid: e90a2ac91151cba4d877533a78a32295, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &7366846699573296912
 GameObject:
   m_ObjectHideFlags: 0
