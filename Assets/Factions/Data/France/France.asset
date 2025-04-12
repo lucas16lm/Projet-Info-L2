@@ -18,7 +18,7 @@ MonoBehaviour:
   unitsMaterial: {fileID: 2100000, guid: 2795c5d9ef4b2374ca829d0e6a019567, type: 2}
   factionColor: {r: 0.14653791, g: 0.17266914, b: 0.8396226, a: 0}
   baseBalance:
-    gold: 25
+    gold: 20
   generalData: {fileID: 11400000, guid: 4e41a187b8286a9438adffeb56bc1e78, type: 2}
   outpostData: {fileID: 11400000, guid: e3f17f2f748a2a94ca4b81346707df9e, type: 2}
   factionUnitsData:
