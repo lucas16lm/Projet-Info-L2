@@ -28,6 +28,8 @@ public class PauseMenu : MonoBehaviour
 
     void Pause()
     {
+        if(GameManager.instance.uIManager.reinforcementPanel.transform.GetChild(0).gameObject.activeSelf) return;
+        
         Cursor.lockState = CursorLockMode.None;
         pauseMenuUI.SetActive(true);
         Time.timeScale = 0;
