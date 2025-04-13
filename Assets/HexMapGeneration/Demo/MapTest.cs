@@ -13,6 +13,7 @@ public class MapTest : MonoBehaviour
     
 
     public void CreateMapButton(){
+        gridGenerator.seed=new System.Random().Next(-100000,100000);
         gridGenerator.CreateMap();
     }
 
